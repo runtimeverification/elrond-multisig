@@ -6,9 +6,9 @@ CHECK_RESULT_RUN = if [ $$? -eq 0 ] ; then echo "passed $<"; mv $@.tmp $@; else 
 
 .PRECIOUS: tests/*.out
 
-execution.timestamp: execution.k *.k
+execution.timestamp: pseudocode-execute.k *.k
 	@echo "Compiling $<"
-	@kompile $(KOMPILE_FLAGS) $< --backend haskell
+	@kompile $(KOMPILE_FLAGS) $< --backend haskell -I ..
 	@touch execution.timestamp
 
 test: ${TEST_COMPARISON}
@@ -29,5 +29,5 @@ tests/%.golden.make: tests/%.msig execution.timestamp
 
 clean:
 	-rm *.timestamp tests/*.out tests/*.cmp
-	-rm -r execution-kompiled
+	-rm -r pseudocode-execute-kompiled
 	-rm -r .krun*

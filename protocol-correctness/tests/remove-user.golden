@@ -51,7 +51,7 @@
           .Map
         </variables>
         <stack>
-          .List
+          .stack
         </stack>
       </pseudocode-state>
       <external-call-env>
@@ -59,6 +59,12 @@
           uninitialized
         </caller-address>
       </external-call-env>
+      <log>
+        <performed-actions>
+          ListItem ( RemoveUser ( address ( 8 ) ) )
+          ListItem ( AddBoardMember ( address ( 8 ) ) )
+        </performed-actions>
+      </log>
     </state>
   </TT>
 </T>
