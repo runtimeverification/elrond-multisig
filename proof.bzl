@@ -40,7 +40,7 @@ kompile = rule(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool"),
+            default = Label("//kompile-tool:kompile_tool"),
         ),
     },
     executable = False,
@@ -73,7 +73,7 @@ klibrary = rule(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:kompile_e_tool"),
+            default = Label("//kompile-tool:kompile_e_tool"),
         ),
     },
 )
@@ -115,13 +115,13 @@ ktrusted = rule(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:ktrusted_tool"),
+            default = Label("//kompile-tool:ktrusted_tool"),
         ),
         "kmerge_tool": attr.label(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:kmerge_tool"),
+            default = Label("//kompile-tool:kmerge_tool"),
         ),
     },
 )
@@ -199,19 +199,19 @@ kprove_kompile = rule(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:kprove_kompile_tool"),
+            default = Label("//kompile-tool:kprove_kompile_tool"),
         ),
         "kmerge_tool": attr.label(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:kmerge_tool"),
+            default = Label("//kompile-tool:kmerge_tool"),
         ),
         "k_distribution": attr.label(
             executable = False,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:k_release"),
+            default = Label("//kompile-tool:k_release"),
         ),
     },
 )
@@ -220,7 +220,7 @@ def _kore_test_impl(ctx):
 
   script_file = ctx.actions.declare_file(ctx.label.name + '-runner.sh')
 
-  tool_call = "kompile_tool/kore_tool %s %s %s %s %s %s %s" % (
+  tool_call = "kompile-tool/kore_tool %s %s %s %s %s %s %s" % (
       ctx.attr.module,
       ctx.attr.kompiled[KompileInfo].files[0].short_path,
       ctx.attr.kompiled[KproveInfo].definition.short_path,
@@ -270,19 +270,19 @@ kore_test = rule(
             executable = True,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:kore_tool"),
+            default = Label("//kompile-tool:kore_tool"),
         ),
         "k_distribution": attr.label(
             executable = False,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:k_release"),
+            default = Label("//kompile-tool:k_release"),
         ),
         "debug_script": attr.label(
             executable = False,
             cfg = "exec",
             allow_files = True,
-            default = Label("//kompile_tool:kast_script"),
+            default = Label("//kompile-tool:kast_script"),
         ),
     },
     test = True,
