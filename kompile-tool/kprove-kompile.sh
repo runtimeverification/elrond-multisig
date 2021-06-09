@@ -25,7 +25,7 @@ shift
 
 MODULE_NAME=$(basename "$ORIGINAL_FILE" | sed 's/\.[^\.]*$//' | tr [:lower:] [:upper:])
 
-KOMPILE_TOOL_DIR=kompile_tool
+KOMPILE_TOOL_DIR=kompile-tool
 
 KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprove)
 

@@ -27,7 +27,7 @@ MODULE_NAME=$(cat $COMMAND | sed 's/^.*--module \([^ ]*\) .*$/\1/')
 
 # SPEC_MODULE_NAME=$(cat $COMMAND | sed 's/^.*--spec-module \([^ ]*\) .*$/\1/')
 
-KOMPILE_TOOL_DIR=kompile_tool
+KOMPILE_TOOL_DIR=kompile-tool
 
 REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
 
