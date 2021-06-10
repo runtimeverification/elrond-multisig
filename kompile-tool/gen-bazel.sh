@@ -4,4 +4,4 @@ set -e
 
 workspace=$(bazel info | grep "workspace:" | sed 's/^.* //')
 
-$workspace/kompile-tool/gen-bazel.py $workspace "$@">BUILD
+$workspace/kompile-tool/gen-bazel.py "$@"
