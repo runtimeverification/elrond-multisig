@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-ADD-BOARD-MEMBER-NONE-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-BOARD-MEMBER-NONE-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> add-board-member-None.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

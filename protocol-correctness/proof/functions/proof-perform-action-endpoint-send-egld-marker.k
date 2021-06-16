@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-SEND-EGLD-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-SEND-EGLD-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> send-egld.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

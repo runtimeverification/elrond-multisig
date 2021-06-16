@@ -1,12 +1,10 @@
-load("//:proof.bzl", "kompile", "klibrary", "kprove_test", "ktrusted")
+load("//:proof.bzl", "klibrary", "kompile", "kprove_test", "ktrusted")
 
 kompile(
   name = "invariant-execute",
   srcs = ["invariant-execute.k"],
   deps = [
       "//protocol-correctness/proof:main-proof-execute-files",
-      "//protocol-correctness/proof/functions:functions-execute-files",
-      "//protocol-correctness/proof/instrumentation/pushlist:pushlist-execute-files",
       ":init-loop-parts-files",
   ],
   visibility = ["//visibility:public"],
@@ -17,8 +15,6 @@ klibrary(
   srcs = ["invariant-execute.k"],
   deps = [
       "//protocol-correctness/proof:main-proof-execute-files",
-      "//protocol-correctness/proof/functions:functions-execute-files",
-      "//protocol-correctness/proof/instrumentation/pushlist:pushlist-execute-files",
       ":init-loop-parts-files",
   ],
   visibility = ["//visibility:public"],

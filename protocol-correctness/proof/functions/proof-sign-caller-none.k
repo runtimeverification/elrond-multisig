@@ -5,7 +5,8 @@ module PROOF-SIGN-CALLER-NONE
 //@ trusted
 // module TRUSTED-SIGN-CALLER-NONE
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

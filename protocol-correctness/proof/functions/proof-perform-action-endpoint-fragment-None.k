@@ -3,7 +3,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NONE
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NONE
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> runPseudoCode(

@@ -1,4 +1,4 @@
-load("//:proof.bzl", "kompile", "klibrary")
+load("//:proof.bzl", "klibrary", "kompile")
 
 kompile(
   name = "malicious-user-execute",

@@ -2,7 +2,9 @@ require "trusted-unsign-no-user.k"  //@ Bazel remove
 
 //@ proof
 module PROOF-UNSIGN-NO-USER-MARKER
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
   imports TRUSTED-UNSIGN-NO-USER
 //@ trusted
 // module TRUSTED-UNSIGN-NO-USER-MARKER

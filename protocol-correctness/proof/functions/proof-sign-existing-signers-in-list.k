@@ -5,7 +5,8 @@ module PROOF-SIGN-EXISTING-SIGNERS-IN-LIST
 //@ trusted
 // module TRUSTED-SIGN-EXISTING-SIGNERS-IN-LIST
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

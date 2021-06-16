@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-SC-CALL-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-SC-CALL-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> sc-call.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

@@ -4,6 +4,14 @@ import os
 import subprocess
 import sys
 
+import trusted
+
+def naturalNumbers():
+  i = 1
+  while True:
+    yield i
+    i += 1
+
 class KFile(object):
   def __init__(self, name, require, timeout, breadth):
     self.__name = name
@@ -86,6 +94,16 @@ class StringRecorder(object):
     return self.__strings
 
 def loadFile(directory, name):
+  with open(os.path.join(directory, name), 'r') as f:
+    contents = f.read()
+    return loadFileContents(contents, name)
+
+def loadFileAsTrusted(directory, name, trusted_name):
+  with open(os.path.join(directory, name), 'r') as f:
+    contents = ''.join(trusted.makeTrusted(name, zip(naturalNumbers(), f)))
+    return loadFileContents(contents, trusted_name)
+
+def loadFileContents(contents, name):
   START = 0
   SLASH = 1
   MULTILINE = 2
@@ -211,8 +229,6 @@ def loadFile(directory, name):
       lambda_tr(tr(SSLASH_SP_BREADTH_SP_EQ_SP_IN), breadth.add)
     ],
   }
-  with open(os.path.join(directory, name), 'r') as f:
-    contents = f.read()
   state = START
   for c in contents:
     ts = transitions[state]
@@ -251,8 +267,18 @@ def proofName(file_name):
   return removeExtension(file_name)
 
 def trustedName(file_name):
-  assert file_name.startswith('proof-')
-  return removeExtension('trusted' + file_name[5:])
+  if file_name.startswith('proof-'):
+    return removeExtension('trusted' + file_name[5:])
+  if file_name.startswith('lemma-'):
+    return removeExtension(trustedFileName(file_name))
+  assert False, file_name
+
+def trustedFileName(file_name):
+  assert file_name.startswith('lemma-'), file_name
+  return 'trusted-' + file_name
+
+def trustedLibraryName(file_name):
+  return libraryName(trustedFileName(file_name))
 
 def appendName(rule_name, out):
   out.append('  name = "')
@@ -264,14 +290,18 @@ def appendSrcs(file_name, out):
   out.append(file_name)
   out.append('"],\n')
 
-def appendDeps(name, deps, converter, dependencyResolver, is_proof, out):
+def appendDeps(name, deps, converter, dependency_resolver, is_proof, out, *, extra = []):
   if deps:
     out.append('  ')
     out.append(name)
     out.append(' = [\n')
     for r in deps:
       out.append('      "')
-      out.append(converter(dependencyResolver.resolve(r, is_proof)))
+      out.append(converter(dependency_resolver.resolve(r, is_proof)))
+      out.append('",\n')
+    for r in extra:
+      out.append('      "')
+      out.append(r)
       out.append('",\n')
     out.append('  ],\n')
   else:
@@ -280,31 +310,31 @@ def appendDeps(name, deps, converter, dependencyResolver, is_proof, out):
 def appendPublic(out):
   out.append('  visibility = ["//visibility:public"],\n')
 
-def makeSemanticsRule(file, dependencyResolver, out):
+def makeSemanticsRule(file, dependency_resolver, out):
   file_name = file.name()
   rule_name = semanticsName(file_name)
 
   out.append('kompile(\n')
   appendName(rule_name, out)
   appendSrcs(file_name, out)
-  appendDeps('deps', file.require(), libraryName, dependencyResolver, False, out)
+  appendDeps('deps', file.require(), libraryName, dependency_resolver, False, out)
   appendPublic(out)
   out.append(')\n')
   out.append('\n')
 
-def makeLibraryRule(file, dependencyResolver, out):
+def makeLibraryRule(file, dependency_resolver, out):
   file_name = file.name()
   rule_name = libraryName(file_name)
 
   out.append('klibrary(\n')
   appendName(rule_name, out)
   appendSrcs(file_name, out)
-  appendDeps('deps', file.require(), libraryName, dependencyResolver, False, out)
+  appendDeps('deps', file.require(), libraryName, dependency_resolver, False, out)
   appendPublic(out)
   out.append(')\n')
   out.append('\n')
 
-def makeProofRule(file, semantics, dependencyResolver, out):
+def makeProofRule(file, semantics, dependency_resolver, out):
   file_name = file.name()
   rule_name = proofName(file_name)
   #print('makeProofRule(%s)' % rule_name)
@@ -312,7 +342,7 @@ def makeProofRule(file, semantics, dependencyResolver, out):
   out.append('kprove_test(\n')
   appendName(rule_name, out)
   appendSrcs(file_name, out)
-  appendDeps('trusted', file.require(), removeExtension, dependencyResolver, True, out)
+  appendDeps('trusted', file.require(), removeExtension, dependency_resolver, True, out)
   out.append('  semantics = "')
   out.append(semantics)
   out.append('",\n')
@@ -333,6 +363,19 @@ def makeTrustedRule(file, out):
   out.append('ktrusted(\n')
   appendName(rule_name, out)
   appendSrcs(file_name, out)
+  appendPublic(out)
+  out.append(')\n')
+  out.append('\n')
+
+def makeTrustedLibraryRule(file, trusted_file, dependency_resolver, out):
+  file_name = file.name()
+  rule_name = libraryName(trusted_file.name())
+  trusted_name = ':' + trustedName(file_name)
+
+  out.append('klibrary(\n')
+  appendName(rule_name, out)
+  appendSrcs(trusted_name, out)
+  appendDeps('deps', trusted_file.require(), libraryName, dependency_resolver, False, out, extra = [trusted_name])
   appendPublic(out)
   out.append(')\n')
   out.append('\n')
@@ -392,10 +435,11 @@ def generateBuildFile(current_dir, bazel_root):
   if skip:
     return
 
-  dependencyResolver = DependencyResolver(bazel_root, current_dir)
+  dependency_resolver = DependencyResolver(bazel_root, current_dir)
   out = []
   libraries = []
   proofs = []
+  lemmas = []
   main = None
   for fname in os.listdir(current_dir):
     if os.path.isdir(fname):
@@ -404,6 +448,9 @@ def generateBuildFile(current_dir, bazel_root):
       continue
     if fname.startswith('proof'):
       proofs.append(fname)
+      continue
+    if fname.startswith('lemma-'):
+      lemmas.append(fname)
       continue
     if fname.endswith('-execute.k'):
       assert not main, [main, fname]
@@ -422,8 +469,12 @@ def generateBuildFile(current_dir, bazel_root):
   if proofs:
     to_load.append('"kprove_test"')
     to_load.append('"ktrusted"')
+  if lemmas:
+    to_load.append('"kprove_test"')
+    to_load.append('"ktrusted"')
+    to_load.append('"klibrary"')
 
-  if not main and not libraries and not proofs:
+  if not main and not libraries and not proofs and not lemmas:
     with open(os.path.join(current_dir, 'BUILD'), 'w') as f:
       f.write('')
     return
@@ -431,23 +482,31 @@ def generateBuildFile(current_dir, bazel_root):
   assert semantics, "Semantics rule not present in the config file and no semantics could be found in the current directory (%s)." % current_dir
 
   out.append('load(')
-  out.append(', '.join(to_load))
+  out.append(', '.join(sorted(set(to_load))))
   out.append(')\n')
   out.append('\n')
 
   if main:
     contents = loadFile(current_dir, main)
-    makeSemanticsRule(contents, dependencyResolver, out)
-    makeLibraryRule(contents, dependencyResolver, out)
+    makeSemanticsRule(contents, dependency_resolver, out)
+    makeLibraryRule(contents, dependency_resolver, out)
 
   for l in sorted(libraries):
     contents = loadFile(current_dir, l)
-    makeLibraryRule(contents, dependencyResolver, out)
+    makeLibraryRule(contents, dependency_resolver, out)
 
   for p in sorted(proofs):
     contents = loadFile(current_dir, p)
-    makeProofRule(contents, semantics, dependencyResolver, out)
+    makeProofRule(contents, semantics, dependency_resolver, out)
     makeTrustedRule(contents, out)
+
+  for l in sorted(lemmas):
+    contents = loadFile(current_dir, l)
+    trusted_contents = loadFileAsTrusted(current_dir, l, trustedFileName(l))
+
+    makeProofRule(contents, semantics, dependency_resolver, out)
+    makeTrustedRule(contents, out)
+    makeTrustedLibraryRule(contents, trusted_contents, dependency_resolver, out)
 
   with open(os.path.join(current_dir, 'BUILD'), 'w') as f:
     f.write(''.join(out))

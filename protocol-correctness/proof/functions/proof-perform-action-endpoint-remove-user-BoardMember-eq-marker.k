@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> remove-user-BoardMember-eq.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

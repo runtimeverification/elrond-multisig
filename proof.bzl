@@ -1,6 +1,19 @@
+load("@bazel_skylib//lib:collections.bzl", "collections")
+
 KompileInfo = provider(fields=["files"])
 KtrustedInfo = provider(fields=["trusted"])
 KproveInfo = provider(fields=["spec", "definition", "command"])
+
+def _extract_includes(ctx):
+  all_files = ctx.files.srcs
+  for dep in ctx.attr.deps:
+    all_files = all_files + dep[DefaultInfo].files.to_list()
+
+  paths = collections.uniq([s.root.path for s in all_files])
+  joined_paths = ':'.join([p for p in paths if p])
+  if not joined_paths:
+    return ':'
+  return joined_paths
 
 def _kompile_impl(ctx):
   output_files = [
@@ -12,7 +25,7 @@ def _kompile_impl(ctx):
   ]
   if len(ctx.files.srcs) != 1:
     fail
-  input_names = [output_files[0].path] + [s.path for s in ctx.files.srcs]
+  input_names = [_extract_includes(ctx), output_files[0].path] + [s.path for s in ctx.files.srcs]
   # TODO: Make this work if the file name is not based on the target name.
   ctx.actions.run(
       inputs=depset(ctx.files.srcs, transitive = [dep[DefaultInfo].files for dep in ctx.attr.deps]),
@@ -55,7 +68,7 @@ def _klibrary_impl(ctx):
   ctx.actions.run(
       inputs=depset(ctx.files.srcs, transitive = [dep[DefaultInfo].files for dep in ctx.attr.deps]),
       outputs=[output_dir],
-      arguments=input_names,
+      arguments= [_extract_includes(ctx)] + input_names,
       progress_message="Checking %s" % ctx.files.srcs[0].path,
       executable=ctx.executable.kompile_tool)
   return [
@@ -86,7 +99,7 @@ def _ktrusted_impl(ctx):
   ctx.actions.run(
       inputs=depset(ctx.files.srcs),
       outputs=[tmp_file],
-      arguments=[ctx.files.srcs[0].path, tmp_file.path],
+      arguments=['trusted', ctx.files.srcs[0].path, tmp_file.path],
       progress_message="Trusting %s" % ctx.files.srcs[0].path,
       executable=ctx.executable.ktrusted_tool)
 
@@ -101,6 +114,9 @@ def _ktrusted_impl(ctx):
       progress_message="Merging %s" % ctx.files.srcs[0].path,
       executable=ctx.executable.kmerge_tool)
   return [
+      DefaultInfo(
+          files = depset([output_file]),
+      ),
       KtrustedInfo(
           trusted = output_file,
       )
@@ -140,10 +156,19 @@ def _merge_trusted(input_file, trusted_attr, kmerge, actions, merged_file):
 def _kprove_kompile_impl(ctx):
   if len(ctx.files.srcs) != 1:
     fail
+
+  tmp_file = ctx.actions.declare_file(ctx.label.name + ".tmp-proof.k")
+  ctx.actions.run(
+      inputs=depset([ctx.files.srcs[0]]),
+      outputs=[tmp_file],
+      arguments=['proof', ctx.files.srcs[0].path, tmp_file.path],
+      progress_message="Preparing %s" % ctx.files.srcs[0].path,
+      executable=ctx.executable.ktrusted_tool)
+
   merged_file = ctx.actions.declare_file(ctx.label.name + '.k')
 
   _merge_trusted(
-      ctx.files.srcs[0],
+      tmp_file,
       ctx.attr.trusted,
       ctx.executable.kmerge_tool,
       ctx.actions,
@@ -200,6 +225,12 @@ kprove_kompile = rule(
             cfg = "exec",
             allow_files = True,
             default = Label("//kompile-tool:kprove_kompile_tool"),
+        ),
+        "ktrusted_tool": attr.label(
+            executable = True,
+            cfg = "exec",
+            allow_files = True,
+            default = Label("//kompile-tool:ktrusted_tool"),
         ),
         "kmerge_tool": attr.label(
             executable = True,
@@ -303,4 +334,3 @@ def kprove_test(*, name, srcs, trusted=[], semantics, breadth="1", timeout="shor
     kompiled = ":%s-kompile" % name,
     timeout = timeout,
   )
-

@@ -13,6 +13,9 @@ echo >> $OUTPUT
 
 for f in "$@"
 do
-  cat "$f" | sed 's/^.*\/\/@ Bazel remove\s*$/\/\/ Removed by Bazel + kmerge./' >> $OUTPUT
+  cat "$f" \
+    | sed 's/^.*\/\/@ Bazel remove\s*$/\/\/ Removed by Bazel + kmerge./' \
+    | sed 's/^require /\/\/ Removed by Bazel + kmerge./' \
+    >> $OUTPUT
   echo >> $OUTPUT
 done

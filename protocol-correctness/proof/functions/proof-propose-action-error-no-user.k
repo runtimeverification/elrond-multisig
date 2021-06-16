@@ -3,7 +3,8 @@ module PROOF-PROPOSE-ACTION-ERROR-NO-USER
 //@ trusted
 // module TRUSTED-PROPOSE-ACTION-ERROR-NO-USER
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(proposeAction(_Action:Action)) ~> K:K

@@ -1,19 +1,21 @@
+require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/last-functions.k"
+require "protocol-correctness/lib/plistlen-functions.k"
+
 module PSEUDOCODE-SYNTAX
   imports INT
   imports LIST
   imports STRING
+
+  imports BASE-TYPES-SYNTAX
 
   syntax CodeMetadata ::= "CodeMetadata::DEFAULT"     [function]
                       |   "CodeMetadata::UPGRADEABLE" [function]
                       |   "CodeMetadata::PAYABLE"     [function]
                       |   "CodeMetadata::READABLE"    [function]
 
-  syntax Usize ::= u(Int)  // TODO: int32
-  syntax BigUint ::= big(Int)  // Assumes no operations on this.
   syntax CodeMetadata ::= meta(Int)  // Assumes no operations on this.
   syntax UserRole ::= "None" | "Proposer" | "BoardMember"
-  syntax BoxedBytes ::= bytes(String)
-  syntax Address ::= address(Int)
   syntax Action ::= "Nothing"
                 |   AddBoardMember(Address)
                 |   AddProposer(Address)
@@ -31,7 +33,6 @@ module PSEUDOCODE-SYNTAX
                         function: BoxedBytes,
                         arguments: ExpressionList)  // list of BoxedBytes
 
-  syntax Variable ::= r"[A-Za-z_][A-Za-z_0-9]*" [token]
   syntax Variable ::= "action"        [token]
                   |   "action_id"     [token]
                   |   "address"       [token]
@@ -47,51 +48,9 @@ module PSEUDOCODE-SYNTAX
                   |   "user_id"       [token]
                   |   "result"        [token]
 
-  syntax ExternalCommands ::= ExternalCommand
-                          |   ExternalCommand ExternalCommands
-  syntax ExternalCommand  ::= "from" Address "run" EndpointCall ";"
-
-  syntax Block ::= "{" Instructions "}"
-  syntax Instructions ::= Instruction
-                      |   Instruction Instructions
-  syntax Instruction  ::= "require" "(" Expression ")" ";"
-                      |   Variable "=" Expression ";"
-                      |   "if" "(" Expression ")" Block               [avoid]
-                      |   "if" "(" Expression ")" Block "else" Block  [prefer]
-                      |   "for" "(" index:Variable "," value:Variable ")" "in" Expression Block
-                      |   Expression ";"
-                      |   "ok" "(" Expression ")" ";"
-  syntax Value  ::= Usize
-                |   "void"
-                |   Bool
-                |   UserRole
-                |   Address
-                |   BoxedBytes
-                |   BigUint
+  syntax Value  ::= UserRole
                 |   CodeMetadata
-  syntax Expression ::= FunctionCall
-                    |   Variable
-                    |   ExpressionList
-                    |   Action
-                    |   Value
-                    |   Expression "+" Expression
-                    |   Expression "-" Expression
-                    |   Expression "|" Expression
-                    >   Expression "==" Expression
-                    |   Expression "<=" Expression
-                    |   Expression ">" Expression
-                    |   "!" Expression
-
-  syntax ExpressionCSV  ::= "."
-                        |   Expression "," ExpressionCSV
-
-  syntax ArgumentCSV  ::= Expression
-                      |   Expression "," ArgumentCSV
-
-  syntax ExpressionList ::= "[" ExpressionCSV "]"
-
-  syntax FunctionCall ::= FunctionTag "(" ")"
-                      |   FunctionTag "(" ArgumentCSV ")"
+  syntax Expression ::= Action
 
   syntax FunctionTag  ::= "proposeAction"             // (action)
                       |   "setQuorum"                 // (quorum)
@@ -140,9 +99,6 @@ module PSEUDOCODE-SYNTAX
                       |   "sendTx"                    // (address, amount, data)
                       |   "asyncCall"                 // (address, amount, [data])
                       |   EndpointTag
-
-  syntax EndpointCall ::= EndpointTag "(" ")"
-                      |   EndpointTag "(" ArgumentCSV ")"
 
   syntax EndpointTag  ::= "init"                // (quorum, board)
                       |   "proposeAddBoardMember"  // (user_id)
@@ -489,6 +445,8 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
   imports INT
 
   imports PSEUDOCODE-SYNTAX
+  imports PLISTLEN-FUNCTIONS-SYNTAX
+  imports LAST-FUNCTIONS-SYNTAX
 
   syntax KResult
 
@@ -507,13 +465,9 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
   
   syntax Int ::= addOneIfNotNegative(Int)  [function, functional]
 
-  syntax Int ::= pListLen(ExpressionList)  [function, functional, smtlib(pListLen)]
-
   syntax ExpressionCSV ::= #listSwapRemove(ExpressionCSV, Int)  [function, functional]
 
   syntax ExpressionCSV ::= lastToStart(ExpressionCSV)  [function, functional]
-
-  syntax Expression ::= last(ExpressionCSV)  [function]
 
   syntax ExpressionCSV ::= removeLast(ExpressionCSV)  [function]
 
@@ -522,6 +476,11 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
   syntax ExpressionCSV ::= #pushList(ExpressionCSV, Expression) [function, functional]
 
   syntax ExpressionCSV ::= prepend(ExpressionCSV, Expression) [function, functional]
+
+  syntax Int ::= metadataToInt(CodeMetadata)  [function, functional]
+
+  syntax CodeMetadata ::= codeMetadataFunction(upgradeable:Bool, payable:Bool, readable:Bool)
+      [function, functional]
 
 endmodule
 
@@ -537,6 +496,9 @@ module PSEUDOCODE-FUNCTIONS
   imports PSEUDOCODE-MAP-UTILS
   imports PSEUDOCODE-SYNTAX
   imports PSEUDOCODE-TYPE-REFLECTION
+
+  imports PLISTLEN-FUNCTIONS
+  imports LAST-FUNCTIONS
 
   context evaluate(_:FunctionTag(
           {HOLE => evaluateAc(HOLE)}:>ArgumentCSV
@@ -867,9 +829,6 @@ module PSEUDOCODE-FUNCTIONS
   rule addOneIfNotNegative(X) => X
     requires X <Int 0
 
-  rule pListLen([.]) => 0
-  rule pListLen([_:Expression, Es:ExpressionCSV]) => 1 +Int pListLen([Es])
-
   rule  call(listSwapRemove([L:ExpressionCSV], u(I:Int)))
         => [#listSwapRemove(L, I)]
     // TODO: Do things work with this requires?
@@ -887,15 +846,6 @@ module PSEUDOCODE-FUNCTIONS
   rule lastToStart(.) => .:ExpressionCSV
   rule lastToStart(Es:ExpressionCSV) => last(Es), removeLast(Es)
     requires pListLen([Es]) >Int 0
-
-  rule last(E:Expression, .) => E
-  rule last(_:Expression, Es:ExpressionCSV) => last(Es)
-    requires pListLen([Es]) >Int 0
-
-  rule #Ceil(last(@Es:ExpressionCSV))
-      =>  {pListLen([@Es]) >Int 0 #Equals true}
-          #And #Ceil(@Es)
-    [anywhere, simplification]
 
   rule removeLast(_:Expression, .) => .:ExpressionCSV
   rule removeLast(E:Expression, Es:ExpressionCSV) => E, removeLast(Es)
@@ -1082,6 +1032,16 @@ module PSEUDOCODE-FUNCTIONS
         => evaluate(void)
     requires isKResult(Arguments)
 
+  rule metadataToInt(meta(Value:Int)) => Value
+
+  rule codeMetadataFunction(Upgradeable:Bool, Payable:Bool, Readable:Bool)
+      => meta(
+               metadataToInt(CodeMetadata::DEFAULT)
+          |Int #if Upgradeable #then metadataToInt(CodeMetadata::UPGRADEABLE) #else 0 #fi
+          |Int #if Payable #then metadataToInt(CodeMetadata::PAYABLE) #else 0 #fi
+          |Int #if Readable #then metadataToInt(CodeMetadata::READABLE) #else 0 #fi
+        )
+
 endmodule
 
 module MAYBE
@@ -1231,6 +1191,9 @@ module MAP-UTILS
   rule X:KItem in_keys(Y:KItem |-> _:KItem M:Map)
         => X ==K Y orBool X in_keys(M)
     ensures notBool Y in_keys(M)
+    [simplification]
+  rule K1 in_keys(M [ K2 <- undef ]) => K1 in_keys(M)
+    requires notBool K1 ==K K2
     [simplification]
 
   rule M:Map[Key:KItem] orDefault _:KItem => M[Key]

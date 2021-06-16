@@ -6,7 +6,9 @@ module PROOF-DISCARD-ACTION-NO-USER-MARKER
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-NO-USER-MARKER
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> discard-action-no-user.k ~> call(discardAction(_ActionId:Usize)) ~> K:K

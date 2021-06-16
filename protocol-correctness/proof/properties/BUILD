@@ -1,4 +1,4 @@
-load("//:proof.bzl", "kompile", "klibrary", "kprove_test", "ktrusted")
+load("//:proof.bzl", "klibrary", "kompile", "kprove_test", "ktrusted")
 
 kompile(
   name = "properties-execute",

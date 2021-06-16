@@ -1,7 +1,8 @@
 // timeout = long
 //@ proof
 module PROOF-UNSIGN-OTHER-SIGNERS-FIRST
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 //@ trusted
 // module TRUSTED-UNSIGN-OTHER-SIGNERS-FIRST
   // imports MAIN-PROOF-EXECUTE

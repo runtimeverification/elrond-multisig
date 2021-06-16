@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-PROPOSER-NOBODY-LEFT-EQ-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-REMOVE-USER-PROPOSER-NOBODY-LEFT-EQ-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> remove-user-Proposer-nobody-left-eq.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

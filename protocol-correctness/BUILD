@@ -1,4 +1,4 @@
-load("//:proof.bzl", "kompile", "klibrary")
+load("//:proof.bzl", "klibrary", "kompile")
 
 kompile(
   name = "pseudocode-execute",
@@ -22,6 +22,9 @@ klibrary(
   name = "pseudocode-files",
   srcs = ["pseudocode.k"],
   deps = [
+      "//protocol-correctness/lib:base-types-files",
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
   ],
   visibility = ["//visibility:public"],
 )

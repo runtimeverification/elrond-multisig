@@ -4,7 +4,8 @@ module PROOF-PROPOSE-SC-DEPLOY-FRAGMENT
 //@ trusted
 // module TRUSTED-PROPOSE-SC-DEPLOY-FRAGMENT
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> runPseudoCode(

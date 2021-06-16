@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-BOARDMEMBER-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-BOARDMEMBER-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> add-proposer-BoardMember.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
