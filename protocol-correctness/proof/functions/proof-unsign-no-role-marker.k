@@ -1,7 +1,9 @@
 // timeout = moderate
 //@ proof
 module PROOF-UNSIGN-NO-ROLE-MARKER
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 //@ trusted
 // module TRUSTED-UNSIGN-NO-ROLE-MARKER
   // imports MAIN-PROOF-EXECUTE

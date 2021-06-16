@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-SC-DEPLOY-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-SC-DEPLOY-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> sc-deploy.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

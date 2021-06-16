@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-PROPOSER-EQ-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-PROPOSER-EQ-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> add-proposer-Proposer-eq.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

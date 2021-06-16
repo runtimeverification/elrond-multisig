@@ -5,7 +5,8 @@ module PROOF-CHANGE-USER-ROLE-PROPOSER
 //@ trusted
 // module TRUSTED-CHANGE-USER-ROLE-PROPOSER
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(changeUserRole(UserAddress:Address, NewRole:UserRole)) ~> K:K

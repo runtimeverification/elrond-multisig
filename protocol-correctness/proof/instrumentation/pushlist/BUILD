@@ -1,17 +1,8 @@
-load("//:proof.bzl", "kompile", "klibrary", "kprove_test", "ktrusted")
-
-kompile(
-  name = "pushlist-execute",
-  srcs = ["pushlist-execute.k"],
-  deps = [
-      "//protocol-correctness:pseudocode-files",
-  ],
-  visibility = ["//visibility:public"],
-)
+load("//:proof.bzl", "klibrary", "kprove_test", "ktrusted")
 
 klibrary(
-  name = "pushlist-execute-files",
-  srcs = ["pushlist-execute.k"],
+  name = "pushlist-instrumentation-files",
+  srcs = ["pushlist-instrumentation.k"],
   deps = [
       "//protocol-correctness:pseudocode-files",
   ],
@@ -23,7 +14,7 @@ kprove_test(
   srcs = ["proof-push-list-not-empty.k"],
   trusted = [
   ],
-  semantics = "pushlist-execute",
+  semantics = "//protocol-correctness/proof:main-proof-execute",
   breadth = "2",
 )
 

@@ -5,7 +5,7 @@ module PROOF-PUSH-LIST-NOT-EMPTY
 //@ trusted
 // module TRUSTED-PUSH-LIST-NOT-EMPTY
 //@ end
-  imports PUSHLIST-EXECUTE-SYNTAX
+  imports PUSHLIST-INSTRUMENTATION-SYNTAX
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
 
   claim lemmaPushListNotEmpty(L:ExpressionCSV, E:Expression) => .K

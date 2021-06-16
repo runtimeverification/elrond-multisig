@@ -8,7 +8,8 @@ module PROOF-PROPOSE-ACTION-BOARDMEMBER
 //@ end
 
   imports EXECUTION-PROOF-HELPERS
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(proposeAction(Action:Action)) ~> K:K

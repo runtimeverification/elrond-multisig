@@ -17,7 +17,7 @@ module PROOF-DISCARD-ACTION-3
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-3
 //   imports INVARIANT-FUNCTIONS
-//   imports DISCARD-ACTION-INSTRUMENTATION
+//   imports INSTRUMENTATION-DISCARD-ACTION
 //@ end
 
   claim <T><TT>

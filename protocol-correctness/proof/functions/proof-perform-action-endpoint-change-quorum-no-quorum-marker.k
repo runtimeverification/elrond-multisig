@@ -7,7 +7,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-CHANGE-QUORUM-NO-QUORUM-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-CHANGE-QUORUM-NO-QUORUM-MARKER
 //@ end
 
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INSTRUMENTATION-PROOF
+  imports INVARIANT
 
   claim <T><TT>
           <k> change-quorum-no-quorum.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

@@ -1,11 +1,12 @@
-// timeout = moderate
+// timeout = long
 // breadth = 2
 //@ proof
 module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ trusted
 // module TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

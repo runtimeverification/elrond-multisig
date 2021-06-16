@@ -5,7 +5,8 @@ module PROOF-CHANGE-USER-ROLE-BOARDMEMBER
 //@ trusted
 // module TRUSTED-CHANGE-USER-ROLE-BOARDMEMBER
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(changeUserRole(UserAddress:Address, NewRole:UserRole)) ~> K:K

@@ -1,6 +1,6 @@
 require "protocol-correctness/pseudocode.k"
-require "protocol-correctness/proof/map/map-execute.k"
 require "protocol-correctness/proof/base.k"
+require "protocol-correctness/proof/map/map-execute.k"
 
 module EXECUTION-PROOF-HELPERS
   imports MAP-SYMBOLIC
@@ -20,12 +20,6 @@ module EXECUTION-PROOF-HELPERS
   syntax Int ::= expand(Int)  [function, functional, no-evaluators]
   syntax Int ::= "usesExpanded"  [function, functional, no-evaluators]
 
-  rule isKResult(last(Es)) => true
-    requires isKResult(Es)
-    // TODO: Define a function called `lastCeilCondition`...
-    ensures pListLen([Es]) >Int 0
-    [simplification]
-
   rule isUsize(last(Es)) => true
     requires listElementsAreUsize([Es])
     [simplification]
@@ -44,8 +38,6 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreUsize([removeLast(Es:ExpressionCSV)]) => true
     requires listElementsAreUsize([Es])
     [simplification]
-
-  rule pListLen(_) >=Int 0 => true  [simplification, smt-lemma]
 
   rule addOneIfNotNegative(X:Int) >=Int 0 => X >=Int 0 [simplification]
 

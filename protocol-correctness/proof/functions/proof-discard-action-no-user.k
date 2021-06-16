@@ -3,7 +3,8 @@ module PROOF-DISCARD-ACTION-NO-USER
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-NO-USER
 //@ end
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 
   claim <T><TT>
           <k> call(discardAction(_ActionId:Usize)) ~> K:K

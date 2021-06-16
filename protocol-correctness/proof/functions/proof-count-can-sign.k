@@ -2,7 +2,8 @@
 // breadth = 6
 //@ proof
 module PROOF-COUNT-CAN-SIGN
-  imports FUNCTIONS-EXECUTE
+  imports EXECUTION-PROOF-HELPERS
+  imports INVARIANT
 //@ trusted
 // module TRUSTED-COUNT-CAN-SIGN
   // imports MAIN-PROOF-EXECUTE

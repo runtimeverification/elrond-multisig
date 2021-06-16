@@ -6,6 +6,12 @@ Setup
 
 * Install [Bazel](https://docs.bazel.build/versions/4.0.0/install.html)
 * Install [K](https://github.com/kframework/k/releases)
+  Last tested version:
+  - K release: v5.1.51
+
+  Or, if you want to build K manually:
+  - K commit: 94041a3ded548fb07b52e84751d8e09613275658
+  - Haskell backend commit: 1724c5c23afea515f4c58328d1f42abc5de6e15c
 * Clone this repository
   ```
   git clone git@github.com:runtime-verification/elrond-multisig

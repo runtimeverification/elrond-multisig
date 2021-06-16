@@ -1,65 +1,41 @@
 #!/usr/bin/env python3
 import sys
 
+import trusted
+
 def naturalNumbers():
   i = 1
   while True:
     yield i
     i += 1
 
-DEFAULT = 0
-PROOF = 1
-TRUSTED = 2
-
-def makeTrusted(file_name, lines):
-  state = DEFAULT
+def makeProof(file_name, lines):
+  lemma_parser = trusted.LemmaParser(file_name)
   for (line_number, line) in lines:
     normalized = line.strip()
-    if normalized.startswith('//@'):
-      if state == DEFAULT:
-        if normalized == '//@ proof':
-          state = PROOF
-        else:
-          raise Exception(
-            "Unexpected trusted directive, only '//@ proof' allowed here.\n%s:%d"
-            % (file_name, line_number))
-      elif state == PROOF:
-        if normalized == '//@ trusted':
-          state = TRUSTED
-        else:
-          raise Exception(
-            "Unexpected trusted directive, only '//@ trusted' allowed here.\n%s:%d"
-            % (file_name, line_number))
-      elif state == TRUSTED:
-        if normalized == '//@ end':
-          state = DEFAULT
-        else:
-          raise Exception(
-            "Unexpected trusted directive, only '//@ end' allowed here.\n%s:%d"
-            % (file_name, line_number))
-    else:
-      if state == DEFAULT:
-        pass
-      else:
-        unindented = line.lstrip()
-        indentation = ' ' * (len(line) - len(unindented))
-        if state == PROOF:
-          line = indentation + '// ' + unindented
-        elif state == TRUSTED:
-          if unindented.startswith('// '):
-            line = indentation + unindented[3:]
-          else:
-            raise Exception(
-              "Expected trusted lines to be commented.\n%s:%d"
-              % (file_name, line_number))
+
+    lemma_parser.processLine(line, normalized, line_number)
+    if lemma_parser.isParsing():
+      if lemma_parser.finishedParsing():
+        yield lemma_parser.toClaim()
+        lemma_parser.reset()
+      continue
+
     yield line
 
 def main(argv):
-  if len(argv) != 2:
-    raise Exception('Wrong number of arguments, expected an input and an output file name.')
-  with open(argv[0], 'r') as f:
-    with open(argv[1], 'w') as g:
-      g.writelines(makeTrusted(argv[0], zip(naturalNumbers(), f)))
+  if len(argv) != 3:
+    raise Exception('Wrong number of arguments, expected: trusted/proof, an input and an output file name.')
+  if argv[0] == 'trusted':
+    with open(argv[1], 'r') as f:
+      with open(argv[2], 'w') as g:
+        g.writelines(trusted.makeTrusted(argv[1], zip(naturalNumbers(), f)))
+  elif argv[0] == 'proof':
+    with open(argv[1], 'r') as f:
+      with open(argv[2], 'w') as g:
+        g.writelines(makeProof(argv[1], zip(naturalNumbers(), f)))
+  else:
+    raise Exception('The first argument must be one of "trusted" and "proof".')
 
 if __name__ == '__main__':
   main(sys.argv[1:])

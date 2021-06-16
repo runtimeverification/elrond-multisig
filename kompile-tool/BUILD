@@ -53,3 +53,10 @@ sh_library(
   srcs = ["kast.kscript"],
   visibility = ["//visibility:public"],
 )
+
+py_binary(
+  name = "klemmas_to_proof_tool",
+  main = "lemmas-to-proof.py",
+  srcs = ["lemmas-to-proof.py"],
+  visibility = ["//visibility:public"],
+)
