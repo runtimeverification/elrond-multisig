@@ -1,14 +1,22 @@
-require "protocol-correctness/pseudocode.k"
+require "protocol-correctness/lib/list-elements-are-usize.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/map/map-execute.k"
+require "protocol-correctness/pseudocode.k"
+
+module EXECUTION-PROOF-HELPERS-SYNTAX
+  imports LIST-ELEMENTS-ARE-USIZE-SYNTAX
+endmodule
 
 module EXECUTION-PROOF-HELPERS
+  imports EXECUTION-PROOF-HELPERS-SYNTAX
+
   imports MAP-SYMBOLIC
   imports SET
 
   imports PSEUDOCODE
   imports MAP-EXECUTE
   imports EXPLICIT-KITEM-INJECTION
+  imports LIST-ELEMENTS-ARE-USIZE
 
   // Expand and PropertyHandling form a stupid trick used to control symbolic
   // function application.
@@ -19,10 +27,6 @@ module EXECUTION-PROOF-HELPERS
   // TODO: Delete above or below.
   syntax Int ::= expand(Int)  [function, functional, no-evaluators]
   syntax Int ::= "usesExpanded"  [function, functional, no-evaluators]
-
-  rule isUsize(last(Es)) => true
-    requires listElementsAreUsize([Es])
-    [simplification]
 
   rule isKResult(lastToStart(Es)) => isKResult(Es)
     [simplification]
@@ -100,12 +104,6 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreAddresses([E:Expression , Es:ExpressionCSV])
       => isAddress(E) andBool listElementsAreAddresses([Es])
 
-  syntax Bool ::= listElementsAreUsize(KItem)  [function, functional]
-  rule listElementsAreUsize([.]) => true
-  rule listElementsAreUsize([E:Expression, Es:ExpressionCSV])
-      => isUsize(E) andBool listElementsAreUsize([Es])
-  rule listElementsAreUsize(_:KItem) => false
-    [owise]
   rule listElementsAreUsize([E:Expression, Es:ExpressionCSV])
       => isUsize(E) andBool listElementsAreUsize([Es])
     [simplification]

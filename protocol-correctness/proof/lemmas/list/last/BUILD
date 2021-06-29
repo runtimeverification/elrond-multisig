@@ -21,6 +21,33 @@ klibrary(
 )
 
 kprove_test(
+  name = "lemma-last-usize",
+  srcs = ["lemma-last-usize.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-last-usize",
+  srcs = ["lemma-last-usize.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-last-usize-files",
+  srcs = [":trusted-lemma-last-usize"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:list-elements-are-usize-files",
+      ":trusted-lemma-last-usize",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-last",
   srcs = ["lemma-last.k"],
   trusted = [

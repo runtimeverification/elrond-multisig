@@ -32,9 +32,10 @@ klibrary(
   name = "execution-proof-helpers-files",
   srcs = ["execution-proof-helpers.k"],
   deps = [
-      "//protocol-correctness:pseudocode-files",
+      "//protocol-correctness/lib:list-elements-are-usize-files",
       ":base-files",
       "//protocol-correctness/proof/map:map-execute-files",
+      "//protocol-correctness:pseudocode-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -208,6 +209,7 @@ klibrary(
   srcs = ["lemmas.k"],
   deps = [
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-files",
+      "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-usize-files",
       "//protocol-correctness/proof/lemmas/list/plistlen:trusted-lemma-plistlen-files",
   ],
   visibility = ["//visibility:public"],
