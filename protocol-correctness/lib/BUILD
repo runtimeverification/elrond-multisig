@@ -35,6 +35,15 @@ klibrary(
 )
 
 klibrary(
+  name = "list-elements-are-usize-files",
+  srcs = ["list-elements-are-usize.k"],
+  deps = [
+      ":base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "plistlen-functions-files",
   srcs = ["plistlen-functions.k"],
   deps = [

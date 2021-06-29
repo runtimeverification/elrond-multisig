@@ -8,5 +8,5 @@ endmodule
 module LIST-EXECUTE
   imports MAIN-PROOF-EXECUTE-NO-LEMMAS
 
-  // imports LIST-EXECUTE-SYNTAX
+  imports LIST-EXECUTE-SYNTAX
 endmodule
