@@ -26,6 +26,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "last-execute",
+  breadth = "3",
 )
 
 ktrusted(
@@ -95,6 +96,32 @@ klibrary(
       "//protocol-correctness/lib:last-functions-files",
       "//protocol-correctness/lib:plistlen-functions-files",
       ":trusted-lemma-last",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-remove-last-kresult",
+  srcs = ["lemma-remove-last-kresult.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-remove-last-kresult",
+  srcs = ["lemma-remove-last-kresult.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-remove-last-kresult-files",
+  srcs = [":trusted-lemma-remove-last-kresult"],
+  deps = [
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-remove-last-kresult",
   ],
   visibility = ["//visibility:public"],
 )

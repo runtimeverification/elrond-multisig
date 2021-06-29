@@ -70,10 +70,10 @@ endmodule
 module BASE-TYPES
   imports BASE-TYPES-SYNTAX
 
-  rule isKResultExpression(KItem) => false [owise]
+  rule isKResultExpression(_:Expression) => false [owise]
   rule isKResultExpression(_:Value) => true
 
-  rule isKResult(E:Expression) => definedIsKResult(E)
+  rule isKResult(E:Expression) => isKResultExpression(E)
 
 
   rule isKResultArgumentCSV(E:Expression , Es:ArgumentCSV)

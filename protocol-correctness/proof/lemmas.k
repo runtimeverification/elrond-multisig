@@ -1,6 +1,7 @@
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-usize.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-to-start-kresult.k"
+require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-remove-last-kresult.k"
 require "protocol-correctness/proof/lemmas/list/plistlen/trusted-lemma-plistlen.k"
 
 module LEMMAS
@@ -8,4 +9,5 @@ module LEMMAS
   imports TRUSTED-LEMMA-LAST
   imports TRUSTED-LEMMA-LAST-USIZE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
+  imports TRUSTED-LEMMA-REMOVE-LAST-KRESULT
 endmodule
