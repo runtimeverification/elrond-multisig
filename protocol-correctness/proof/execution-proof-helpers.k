@@ -31,11 +31,6 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreUsize([lastToStart(Es)]) => listElementsAreUsize([Es])
     [simplification]
 
-  rule isKResult(removeLast(Es)) => true
-    requires isKResult(Es)
-    ensures pListLen([Es]) >Int 0
-    [simplification]
-
   rule listElementsAreUsize([removeLast(Es:ExpressionCSV)]) => true
     requires listElementsAreUsize([Es])
     [simplification]

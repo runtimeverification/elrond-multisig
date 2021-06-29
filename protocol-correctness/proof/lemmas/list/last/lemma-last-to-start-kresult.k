@@ -1,6 +1,9 @@
+// breadth = 3
 //@ proof
 module LEMMA-LAST-TO-START-KRESULT
   imports LIST-EXECUTE-SYNTAX
+  imports INSTRUMENTATION-CONCRETIZE
+
 //@ trusted
 // require "protocol-correctness/lib/last-functions.k"
 // require "protocol-correctness/lib/plistlen-functions.k"
