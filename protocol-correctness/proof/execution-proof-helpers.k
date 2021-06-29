@@ -28,9 +28,6 @@ module EXECUTION-PROOF-HELPERS
   syntax Int ::= expand(Int)  [function, functional, no-evaluators]
   syntax Int ::= "usesExpanded"  [function, functional, no-evaluators]
 
-  rule isKResult(lastToStart(Es)) => isKResult(Es)
-    [simplification]
-
   rule listElementsAreUsize([lastToStart(Es)]) => listElementsAreUsize([Es])
     [simplification]
 

@@ -210,6 +210,7 @@ klibrary(
   deps = [
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-files",
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-usize-files",
+      "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-to-start-kresult-files",
       "//protocol-correctness/proof/lemmas/list/plistlen:trusted-lemma-plistlen-files",
   ],
   visibility = ["//visibility:public"],

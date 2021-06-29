@@ -60,9 +60,38 @@ module BASE-TYPES-SYNTAX
   syntax EndpointCall ::= EndpointTag "(" ")"
                       |   EndpointTag "(" ArgumentCSV ")"
 
+  syntax Bool ::= isKResultExpression(Expression)  [function, functional]
+  syntax Bool ::= isKResultArgumentCSV(ArgumentCSV)  [function, functional]
+  syntax Bool ::= isKResultExpressionCSV(ExpressionCSV)  [function, functional]
+  syntax Bool ::= isKResultExpressionList(ExpressionList)  [function, functional]
   syntax KResult
 endmodule
 
 module BASE-TYPES
   imports BASE-TYPES-SYNTAX
+
+  rule isKResultExpression(KItem) => false [owise]
+  rule isKResultExpression(_:Value) => true
+
+  rule isKResult(E:Expression) => definedIsKResult(E)
+
+
+  rule isKResultArgumentCSV(E:Expression , Es:ArgumentCSV)
+      => isKResultExpression(E) andBool isKResultArgumentCSV(Es)
+  rule isKResultArgumentCSV(E:Expression)
+      => isKResultExpression(E)
+
+  rule isKResult(Es:ArgumentCSV) => isKResultArgumentCSV(Es)
+
+
+  rule isKResultExpressionCSV(.:ExpressionCSV) => true
+  rule isKResultExpressionCSV(E:Expression , Es:ExpressionCSV) => isKResultExpression(E) andBool isKResultExpressionCSV(Es)
+
+  rule isKResult(Es:ExpressionCSV) => isKResultExpressionCSV(Es)
+
+
+  rule isKResultExpressionList([Es:ExpressionCSV]) => isKResultExpressionCSV(Es)
+ 
+  rule isKResult(Es:ExpressionList) => isKResultExpressionList(Es)
+
 endmodule

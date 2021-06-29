@@ -24,7 +24,9 @@ klibrary(
   deps = [
       "//protocol-correctness/lib:base-types-files",
       "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:last-to-start-files",
       "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
   ],
   visibility = ["//visibility:public"],
 )

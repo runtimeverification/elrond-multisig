@@ -35,6 +35,18 @@ klibrary(
 )
 
 klibrary(
+  name = "last-to-start-files",
+  srcs = ["last-to-start.k"],
+  deps = [
+      ":base-types-files",
+      ":last-functions-files",
+      ":plistlen-functions-files",
+      ":remove-last-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "list-elements-are-usize-files",
   srcs = ["list-elements-are-usize.k"],
   deps = [
@@ -48,6 +60,16 @@ klibrary(
   srcs = ["plistlen-functions.k"],
   deps = [
       ":base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "remove-last-files",
+  srcs = ["remove-last.k"],
+  deps = [
+      ":base-types-files",
+      ":plistlen-functions-files",
   ],
   visibility = ["//visibility:public"],
 )
