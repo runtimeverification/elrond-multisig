@@ -21,6 +21,32 @@ klibrary(
 )
 
 kprove_test(
+  name = "lemma-last-to-start-kresult",
+  srcs = ["lemma-last-to-start-kresult.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+)
+
+ktrusted(
+  name = "trusted-lemma-last-to-start-kresult",
+  srcs = ["lemma-last-to-start-kresult.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-last-to-start-kresult-files",
+  srcs = [":trusted-lemma-last-to-start-kresult"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:last-to-start-files",
+      ":trusted-lemma-last-to-start-kresult",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-last-usize",
   srcs = ["lemma-last-usize.k"],
   trusted = [

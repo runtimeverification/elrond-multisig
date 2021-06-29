@@ -1,6 +1,8 @@
 require "protocol-correctness/lib/base-types.k"
 require "protocol-correctness/lib/last-functions.k"
+require "protocol-correctness/lib/last-to-start.k"
 require "protocol-correctness/lib/plistlen-functions.k"
+require "protocol-correctness/lib/remove-last.k"
 
 module PSEUDOCODE-SYNTAX
   imports INT
@@ -123,6 +125,39 @@ module PSEUDOCODE-SYNTAX
 
 endmodule
 
+module PSEUDOCODE-KRESULT
+  imports PSEUDOCODE-SYNTAX
+  syntax Bool ::= isKResultAction(Action)  [function, functional]
+
+  rule isKResultAction(Nothing) => true
+  rule isKResultAction(AddBoardMember(A:Address)) => isKResult(A)
+  rule isKResultAction(AddProposer(A:Address)) => isKResult(A)
+  rule isKResultAction(RemoveUser(A:Address)) => isKResult(A)
+  rule isKResultAction(ChangeQuorum(U:Usize)) => isKResult(U)
+  rule  isKResultAction(SendEgld(To:Address, Amount:BigUint, Data:BoxedBytes))
+        => isKResult(To) andBool isKResult(Amount) andBool isKResult(Data)
+  rule  isKResultAction(SCDeploy(
+                        Amount:BigUint,
+                        Code:BoxedBytes,
+                        CodeMetadata:CodeMetadata,
+                        Arguments:ExpressionList))
+        => isKResult(Amount)
+            andBool isKResult(Code)
+            andBool isKResult(CodeMetadata)
+            andBool isKResult(Arguments)
+  rule isKResultAction(SCCall(
+                        To:Address,
+                        Amount:BigUint,
+                        Function:BoxedBytes,
+                        Arguments:ExpressionList))
+        => isKResult(To)
+            andBool isKResult(Amount)
+            andBool isKResult(Function)
+            andBool isKResult(Arguments)
+
+  rule isKResult(A:Action) => isKResultAction(A)
+endmodule
+
 module PSEUDOCODE
   imports PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-DETAILS
@@ -132,6 +167,7 @@ module PSEUDOCODE
   imports PSEUDOCODE-FUNCTIONS
   imports PSEUDOCODE-IF
   imports PSEUDOCODE-INSTRUCTIONS
+  imports PSEUDOCODE-KRESULT
   imports PSEUDOCODE-MEMORY
   imports PSEUDOCODE-SYNTAX
 endmodule
@@ -369,8 +405,6 @@ module PSEUDOCODE-COMMON
   imports MAP
   imports PSEUDOCODE-SYNTAX
 
-  syntax KResult ::= Value
-
   rule CodeMetadata::DEFAULT      => meta(0)
   rule CodeMetadata::UPGRADEABLE  => meta(1 <<Int 8)
   rule CodeMetadata::PAYABLE      => meta(1 <<Int 1)
@@ -402,42 +436,6 @@ module PSEUDOCODE-DETAILS
   context evaluateEc(E:Expression , {HOLE:ExpressionCSV => evaluateEc(HOLE)}:>ExpressionCSV)
     requires isKResult(E)
 
-  rule isKResult(E:Expression , Es:ArgumentCSV) => isKResult(E) andBool isKResult(Es)
-
-  rule isKResult(.:ExpressionCSV) => true
-  rule isKResult(E:Expression , Es:ExpressionCSV) => isKResult(E) andBool isKResult(Es)
-
-  rule isKResult([Es:ExpressionCSV]) => isKResult(Es)
-
-  rule isKResult(A:Action) => isKResultAction(A)
-
-  syntax Bool ::= isKResultAction(Action)  [function, functional]
-
-  rule isKResultAction(Nothing) => true
-  rule isKResultAction(AddBoardMember(A:Address)) => isKResult(A)
-  rule isKResultAction(AddProposer(A:Address)) => isKResult(A)
-  rule isKResultAction(RemoveUser(A:Address)) => isKResult(A)
-  rule isKResultAction(ChangeQuorum(U:Usize)) => isKResult(U)
-  rule  isKResultAction(SendEgld(To:Address, Amount:BigUint, Data:BoxedBytes))
-        => isKResult(To) andBool isKResult(Amount) andBool isKResult(Data)
-  rule  isKResultAction(SCDeploy(
-                        Amount:BigUint,
-                        Code:BoxedBytes,
-                        CodeMetadata:CodeMetadata,
-                        Arguments:ExpressionList))
-        => isKResult(Amount)
-            andBool isKResult(Code)
-            andBool isKResult(CodeMetadata)
-            andBool isKResult(Arguments)
-  rule isKResultAction(SCCall(
-                        To:Address,
-                        Amount:BigUint,
-                        Function:BoxedBytes,
-                        Arguments:ExpressionList))
-        => isKResult(To)
-            andBool isKResult(Amount)
-            andBool isKResult(Function)
-            andBool isKResult(Arguments)
 endmodule
 
 module PSEUDOCODE-FUNCTIONS-SYNTAX
@@ -445,8 +443,11 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
   imports INT
 
   imports PSEUDOCODE-SYNTAX
-  imports PLISTLEN-FUNCTIONS-SYNTAX
+
   imports LAST-FUNCTIONS-SYNTAX
+  imports LAST-TO-START-SYNTAX
+  imports PLISTLEN-FUNCTIONS-SYNTAX
+  imports REMOVE-LAST-SYNTAX
 
   syntax KResult
 
@@ -466,10 +467,6 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
   syntax Int ::= addOneIfNotNegative(Int)  [function, functional]
 
   syntax ExpressionCSV ::= #listSwapRemove(ExpressionCSV, Int)  [function, functional]
-
-  syntax ExpressionCSV ::= lastToStart(ExpressionCSV)  [function, functional]
-
-  syntax ExpressionCSV ::= removeLast(ExpressionCSV)  [function]
 
   syntax ExpressionCSV ::= reverseExpressionCsv(ExpressionCSV, ExpressionCSV)  [function, functional]
 
@@ -499,6 +496,8 @@ module PSEUDOCODE-FUNCTIONS
 
   imports PLISTLEN-FUNCTIONS
   imports LAST-FUNCTIONS
+  imports LAST-TO-START
+  imports REMOVE-LAST
 
   context evaluate(_:FunctionTag(
           {HOLE => evaluateAc(HOLE)}:>ArgumentCSV
@@ -842,14 +841,6 @@ module PSEUDOCODE-FUNCTIONS
   rule  #listSwapRemove(Es:ExpressionCSV, I:Int)
         => Es
     requires I <Int 0
-
-  rule lastToStart(.) => .:ExpressionCSV
-  rule lastToStart(Es:ExpressionCSV) => last(Es), removeLast(Es)
-    requires pListLen([Es]) >Int 0
-
-  rule removeLast(_:Expression, .) => .:ExpressionCSV
-  rule removeLast(E:Expression, Es:ExpressionCSV) => E, removeLast(Es)
-    requires pListLen([Es]) >Int 0
 
   rule #Ceil(removeLast(@Es:ExpressionCSV))
       =>  {pListLen([@Es]) >Int 0 #Equals true}
