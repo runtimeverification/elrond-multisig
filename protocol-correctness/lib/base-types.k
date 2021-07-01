@@ -71,7 +71,10 @@ module BASE-TYPES
   imports BASE-TYPES-SYNTAX
 
   rule isKResultExpression(_:Expression) => false [owise]
+  rule isKResultExpression(E:ExpressionList) => isKResultExpressionList(E)
   rule isKResultExpression(_:Value) => true
+
+  rule isKResultExpressionList([Es:ExpressionCSV]) => isKResultExpressionCSV(Es)
 
   rule isKResult(E:Expression) => isKResultExpression(E)
 
@@ -88,10 +91,5 @@ module BASE-TYPES
   rule isKResultExpressionCSV(E:Expression , Es:ExpressionCSV) => isKResultExpression(E) andBool isKResultExpressionCSV(Es)
 
   rule isKResult(Es:ExpressionCSV) => isKResultExpressionCSV(Es)
-
-
-  rule isKResultExpressionList([Es:ExpressionCSV]) => isKResultExpressionCSV(Es)
- 
-  rule isKResult(Es:ExpressionList) => isKResultExpressionList(Es)
 
 endmodule

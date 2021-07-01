@@ -472,13 +472,19 @@ module INVARIANT
   rule isKResult(#pushList(Es:ExpressionCSV, E:Expression))
     => isKResult(Es) andBool isKResult(E)
     [simplification]
+  rule isKResultExpressionCSV(#pushList(Es:ExpressionCSV, E:Expression))
+    => isKResult(Es) andBool isKResult(E)
+    [simplification]
 
   rule listElementsAreUsize([#pushList(Es:ExpressionCSV, E:Expression)])
     => listElementsAreUsize([Es]) andBool isUsize(E)
     [simplification]
 
-  rule isKResult(#listSwapRemove(Es:ExpressionCSV, _:Int))
-    => isKResult(Es)
+  rule isKResult(#listSwapRemove(Es:ExpressionCSV, _:Int)) => true
+    requires isKResult(Es)
+    [simplification]
+  rule isKResultExpressionCSV(#listSwapRemove(Es:ExpressionCSV, _:Int)) => true
+    requires isKResultExpressionCSV(Es)
     [simplification]
 
   rule listElementsAreUsize([#listSwapRemove(Es:ExpressionCSV, _:Int)]) => true

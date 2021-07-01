@@ -34,6 +34,9 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreUsize([removeLast(Es:ExpressionCSV)]) => true
     requires listElementsAreUsize([Es])
     [simplification]
+  rule listElementsAreUsize([#removeLast(E:Expression, Es:ExpressionCSV)]) => true
+    requires listElementsAreUsize([E, Es])
+    [simplification]
 
   rule addOneIfNotNegative(X:Int) >=Int 0 => X >=Int 0 [simplification]
 
@@ -46,6 +49,9 @@ module EXECUTION-PROOF-HELPERS
   rule #listContains([removeLast(L:ExpressionCSV)], last(L)) => false
     requires listElementsAreDistinct([L])
     [simplification]
+  rule #listContains([#removeLast(E:Expression, L:ExpressionCSV)], #last(E, L)) => false
+    requires listElementsAreDistinct([E, L])
+    [simplification]
   rule #listContains([#listSwapRemove(L:ExpressionCSV, _:Int)], E:Expression) => false
     requires notBool #listContains([L], E)
     [simplification]
@@ -57,6 +63,9 @@ module EXECUTION-PROOF-HELPERS
 
   rule listElementsAreDistinct([removeLast(L:ExpressionCSV)]) => true
     requires listElementsAreDistinct([L])
+    [simplification]
+  rule listElementsAreDistinct([#removeLast(E:Expression, L:ExpressionCSV)]) => true
+    requires listElementsAreDistinct([E, L])
     [simplification]
 
   syntax Bool ::= noCommonItem(Usize, Map, ExpressionList)  [function, functional]

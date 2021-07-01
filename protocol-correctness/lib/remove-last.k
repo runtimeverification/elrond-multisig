@@ -7,12 +7,18 @@ module REMOVE-LAST-SYNTAX
   syntax ExpressionCSV ::= removeLast(ExpressionCSV)  [function]
 endmodule
 
-module REMOVE-LAST
-  imports REMOVE-LAST-SYNTAX
-  imports PLISTLEN-FUNCTIONS-SYNTAX
+module REMOVE-LAST-ADDITIONAL-SYNTAX
+  imports BASE-TYPES-SYNTAX
 
   syntax ExpressionCSV ::= #removeLast(Expression, ExpressionCSV)  [function, functional]
   syntax ExpressionCSV ::= #removeLast0(ExpressionCSV)  [function, functional]
+endmodule
+
+module REMOVE-LAST
+  imports REMOVE-LAST-SYNTAX
+  imports REMOVE-LAST-ADDITIONAL-SYNTAX
+  imports PLISTLEN-FUNCTIONS-SYNTAX
+
 
   rule removeLast(E:Expression, Es:ExpressionCSV) => #removeLast(E, Es)
 
