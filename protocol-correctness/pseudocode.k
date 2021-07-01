@@ -155,7 +155,7 @@ module PSEUDOCODE-KRESULT
             andBool isKResult(Function)
             andBool isKResult(Arguments)
 
-  rule isKResult(A:Action) => isKResultAction(A)
+  rule isKResultExpression(A:Action) => isKResultAction(A)
 endmodule
 
 module PSEUDOCODE
@@ -1037,6 +1037,8 @@ module PSEUDOCODE-FUNCTIONS
 endmodule
 
 module MAYBE
+  imports BASE-TYPES
+
   syntax Maybe ::= just(KItem) | "nothing"
   syntax KItem ::= Maybe
 

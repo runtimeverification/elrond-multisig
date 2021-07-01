@@ -101,6 +101,137 @@ klibrary(
 )
 
 kprove_test(
+  name = "lemma-pound-last-expression",
+  srcs = ["lemma-pound-last-expression.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-last-expression",
+  srcs = ["lemma-pound-last-expression.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-last-expression-files",
+  srcs = [":trusted-lemma-pound-last-expression"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      ":trusted-lemma-pound-last-expression",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-pound-last-usize",
+  srcs = ["lemma-pound-last-usize.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-last-usize",
+  srcs = ["lemma-pound-last-usize.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-last-usize-files",
+  srcs = [":trusted-lemma-pound-last-usize"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:list-elements-are-usize-files",
+      ":trusted-lemma-pound-last-usize",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-pound-last",
+  srcs = ["lemma-pound-last.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-last",
+  srcs = ["lemma-pound-last.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-last-files",
+  srcs = [":trusted-lemma-pound-last"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      ":trusted-lemma-pound-last",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-pound-remove-last-kresult-expression",
+  srcs = ["lemma-pound-remove-last-kresult-expression.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-remove-last-kresult-expression",
+  srcs = ["lemma-pound-remove-last-kresult-expression.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-remove-last-kresult-expression-files",
+  srcs = [":trusted-lemma-pound-remove-last-kresult-expression"],
+  deps = [
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-pound-remove-last-kresult-expression",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-pound-remove-last-kresult",
+  srcs = ["lemma-pound-remove-last-kresult.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-remove-last-kresult",
+  srcs = ["lemma-pound-remove-last-kresult.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-remove-last-kresult-files",
+  srcs = [":trusted-lemma-pound-remove-last-kresult"],
+  deps = [
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-pound-remove-last-kresult",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-remove-last-kresult",
   srcs = ["lemma-remove-last-kresult.k"],
   trusted = [

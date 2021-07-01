@@ -1,23 +1,23 @@
-// breadth = 2
+// breadth = 3
 //@ proof
-module LEMMA-LAST
+module LEMMA-POUND-LAST
   imports LIST-EXECUTE-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/last-functions.k"
 // require "protocol-correctness/lib/plistlen-functions.k"
 // 
-// module TRUSTED-LEMMA-LAST
+// module TRUSTED-LEMMA-POUND-LAST
 //@ end
 
-  imports LAST-FUNCTIONS-SYNTAX
+  imports LAST-FUNCTIONS-ADDITIONAL-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
 
   lemma
-      lemmaSplitList2([Es]) => .K
+      lemmaSplitListExpression2(E, [Es]) => .K
     proves
-      isKResult(last(Es)) => true
+      isKResultExpression(#last(E, Es)) => true
     requires
-      isKResult(Es) andBool pListLen([Es]) >Int 0
+       isKResult(E) andBool isKResult(Es)
     [simplification]
     endlemma
 

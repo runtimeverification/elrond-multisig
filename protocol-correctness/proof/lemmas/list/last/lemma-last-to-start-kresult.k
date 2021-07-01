@@ -19,7 +19,7 @@ module LEMMA-LAST-TO-START-KRESULT
   lemma
       lemmaSplitList2([Es]) => .K
     proves
-      isKResult(lastToStart(Es)) => isKResult(Es)
+      isKResultExpressionCSV(lastToStart(Es)) => isKResult(Es)
     requires
       true
     [simplification]
