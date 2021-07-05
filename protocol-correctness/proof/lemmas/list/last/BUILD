@@ -132,7 +132,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "last-execute",
-  breadth = "2",
+  breadth = "3",
 )
 
 ktrusted(
