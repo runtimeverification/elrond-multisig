@@ -48,6 +48,32 @@ klibrary(
 )
 
 kprove_test(
+  name = "lemma-last-to-start-usize",
+  srcs = ["lemma-last-to-start-usize.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-last-to-start-usize",
+  srcs = ["lemma-last-to-start-usize.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-last-to-start-usize-files",
+  srcs = [":trusted-lemma-last-to-start-usize"],
+  deps = [
+      "//protocol-correctness/lib:last-to-start-files",
+      "//protocol-correctness/lib:list-elements-are-usize-files",
+      ":trusted-lemma-last-to-start-usize",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-last-usize",
   srcs = ["lemma-last-usize.k"],
   trusted = [
@@ -122,6 +148,33 @@ klibrary(
       "//protocol-correctness/lib:last-functions-files",
       "//protocol-correctness/lib:plistlen-functions-files",
       ":trusted-lemma-pound-last-expression",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-pound-last-usize-kitem",
+  srcs = ["lemma-pound-last-usize-kitem.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-last-usize-kitem",
+  srcs = ["lemma-pound-last-usize-kitem.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-last-usize-kitem-files",
+  srcs = [":trusted-lemma-pound-last-usize-kitem"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:list-elements-are-usize-files",
+      ":trusted-lemma-pound-last-usize-kitem",
   ],
   visibility = ["//visibility:public"],
 )
@@ -232,6 +285,33 @@ klibrary(
 )
 
 kprove_test(
+  name = "lemma-pound-remove-last-usize",
+  srcs = ["lemma-pound-remove-last-usize.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-pound-remove-last-usize",
+  srcs = ["lemma-pound-remove-last-usize.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-pound-remove-last-usize-files",
+  srcs = [":trusted-lemma-pound-remove-last-usize"],
+  deps = [
+      "//protocol-correctness/lib:list-elements-are-usize-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-pound-remove-last-usize",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-remove-last-kresult",
   srcs = ["lemma-remove-last-kresult.k"],
   trusted = [
@@ -253,6 +333,33 @@ klibrary(
       "//protocol-correctness/lib:plistlen-functions-files",
       "//protocol-correctness/lib:remove-last-files",
       ":trusted-lemma-remove-last-kresult",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-remove-last-usize",
+  srcs = ["lemma-remove-last-usize.k"],
+  trusted = [
+  ],
+  semantics = "last-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-remove-last-usize",
+  srcs = ["lemma-remove-last-usize.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-remove-last-usize-files",
+  srcs = [":trusted-lemma-remove-last-usize"],
+  deps = [
+      "//protocol-correctness/lib:list-elements-are-usize-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-remove-last-usize",
   ],
   visibility = ["//visibility:public"],
 )

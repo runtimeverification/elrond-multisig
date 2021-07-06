@@ -30,4 +30,9 @@ module REMOVE-LAST
 
   rule #removeLast0(.) => .
   rule #removeLast0(E:Expression, Es:ExpressionCSV) => #removeLast(E, Es)
+
+  rule #Ceil(removeLast(@Es:ExpressionCSV))
+      =>  {pListLen([@Es]) >Int 0 #Equals true}
+          #And #Ceil(@Es)
+    [anywhere, simplification]
 endmodule
