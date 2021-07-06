@@ -60,10 +60,14 @@ module BASE-TYPES-SYNTAX
   syntax EndpointCall ::= EndpointTag "(" ")"
                       |   EndpointTag "(" ArgumentCSV ")"
 
+  // TODO: Delete these is<Type>* functions after the backend makes is<Type>
+  // functional.
   syntax Bool ::= isKResultExpression(Expression)  [function, functional]
   syntax Bool ::= isKResultArgumentCSV(ArgumentCSV)  [function, functional]
   syntax Bool ::= isKResultExpressionCSV(ExpressionCSV)  [function, functional]
   syntax Bool ::= isKResultExpressionList(ExpressionList)  [function, functional]
+
+  syntax Bool ::= isUsizeKItem(KItem)  [function, functional]
   syntax KResult
 endmodule
 
@@ -91,5 +95,10 @@ module BASE-TYPES
   rule isKResultExpressionCSV(E:Expression , Es:ExpressionCSV) => isKResultExpression(E) andBool isKResultExpressionCSV(Es)
 
   rule isKResult(Es:ExpressionCSV) => isKResultExpressionCSV(Es)
+
+  rule isUsizeKItem(_:Usize) => true
+  rule isUsizeKItem(_:KItem) => false [owise]
+
+  rule isUsize(K:KItem) => isUsizeKItem(K)
 
 endmodule

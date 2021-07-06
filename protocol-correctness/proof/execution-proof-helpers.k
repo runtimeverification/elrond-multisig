@@ -28,16 +28,6 @@ module EXECUTION-PROOF-HELPERS
   syntax Int ::= expand(Int)  [function, functional, no-evaluators]
   syntax Int ::= "usesExpanded"  [function, functional, no-evaluators]
 
-  rule listElementsAreUsize([lastToStart(Es)]) => listElementsAreUsize([Es])
-    [simplification]
-
-  rule listElementsAreUsize([removeLast(Es:ExpressionCSV)]) => true
-    requires listElementsAreUsize([Es])
-    [simplification]
-  rule listElementsAreUsize([#removeLast(E:Expression, Es:ExpressionCSV)]) => true
-    requires listElementsAreUsize([E, Es])
-    [simplification]
-
   rule addOneIfNotNegative(X:Int) >=Int 0 => X >=Int 0 [simplification]
 
   // Override the default behaviour.
@@ -104,10 +94,6 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreAddresses([.]) => true
   rule listElementsAreAddresses([E:Expression , Es:ExpressionCSV])
       => isAddress(E) andBool listElementsAreAddresses([Es])
-
-  rule listElementsAreUsize([E:Expression, Es:ExpressionCSV])
-      => isUsize(E) andBool listElementsAreUsize([Es])
-    [simplification]
 
   syntax Bool ::= listElementsAreDistinct(KItem)  [function, functional]
   rule listElementsAreDistinct([.]) => true
