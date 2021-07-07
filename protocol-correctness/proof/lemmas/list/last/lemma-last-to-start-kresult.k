@@ -1,7 +1,7 @@
 // breadth = 3
 //@ proof
 module LEMMA-LAST-TO-START-KRESULT
-  imports LIST-EXECUTE-SYNTAX
+  imports LEMMAS-EXECUTE-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
 
 //@ trusted

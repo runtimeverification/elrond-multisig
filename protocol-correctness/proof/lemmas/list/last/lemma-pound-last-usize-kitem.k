@@ -1,7 +1,7 @@
 // breadth = 3
 //@ proof
 module LEMMA-POUND-LAST-USIZE-KITEM
-  imports LIST-EXECUTE-SYNTAX
+  imports LEMMAS-EXECUTE-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/last-functions.k"
 // require "protocol-correctness/lib/plistlen-functions.k"

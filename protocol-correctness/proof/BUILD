@@ -33,6 +33,7 @@ klibrary(
   srcs = ["execution-proof-helpers.k"],
   deps = [
       "//protocol-correctness/lib:list-elements-are-usize-files",
+      "//protocol-correctness/lib:list-elements-are-distinct-files",
       ":base-files",
       "//protocol-correctness/proof/map:map-execute-files",
       "//protocol-correctness:pseudocode-files",
@@ -208,6 +209,7 @@ klibrary(
   name = "lemmas-files",
   srcs = ["lemmas.k"],
   deps = [
+      "//protocol-correctness/proof/lemmas/int:trusted-lemma-add-one-if-not-negative-files",
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-files",
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-usize-files",
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-last-to-start-kresult-files",

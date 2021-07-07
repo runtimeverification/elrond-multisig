@@ -5,7 +5,7 @@ kprove_test(
   srcs = ["lemma-plistlen.k"],
   trusted = [
   ],
-  semantics = "//protocol-correctness/proof/lemmas/list:list-execute",
+  semantics = "//protocol-correctness/proof/lemmas:lemmas-execute",
   breadth = "2",
 )
 

@@ -1,3 +1,4 @@
+require "protocol-correctness/proof/lemmas/int/trusted-lemma-add-one-if-not-negative.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-usize.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-to-start-kresult.k"
@@ -14,11 +15,12 @@ require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-remove-last-u
 require "protocol-correctness/proof/lemmas/list/plistlen/trusted-lemma-plistlen.k"
 
 module LEMMAS
-  imports TRUSTED-LEMMA-PLISTLEN
+  imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
   imports TRUSTED-LEMMA-LAST
   imports TRUSTED-LEMMA-LAST-USIZE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
+  imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-POUND-LAST
   imports TRUSTED-LEMMA-POUND-LAST-EXPRESSION
   imports TRUSTED-LEMMA-POUND-LAST-USIZE
