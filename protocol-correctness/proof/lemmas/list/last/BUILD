@@ -4,7 +4,7 @@ kompile(
   name = "last-execute",
   srcs = ["last-execute.k"],
   deps = [
-      "//protocol-correctness/proof/lemmas/list:list-execute-files",
+      "//protocol-correctness/proof/lemmas:lemmas-execute-files",
       "//protocol-correctness/proof/lemmas/list/plistlen:trusted-lemma-plistlen-files",
   ],
   visibility = ["//visibility:public"],
@@ -14,7 +14,7 @@ klibrary(
   name = "last-execute-files",
   srcs = ["last-execute.k"],
   deps = [
-      "//protocol-correctness/proof/lemmas/list:list-execute-files",
+      "//protocol-correctness/proof/lemmas:lemmas-execute-files",
       "//protocol-correctness/proof/lemmas/list/plistlen:trusted-lemma-plistlen-files",
   ],
   visibility = ["//visibility:public"],

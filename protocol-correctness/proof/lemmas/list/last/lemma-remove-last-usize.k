@@ -1,7 +1,7 @@
 // breadth = 2
 //@ proof
 module LEMMA-REMOVE-LAST-USIZE
-  imports LIST-EXECUTE-SYNTAX
+  imports LEMMAS-EXECUTE-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/list-elements-are-usize.k"
 // require "protocol-correctness/lib/plistlen-functions.k"

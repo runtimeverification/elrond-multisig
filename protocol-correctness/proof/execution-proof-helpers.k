@@ -1,4 +1,5 @@
 require "protocol-correctness/lib/list-elements-are-usize.k"
+require "protocol-correctness/lib/list-elements-are-distinct.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/map/map-execute.k"
 require "protocol-correctness/pseudocode.k"
@@ -17,6 +18,7 @@ module EXECUTION-PROOF-HELPERS
   imports MAP-EXECUTE
   imports EXPLICIT-KITEM-INJECTION
   imports LIST-ELEMENTS-ARE-USIZE
+  imports LIST-ELEMENTS-ARE-DISTINCT
 
   // Expand and PropertyHandling form a stupid trick used to control symbolic
   // function application.
@@ -27,8 +29,6 @@ module EXECUTION-PROOF-HELPERS
   // TODO: Delete above or below.
   syntax Int ::= expand(Int)  [function, functional, no-evaluators]
   syntax Int ::= "usesExpanded"  [function, functional, no-evaluators]
-
-  rule addOneIfNotNegative(X:Int) >=Int 0 => X >=Int 0 [simplification]
 
   // Override the default behaviour.
   rule isDefaultValue(E:ExpressionList, rExpressionList)
@@ -95,14 +95,6 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreAddresses([E:Expression , Es:ExpressionCSV])
       => isAddress(E) andBool listElementsAreAddresses([Es])
 
-  syntax Bool ::= listElementsAreDistinct(KItem)  [function, functional]
-  rule listElementsAreDistinct([.]) => true
-  rule listElementsAreDistinct([E:Expression, Es:ExpressionCSV])
-      => true
-          andBool notBool #listContains([Es], E)
-          andBool listElementsAreDistinct([Es])
-  rule listElementsAreDistinct(_:KItem) => false
-    [owise]
   rule listElementsAreDistinct([#pushList(L:ExpressionCSV, E:Expression)])
       => listElementsAreDistinct([L])
     requires notBool #listContains([L], E)

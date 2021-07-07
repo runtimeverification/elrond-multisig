@@ -1,7 +1,12 @@
 require "protocol-correctness/lib/base-types.k"
 require "protocol-correctness/lib/last-functions.k"
 require "protocol-correctness/lib/last-to-start.k"
+require "protocol-correctness/lib/list-contains.k"
+require "protocol-correctness/lib/list-find.k"
+require "protocol-correctness/lib/list-swap-remove.k"
 require "protocol-correctness/lib/plistlen-functions.k"
+require "protocol-correctness/lib/prepend.k"
+require "protocol-correctness/lib/push-list.k"
 require "protocol-correctness/lib/remove-last.k"
 
 module PSEUDOCODE-SYNTAX
@@ -445,9 +450,15 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 
   imports PSEUDOCODE-SYNTAX
 
+  imports ADD-ONE-IF-NOT-NEGATIVE-SYNTAX
   imports LAST-FUNCTIONS-SYNTAX
   imports LAST-TO-START-SYNTAX
+  imports LIST-CONTAINS-SYNTAX
+  imports LIST-FIND-SYNTAX
+  imports LIST-SWAP-REMOVE-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
+  imports PREPEND-SYNTAX
+  imports PUSH-LIST-SYNTAX
   imports REMOVE-LAST-SYNTAX
 
   syntax KResult
@@ -461,19 +472,7 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 
   syntax KItem ::= "plusOne"
 
-  syntax Bool ::= #listContains(ExpressionList, KItem)  [function, functional]
-
-  syntax Int ::= #listFind(ExpressionList, Expression)  [function, functional]
-  
-  syntax Int ::= addOneIfNotNegative(Int)  [function, functional]
-
-  syntax ExpressionCSV ::= #listSwapRemove(ExpressionCSV, Int)  [function, functional]
-
   syntax ExpressionCSV ::= reverseExpressionCsv(ExpressionCSV, ExpressionCSV)  [function, functional]
-
-  syntax ExpressionCSV ::= #pushList(ExpressionCSV, Expression) [function, functional]
-
-  syntax ExpressionCSV ::= prepend(ExpressionCSV, Expression) [function, functional]
 
   syntax Int ::= metadataToInt(CodeMetadata)  [function, functional]
 
@@ -495,9 +494,15 @@ module PSEUDOCODE-FUNCTIONS
   imports PSEUDOCODE-SYNTAX
   imports PSEUDOCODE-TYPE-REFLECTION
 
-  imports PLISTLEN-FUNCTIONS
+  imports ADD-ONE-IF-NOT-NEGATIVE
   imports LAST-FUNCTIONS
   imports LAST-TO-START
+  imports LIST-CONTAINS
+  imports LIST-FIND
+  imports LIST-SWAP-REMOVE
+  imports PLISTLEN-FUNCTIONS
+  imports PREPEND
+  imports PUSH-LIST
   imports REMOVE-LAST
 
   context evaluate(_:FunctionTag(
@@ -812,36 +817,12 @@ module PSEUDOCODE-FUNCTIONS
 
   rule call(listContains(Es:ExpressionList, E:Expression)) => #listContains(Es, E)
 
-  rule  #listContains([.], _) => false
-  rule  #listContains([E:Expression, _:ExpressionCSV], E) => true
-  rule  #listContains([_:Expression, Es:ExpressionCSV], X:KItem)
-          => #listContains([Es], X)  [owise]
-
   rule call(listFind(Es:ExpressionList, E:Expression)) => u(#listFind(Es, E))
-
-  rule  #listFind([.], _:Expression) => -1
-  rule  #listFind([X:Usize, _:ExpressionCSV], X) => 0
-  rule  #listFind([_:Usize, Es:ExpressionCSV], X:Usize) => addOneIfNotNegative(#listFind([Es], X))
-    [owise]
   
-  rule addOneIfNotNegative(X:Int) => X +Int 1
-    requires X >=Int 0
-  rule addOneIfNotNegative(X) => X
-    requires X <Int 0
-
   rule  call(listSwapRemove([L:ExpressionCSV], u(I:Int)))
         => [#listSwapRemove(L, I)]
     // TODO: Do things work with this requires?
     requires I >=Int 0
-
-  rule  #listSwapRemove(_:Expression , Es:ExpressionCSV, 0)
-        => lastToStart(Es)
-  rule  #listSwapRemove(E:Expression , Es:ExpressionCSV, I:Int)
-        => E , #listSwapRemove(Es, I -Int 1)
-    requires I >Int 0
-  rule  #listSwapRemove(Es:ExpressionCSV, I:Int)
-        => Es
-    requires I <Int 0
 
   rule #Ceil(removeLast(@Es:ExpressionCSV))
       =>  {pListLen([@Es]) >Int 0 #Equals true}
@@ -995,13 +976,6 @@ module PSEUDOCODE-FUNCTIONS
 
   rule call(pushList([Es:ExpressionCSV], E:Expression))
         => [#pushList(Es, E)]
-
-  rule #pushList(., E:Expression)
-        => E, .
-  rule #pushList(E:Expression , Es:ExpressionCSV, E2:Expression)
-        => prepend(#pushList(Es, E2), E)
-
-  rule prepend(Es:ExpressionCSV, E:Expression) => E , Es
 
   rule call(sendTx(_To:Address, _Amount:BigUint, _Data:BoxedBytes))
         => evaluate(void)

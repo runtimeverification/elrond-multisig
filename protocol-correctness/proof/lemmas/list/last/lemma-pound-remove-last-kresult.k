@@ -1,7 +1,7 @@
 // breadth = 3
 //@ proof
 module LEMMA-POUND-REMOVE-LAST-KRESULT
-  imports LIST-EXECUTE-SYNTAX
+  imports LEMMAS-EXECUTE-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/plistlen-functions.k"
 // require "protocol-correctness/lib/remove-last.k"

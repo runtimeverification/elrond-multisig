@@ -1,7 +1,7 @@
 // breadth = 2
 //@ proof
 module LEMMA-PLISTLEN
-  imports LIST-EXECUTE-SYNTAX
+  imports LEMMAS-EXECUTE-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/plistlen-functions.k"
 // //
