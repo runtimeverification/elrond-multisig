@@ -51,6 +51,7 @@ PATH=$(realpath $KOMPILE_TOOL_DIR/k/bin):$PATH
 cd $(dirname $KOMPILE_DIR)
 
 $BACKEND_COMMAND \
+    --version \
     --smt-timeout 4000 \
     $DEFINITION \
     --prove $SPEC \

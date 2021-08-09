@@ -11,6 +11,7 @@ module LIST-CONTAINS
   imports LIST-CONTAINS-SYNTAX
 
   rule  #listContains([.], _) => false
+  // rule  #listContains([E1:Expression, Es:ExpressionCSV], E2) => E1 ==K E2 orBool #listContains([Es], E2)
   rule  #listContains([E:Expression, _:ExpressionCSV], E) => true
   rule  #listContains([_:Expression, Es:ExpressionCSV], X:KItem)
           => #listContains([Es], X)  [owise]

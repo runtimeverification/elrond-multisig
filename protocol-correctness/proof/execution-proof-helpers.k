@@ -36,21 +36,6 @@ module EXECUTION-PROOF-HELPERS
   rule pListLen([#pushList(_, _)]) >Int 0 => true
       [simplification]
 
-  rule #listContains([removeLast(L:ExpressionCSV)], last(L)) => false
-    requires listElementsAreDistinct([L])
-    [simplification]
-  rule #listContains([#removeLast(E:Expression, L:ExpressionCSV)], #last(E, L)) => false
-    requires listElementsAreDistinct([E, L])
-    [simplification]
-  rule #listContains([#listSwapRemove(L:ExpressionCSV, _:Int)], E:Expression) => false
-    requires notBool #listContains([L], E)
-    [simplification]
-  rule #listContains([E1, #listSwapRemove(L:ExpressionCSV, _:Int)], E:Expression) => false
-    requires notBool #listContains([E1, L], E)
-    [simplification]
-  rule #listContains([lastToStart(L:ExpressionCSV) => L], _:Expression)
-    [simplification]
-
   rule listElementsAreDistinct([removeLast(L:ExpressionCSV)]) => true
     requires listElementsAreDistinct([L])
     [simplification]

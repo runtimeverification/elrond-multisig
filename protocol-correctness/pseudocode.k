@@ -424,9 +424,6 @@ module PSEUDOCODE-COMMON
   syntax KItem ::= "removeValue"
   rule (E:Expression ~> removeValue) => .K
     requires isKResult(E)
-
-  syntax Stack ::= ".stack"
-  syntax Stack ::= stack(MultisigStateCell, variables:Map, performedActions:List, next:Stack)
 endmodule
 
 module PSEUDOCODE-DETAILS
@@ -1200,6 +1197,9 @@ module PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-COMMON
 
   syntax KItem ::= "uninitialized"
+
+  syntax Stack ::= ".stack"
+  syntax Stack ::= stack(MultisigStateCell, variables:Map, performedActions:List, next:Stack)
 
   configuration
     <T>

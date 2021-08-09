@@ -15,6 +15,9 @@ module LIST-SWAP-REMOVE
 
   rule  #listSwapRemove(_:Expression , Es:ExpressionCSV, 0)
         => lastToStart(Es)
+  rule  #listSwapRemove(.:ExpressionCSV, I:Int)
+        => .:ExpressionCSV
+    requires I >Int 0
   rule  #listSwapRemove(E:Expression , Es:ExpressionCSV, I:Int)
         => E , #listSwapRemove(Es, I -Int 1)
     requires I >Int 0
