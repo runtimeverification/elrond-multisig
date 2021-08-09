@@ -88,6 +88,7 @@ klibrary(
   srcs = ["instrumentation-lemma.k"],
   deps = [
       "//protocol-correctness/lib:base-types-files",
+      ":instrumentation-concretize-files",
   ],
   visibility = ["//visibility:public"],
 )
