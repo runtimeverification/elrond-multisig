@@ -16,7 +16,6 @@ module LEMMA-PLISTLEN
   //@ trusted
   //@ end
 
-
   lemma
       lemmaSplitList(L) => .K
     proves

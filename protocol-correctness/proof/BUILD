@@ -32,6 +32,7 @@ klibrary(
   name = "execution-proof-helpers-files",
   srcs = ["execution-proof-helpers.k"],
   deps = [
+      "//protocol-correctness/lib:all-keys-become-keys-files",
       "//protocol-correctness/lib:list-elements-are-usize-files",
       "//protocol-correctness/lib:list-elements-are-distinct-files",
       ":base-files",
@@ -225,6 +226,8 @@ klibrary(
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-remove-last-kresult-files",
       "//protocol-correctness/proof/lemmas/list/last:trusted-lemma-remove-last-usize-files",
       "//protocol-correctness/proof/lemmas/list/plistlen:trusted-lemma-plistlen-files",
+      "//protocol-correctness/proof/lemmas/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-a-files",
+      "//protocol-correctness/proof/lemmas/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-b-files",
   ],
   visibility = ["//visibility:public"],
 )

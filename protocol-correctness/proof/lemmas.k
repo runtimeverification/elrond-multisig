@@ -13,6 +13,8 @@ require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-remove-
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-remove-last-kresult.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-remove-last-usize.k"
 require "protocol-correctness/proof/lemmas/list/plistlen/trusted-lemma-plistlen.k"
+require "protocol-correctness/proof/lemmas/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-a.k"
+require "protocol-correctness/proof/lemmas/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"
 
 module LEMMAS
   imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
@@ -30,4 +32,6 @@ module LEMMAS
   imports TRUSTED-LEMMA-POUND-REMOVE-LAST-USIZE
   imports TRUSTED-LEMMA-REMOVE-LAST-KRESULT
   imports TRUSTED-LEMMA-REMOVE-LAST-USIZE
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-A
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
 endmodule

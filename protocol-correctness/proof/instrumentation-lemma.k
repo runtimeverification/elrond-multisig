@@ -3,6 +3,7 @@ require "protocol-correctness/proof/instrumentation-concretize.k"
 
 module INSTRUMENTATION-LEMMA-SYNTAX
   imports BASE-TYPES-SYNTAX
+  imports MAP
 
   syntax IterateArguments ::= ".A"
                             | args1(KItem)
@@ -28,6 +29,10 @@ module INSTRUMENTATION-LEMMA-SYNTAX
   syntax KItem ::= splitIntSign2(Int)
 
   syntax KItem ::= lemmaLastDistinct(Expression, Expression, ExpressionCSV)
+
+  syntax KItem ::= lemmaIterateMap(Map, IterateArguments)
+
+  syntax KItem ::= lemmaIterateMapSplitInKeys(Map, IterateArguments, Map)
 endmodule
 
 module INSTRUMENTATION-LEMMA
@@ -89,4 +94,20 @@ module INSTRUMENTATION-LEMMA
   rule lemmaLastDistinct(E1:Expression, E2:Expression, .:ExpressionCSV) => concretizeValue(E1 ==K E2)
   rule lemmaLastDistinct(E:Expression, E1:Expression, (E2:Expression, Es:ExpressionCSV))
       => concretizeValue(E ==K E2) ~> concretizeValue(E ==K E1) ~> concretizeValue(E1 ==K E2) ~> lemmaLastDistinct(E, E2, Es)
+
+  rule lemmaIterateMap(.Map, _:IterateArguments) => .K
+  rule lemmaIterateMap(M:Map, A:IterateArguments) => lemmaIterateMap(?M:Map, A)
+    requires notBool M ==K .Map
+    ensures M ==K ?_Key:KItem |-> ?_Value:KItem ?M
+
+  rule lemmaIterateMapSplitInKeys(.Map, _:IterateArguments, _:Map) => .K
+  rule lemmaIterateMapSplitInKeys(M:Map, A:IterateArguments, N:Map)
+      =>   concretizeValue(?Key in_keys(N))
+        ~> lemmaIterateMapSplitInKeys(?M:Map, A, N)
+    requires notBool M ==K .Map
+    ensures M ==K ?Key:KItem |-> ?_Value:KItem ?M
+
+  // TODO: move to a better place
+  rule A ==Bool B => true requires {A #Equals B}
+    [simplification]
 endmodule

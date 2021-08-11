@@ -6,7 +6,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "//protocol-correctness/mex/proof:main-proof-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "8",
 )
 

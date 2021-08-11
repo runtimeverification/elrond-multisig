@@ -25,6 +25,14 @@ klibrary(
 )
 
 klibrary(
+  name = "all-keys-become-keys-files",
+  srcs = ["all-keys-become-keys.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "last-functions-files",
   srcs = ["last-functions.k"],
   deps = [
