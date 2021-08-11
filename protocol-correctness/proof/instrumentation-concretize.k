@@ -23,10 +23,10 @@ module INSTRUMENTATION-CONCRETIZE
   rule concretizeValue(Proposer) => .K  [label(concretizeValueProposer)]
   rule concretizeValue(None) => .K  [label(concretizeValueNone)]
 
-  rule concretizeValue(false) => .K  [label(concretizeValueFalse)]
   rule concretizeValue(true) => .K  [label(concretizeValueTrue)]
+  rule concretizeValue(false) => .K  [label(concretizeValueFalse)]
 
-  rule concretizeValue(_) => .K [priority(200)]
+  rule concretizeValue(_) => .K [priority(200), label(concretizeValueDefault)]
 
   syntax KItem ::= concretizeExpressionList(ExpressionList, Int)
   rule concretizeExpressionList([.:ExpressionCSV], X:Int) => .K

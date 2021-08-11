@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/all-keys-become-keys.k"
 require "protocol-correctness/lib/list-elements-are-usize.k"
 require "protocol-correctness/lib/list-elements-are-distinct.k"
 require "protocol-correctness/proof/base.k"
@@ -19,6 +20,8 @@ module EXECUTION-PROOF-HELPERS
   imports EXPLICIT-KITEM-INJECTION
   imports LIST-ELEMENTS-ARE-USIZE
   imports LIST-ELEMENTS-ARE-DISTINCT
+
+  imports ALL-KEYS-BECOME-KEYS
 
   // Expand and PropertyHandling form a stupid trick used to control symbolic
   // function application.
@@ -226,6 +229,9 @@ module EXECUTION-PROOF-HELPERS
     ensures notBool K in_keys(N)
     [simplification]
 
+  rule #allValuesBecomeKeys(M:Map, keysMap(N:Map)) => true requires mapsAreReverseHalf(M, N)
+    [simplification]
+
   syntax Bool ::= mapsAreReverse(Map, Map) [function, functional]
   syntax Bool ::= mapsAreReverseHalf(Map, Map) [function, functional]
 
@@ -416,14 +422,5 @@ module EXECUTION-PROOF-HELPERS
 
   rule 0 <=Int countCanSignFunction(_, _) => true  [simplification, smt-lemma]
 
-  syntax Bool ::= allKeysBecomeKeys(Map, Map)  [function, functional]
-
-  rule allKeysBecomeKeys(.Map, _:Map) => true
-  rule allKeysBecomeKeys(K:KItem |-> _:KItem M:Map, N:Map)
-      => K in_keys(N) andBool allKeysBecomeKeys(M, N)
-    [simplification]
-  rule allKeysBecomeKeys(M:Map, _:KItem |-> _:KItem N:Map) => true
-    requires allKeysBecomeKeys(M, N)
-    [simplification]
 
 endmodule
