@@ -1,0 +1,25 @@
+require "protocol-correctness/lib/language/base-types.k"
+require "protocol-correctness/lib/language/expression.k"
+require "protocol-correctness/lib/language/for.k"
+require "protocol-correctness/lib/language/if.k"
+require "protocol-correctness/lib/language/function-call.k"
+require "protocol-correctness/lib/language/language-list.k"
+require "protocol-correctness/lib/language/map-utils.k"
+require "protocol-correctness/lib/language/maybe.k"
+require "protocol-correctness/lib/language/memory.k"
+require "protocol-correctness/lib/language/running.k"
+require "protocol-correctness/lib/language/type-reflection.k"
+
+module LANGUAGE
+  imports BASE-TYPES
+  imports EXPRESSION
+  imports FOR
+  imports IF
+  imports FUNCTION-CALL
+  imports LANGUAGE-LIST
+  imports MAP-UTILS
+  imports MAYBE
+  imports MEMORY
+  imports RUNNING
+  imports TYPE-REFLECTION
+endmodule

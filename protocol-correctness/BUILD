@@ -22,7 +22,7 @@ klibrary(
   name = "pseudocode-files",
   srcs = ["pseudocode.k"],
   deps = [
-      "//protocol-correctness/lib:base-types-files",
+      "//protocol-correctness/lib/language:language-files",
       "//protocol-correctness/lib:last-functions-files",
       "//protocol-correctness/lib:last-to-start-files",
       "//protocol-correctness/lib:list-contains-files",

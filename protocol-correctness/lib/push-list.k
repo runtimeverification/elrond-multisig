@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/prepend.k"
 
 module PUSH-LIST-SYNTAX

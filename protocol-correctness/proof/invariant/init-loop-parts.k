@@ -50,7 +50,7 @@ module INIT-LOOP-PARTS
             ~> K
           </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>u(0)</num-users>
                 <user-id-to-address>UserIdToAddress0</user-id-to-address>
@@ -63,7 +63,7 @@ module INIT-LOOP-PARTS
                 <quorum>Quorum</quorum>
               </board-state>
               ActionState
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>
                 i |-> PrevIndex
@@ -113,7 +113,7 @@ module INIT-LOOP-PARTS
         <TT>
           <k> Item ~> K </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>u(0)</num-users>
                 <user-id-to-address>UserIdToAddress1</user-id-to-address>
@@ -126,7 +126,7 @@ module INIT-LOOP-PARTS
                 <quorum>Quorum</quorum>
               </board-state>
               ActionState
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>
                 (i |-> Index)
@@ -281,7 +281,7 @@ module INIT-LOOP-PARTS
             ~> K
           </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>u(0)</num-users>
                 <user-id-to-address>UserIdToAddress0</user-id-to-address>
@@ -294,7 +294,7 @@ module INIT-LOOP-PARTS
                 <quorum>Quorum</quorum>
               </board-state>
               ActionState
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>
                 i |-> PrevIndex
@@ -342,7 +342,7 @@ module INIT-LOOP-PARTS
         <TT>
           <k> evaluate(void) ~> K </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>u(0)</num-users>
                 <user-id-to-address>UserIdToAddress1</user-id-to-address>
@@ -355,7 +355,7 @@ module INIT-LOOP-PARTS
                 <quorum>Quorum</quorum>
               </board-state>
               ActionState
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>
                 (i |-> Index)

@@ -39,19 +39,21 @@ module PROOF-PERFORM-PARTS-ADD-PROPOSER-NO-SIGNERS-EQ
               ActionSigners:Map,
               CallerAddress:Address,
               stack(
-                  invariantMultisigState(
-                      NumUsers,
-                      UserIdToAddress,
-                      AddressToUserId,
-                      NumBoardMembers,
-                      NumProposers,
-                      UserIdToRole,
-                      u(Quorum),
-                      ActionLastIndex0,
-                      ActionData,
-                      ActionSigners),
+                  customStackState(
+                      invariantContractState(
+                          NumUsers,
+                          UserIdToAddress,
+                          AddressToUserId,
+                          NumBoardMembers,
+                          NumProposers,
+                          UserIdToRole,
+                          u(Quorum),
+                          ActionLastIndex0,
+                          ActionData,
+                          ActionSigners),
+                      <log><performed-actions>PerformedActions</performed-actions></log>
+                  ),
                   .Map,
-                  PerformedActions,
                   .stack),
               PerformedActions:List)
         </TT></T>
