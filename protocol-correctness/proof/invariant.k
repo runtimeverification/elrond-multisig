@@ -125,7 +125,7 @@ module INVARIANT
       /*actionSigners:*/Map,
       /*performedActions:*/List)  [function, functional]
 
-  syntax MultisigStateCell ::= invariantMultisigState(
+  syntax ContractStateCell ::= invariantContractState(
       /*numUsers:*/Usize,
       /*userIdToAddress:*/Map,
       /*addressToUserId:*/Map,
@@ -148,7 +148,7 @@ module INVARIANT
       /*actionLastIndex:*/Usize,
       /*actionData:*/Map,
       /*actionSigners:*/Map,
-      /*callerAddress:*/KItem,
+      /*callerAddress:*/CallerAddress,
       /*stack:*/Stack,
       /*performedActions:*/List)  [function, functional]
 
@@ -163,7 +163,7 @@ module INVARIANT
       /*actionLastIndex:*/Usize,
       /*actionData:*/Map,
       /*actionSigners:*/Map,
-      /*callerAddress:*/KItem,
+      /*callerAddress:*/CallerAddress,
       /*stack:*/Stack,
       /*variables:*/Map,
       /*performedActions:*/List)  [function, functional]
@@ -207,7 +207,7 @@ module INVARIANT
       ActionLastIndex:Usize,
       ActionData:Map,
       ActionSigners:Map,
-      CallerAddress:KItem,
+      CallerAddress:CallerAddress,
       Stack:Stack,
       PerformedActions:List)
     => invariantStateFull(
@@ -237,13 +237,13 @@ module INVARIANT
       ActionLastIndex:Usize,
       ActionData:Map,
       ActionSigners:Map,
-      CallerAddress:KItem,
+      CallerAddress:CallerAddress,
       Stack:Stack,
       Variables:Map,
       PerformedActions:List)
     =>
       <state>
-        invariantMultisigState(
+        invariantContractState(
             NumUsers,
             UserIdToAddress,
             AddressToUserId,
@@ -253,7 +253,7 @@ module INVARIANT
             Quorum,
             ActionLastIndex,
             ActionData,
-            ActionSigners):MultisigStateCell
+            ActionSigners):ContractStateCell
         <pseudocode-state>
           <variables>Variables</variables>
           <stack> Stack </stack>
@@ -266,7 +266,7 @@ module INVARIANT
         </log>
       </state>
 
-  rule invariantMultisigState(
+  rule invariantContractState(
       NumUsers:Usize,
       UserIdToAddress:Map,
       AddressToUserId:Map,
@@ -278,7 +278,7 @@ module INVARIANT
       ActionData:Map,
       ActionSigners:Map)
     =>
-        <multisig-state>
+        <contract-state>
           <users>
             <num-users>NumUsers</num-users>
             <user-id-to-address>UserIdToAddress</user-id-to-address>
@@ -297,7 +297,7 @@ module INVARIANT
               <action-signers>ActionSigners</action-signers>
             </actions>
           </action-state>
-        </multisig-state>
+        </contract-state>
 
   syntax Bool ::= baseInvariant(
       numUsers:Usize,

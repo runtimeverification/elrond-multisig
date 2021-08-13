@@ -28,7 +28,7 @@ module INSTRUMENTATION-DISCARD-ACTION
                 )
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
 
   rule  <k> splitDiscardAction1(ActionId:Usize)
             =>    makeConcreteValue(Caller, rUsize, AddressToUserId)
@@ -40,7 +40,7 @@ module INSTRUMENTATION-DISCARD-ACTION
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
         <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
     requires Caller in_keys(AddressToUserId)
 
   rule  <k> splitDiscardAction2(ActionId:Usize)
@@ -57,7 +57,7 @@ module INSTRUMENTATION-DISCARD-ACTION
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
         <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
         <action-signers>ActionSigners:Map</action-signers>
         <action-data>ActionData</action-data>
     requires Caller in_keys(AddressToUserId)

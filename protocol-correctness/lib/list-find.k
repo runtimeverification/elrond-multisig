@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/add-one-if-not-negative.k"
 
 module LIST-FIND-SYNTAX

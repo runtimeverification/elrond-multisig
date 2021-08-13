@@ -19,7 +19,7 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-BOARDMEMBER-TOO-FEW
               )) ~> K:K
           </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>u(NumUsers:Int)</num-users>
                 <user-id-to-address>UserIdToAddress:Map</user-id-to-address>
@@ -32,7 +32,7 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-BOARDMEMBER-TOO-FEW
                 <quorum>u(Quorum:Int)</quorum>
               </board-state>
               ActionState:ActionStateCell
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>.Map</variables>
               <stack>Stack:Stack</stack>
@@ -49,7 +49,7 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-BOARDMEMBER-TOO-FEW
       <T> <TT>
           <k> error ~> K </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>u(NumUsers)</num-users>
                 <user-id-to-address>UserIdToAddress</user-id-to-address>
@@ -62,7 +62,7 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-BOARDMEMBER-TOO-FEW
                 <quorum>u(Quorum)</quorum>
               </board-state>
               ActionState
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>?_Variables:Map</variables>
               <stack>Stack</stack>

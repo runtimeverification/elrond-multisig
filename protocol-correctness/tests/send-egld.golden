@@ -4,7 +4,7 @@
       .
     </k>
     <state>
-      <multisig-state>
+      <contract-state>
         <users>
           <num-users>
             u ( 1 )
@@ -43,7 +43,7 @@
             </action-signers>
           </actions>
         </action-state>
-      </multisig-state>
+      </contract-state>
       <pseudocode-state>
         <variables>
           .Map

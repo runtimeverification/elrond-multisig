@@ -87,7 +87,7 @@ klibrary(
   name = "instrumentation-lemma-files",
   srcs = ["instrumentation-lemma.k"],
   deps = [
-      "//protocol-correctness/lib:base-types-files",
+      "//protocol-correctness/lib/language:base-types-files",
   ],
   visibility = ["//visibility:public"],
 )

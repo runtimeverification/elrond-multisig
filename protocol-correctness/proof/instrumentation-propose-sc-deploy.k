@@ -22,7 +22,7 @@ module INSTRUMENTATION-PROPOSE-SC-DEPLOY
                 )
         ... </k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
 
   rule  <k> split-sc-deploy1
             =>  branchK(
@@ -34,5 +34,5 @@ module INSTRUMENTATION-PROPOSE-SC-DEPLOY
         ... </k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
         <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
 endmodule

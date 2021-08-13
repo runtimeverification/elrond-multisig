@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/language/base-types.k"
 
 module LIST-ELEMENTS-ARE-USIZE-SYNTAX
   imports BASE-TYPES-SYNTAX

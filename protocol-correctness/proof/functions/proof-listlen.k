@@ -5,6 +5,7 @@ module PROOF-LISTLEN
 //@ trusted
 // module TRUSTED-LISTLEN
 //@ end
+  imports FUNCTION-CALL-SYNTAX
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
 
   //@ proof

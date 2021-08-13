@@ -16,7 +16,7 @@ module PROOF-PERFORM-ACTION-ID-SC-CALL
           <k> call(performActionFromId(ActionId:Usize)) ~> K:K
           </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>NumUsers:Usize</num-users>
                 <user-id-to-address>UserIdToAddress:Map</user-id-to-address>
@@ -42,7 +42,7 @@ module PROOF-PERFORM-ACTION-ID-SC-CALL
                   <action-signers>ActionSigners:Map</action-signers>
                 </actions>
               </action-state>
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>.Map</variables>
               <stack>Stack:Stack</stack>
@@ -59,7 +59,7 @@ module PROOF-PERFORM-ACTION-ID-SC-CALL
       <T> <TT>
           <k> evaluate(void) ~> K </k>
           <state>
-            <multisig-state>
+            <contract-state>
               <users>
                 <num-users>NumUsers</num-users>
                 <user-id-to-address>UserIdToAddress</user-id-to-address>
@@ -78,7 +78,7 @@ module PROOF-PERFORM-ACTION-ID-SC-CALL
                   <action-signers>ActionSigners[ActionId <- undef]</action-signers>
                 </actions>
               </action-state>
-            </multisig-state>
+            </contract-state>
             <pseudocode-state>
               <variables>?_Variables</variables>
               <stack>Stack</stack>

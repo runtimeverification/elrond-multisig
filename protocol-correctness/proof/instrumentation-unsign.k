@@ -29,7 +29,7 @@ module INSTRUMENTATION-UNSIGN
         ... </k>
         <action-data>ActionData:Map</action-data>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
 
   rule  <k> splitUnsign2(ActionId:Usize)
             =>    makeConcreteValue(CallerAddress, rUsize, AddressToUserId)
@@ -41,7 +41,7 @@ module INSTRUMENTATION-UNSIGN
         ... </k>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
         <user-roles>UserIdToRole:Map</user-roles>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
     requires CallerAddress in_keys(AddressToUserId)
 
   rule  <k> splitUnsign3(ActionId:Usize)
@@ -59,7 +59,7 @@ module INSTRUMENTATION-UNSIGN
         ... </k>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
         <user-roles>UserIdToRole:Map</user-roles>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
         <action-signers>ActionSigners:Map</action-signers>
     requires true
         andBool CallerAddress in_keys(AddressToUserId)
@@ -73,7 +73,7 @@ module INSTRUMENTATION-UNSIGN
         ...</k>
         <action-signers>ActionSigners:Map</action-signers>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
     requires true
         andBool ActionId in_keys(ActionSigners)
         andBool isExpressionList(ActionSigners[ActionId])

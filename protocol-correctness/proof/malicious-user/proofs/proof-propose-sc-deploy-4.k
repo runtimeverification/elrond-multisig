@@ -38,19 +38,21 @@ module PROOF-PROPOSE-SC-DEPLOY-4
               ActionSigners:Map,
               MaliciousAddress:Address,
               stack(
-                  invariantMultisigState(
-                      NumUsers,
-                      UserIdToAddress,
-                      AddressToUserId,
-                      NumBoardMembers,
-                      NumProposers,
-                      UserIdToRole,
-                      Quorum,
-                      ActionLastIndex,
-                      ActionData,
-                      ActionSigners),
+                  customStackState(
+                      invariantContractState(
+                          NumUsers,
+                          UserIdToAddress,
+                          AddressToUserId,
+                          NumBoardMembers,
+                          NumProposers,
+                          UserIdToRole,
+                          Quorum,
+                          ActionLastIndex,
+                          ActionData,
+                          ActionSigners),
+                      <log><performed-actions>PerformedActions</performed-actions></log>
+                  ),
                   .Map,
-                  PerformedActions,
                   .stack
               ),
               .Map,
