@@ -31,7 +31,7 @@ module INSTRUMENTATION-SIGN
                   )
         ... </k>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
         <action-data>ActionData:Map</action-data>
 
   rule  <k> splitSign2(ActionId:Usize)
@@ -44,7 +44,7 @@ module INSTRUMENTATION-SIGN
         ... </k>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
         <user-roles>UserIdToRole:Map</user-roles>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
     requires CallerAddress in_keys(AddressToUserId)
 
   rule  <k> splitSign3(ActionId:Usize)
@@ -62,7 +62,7 @@ module INSTRUMENTATION-SIGN
         ... </k>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
         <user-roles>UserIdToRole:Map</user-roles>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
         <action-signers>ActionSigners:Map</action-signers>
     requires CallerAddress in_keys(AddressToUserId)
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)
@@ -71,6 +71,6 @@ module INSTRUMENTATION-SIGN
             =>    lemmaPushListNotEmpty(Signers, CallerId)
         ...</k>
         <address-to-user-id> CallerAddress |-> CallerId _AddressToUserId:Map </address-to-user-id>
-        <caller-address>CallerAddress:KItem</caller-address>
+        <caller-address>CallerAddress:CallerAddress</caller-address>
         <action-signers>ActionId |-> [Signers:ExpressionCSV] _ActionSigners:Map</action-signers>
 endmodule

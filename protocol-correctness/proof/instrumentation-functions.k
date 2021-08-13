@@ -20,7 +20,7 @@ module INSTRUMENTATION-FUNCTIONS
                 )
         ... </k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
 
   rule  <k> split-propose-action1
             =>  branchK(
@@ -31,7 +31,7 @@ module INSTRUMENTATION-FUNCTIONS
         ... </k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
         <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>Caller:KItem</caller-address>
+        <caller-address>Caller:CallerAddress</caller-address>
 
   rule  preCall
       ~> (.K => concretizeValue(Role))

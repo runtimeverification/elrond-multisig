@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/last-functions.k"
 require "protocol-correctness/lib/plistlen-functions.k"
 require "protocol-correctness/lib/remove-last.k"

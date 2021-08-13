@@ -1202,7 +1202,7 @@ kprove_test(
       ":trusted-perform-action-id-remove-user-BoardMember-too-few",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 ktrusted(

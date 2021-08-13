@@ -1,4 +1,5 @@
-require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/language/language.k"
+
 require "protocol-correctness/lib/last-functions.k"
 require "protocol-correctness/lib/last-to-start.k"
 require "protocol-correctness/lib/list-contains.k"
@@ -15,6 +16,7 @@ module PSEUDOCODE-SYNTAX
   imports STRING
 
   imports BASE-TYPES-SYNTAX
+  imports RUNNING-SYNTAX
 
   syntax CodeMetadata ::= "CodeMetadata::DEFAULT"     [function]
                       |   "CodeMetadata::UPGRADEABLE" [function]
@@ -120,14 +122,6 @@ module PSEUDOCODE-SYNTAX
                       |   "performActionEndpoint"  // (action_id)
                       |   "discardAction"   // (action_id)
 
-  syntax KItem ::= runExternalCalls(ExternalCommands)
-  syntax KItem ::= runExternalCall(ExternalCommand)
-  syntax KItem ::= runPseudoCode(Instructions)
-  syntax KItem ::= runInstruction(Instruction)
-  syntax KItem ::= evaluate(Expression)
-  syntax KItem ::= evaluateEc(ExpressionCSV)
-  syntax KItem ::= evaluateAc(ArgumentCSV)
-
 endmodule
 
 module PSEUDOCODE-KRESULT
@@ -164,281 +158,58 @@ module PSEUDOCODE-KRESULT
 endmodule
 
 module PSEUDOCODE
-  imports BASE-TYPES
+  imports LANGUAGE
   imports PSEUDOCODE-CONFIGURATION
-  imports PSEUDOCODE-DETAILS
   imports PSEUDOCODE-EXPRESSION
-  imports PSEUDOCODE-EXTERNAL
-  imports PSEUDOCODE-FOR
+  imports PSEUDOCODE-FUNCTION-CALL
   imports PSEUDOCODE-FUNCTIONS
-  imports PSEUDOCODE-IF
-  imports PSEUDOCODE-INSTRUCTIONS
   imports PSEUDOCODE-KRESULT
-  imports PSEUDOCODE-MEMORY
   imports PSEUDOCODE-SYNTAX
 endmodule
 
 module PSEUDOCODE-TYPE-REFLECTION
-  imports MAYBE
-  imports PSEUDOCODE-COMMON
+  imports FLOW-SYNTAX
   imports PSEUDOCODE-SYNTAX
+  imports TYPE-REFLECTION-SYNTAX
 
-  syntax ReflectionType ::= "rUsize"
-                        | "rUserRole"
-                        | "rExpressionList"
-                        | "rBool"
-                        | "rAction"
-                        | "rAddress"
-                        | "rBoxedBytes"
-                        | "rBigUint"
-                        | "rCodeMetadata"
-
-  syntax KItem ::= cast(KItem, ReflectionType)  [strict(1)]
-
-  /*
-  rule cast(nothing, _:ReflectionType) => nothing
-  rule cast(just(K:KItem) => K, _:ReflectionType)
-  */
-
-  rule cast(value(K:KItem) => K, _:ReflectionType)  [label(castValue)]
-
-  rule cast(U:Usize, rUsize) => U  [label(castUsize)]
-  rule (.K => stuck) ~> cast(V:KItem, rUsize)
-    ensures notBool isUsize(V)
-    [owise, label(castUsizeStuck)]
+  syntax ReflectionType ::= "rUserRole"
+                        |   "rAction"
+                        |   "rCodeMetadata"
 
   rule cast(U:UserRole, rUserRole) => U  [label(castUserRole)]
   rule (.K => stuck) ~> cast(V:KItem, rUserRole)
     ensures notBool isUserRole(V)
     [owise, label(castUserRoleStuck)]
 
-  rule cast(V:ExpressionList, rExpressionList) => V  [label(castExpressionList)]
-  rule (.K => stuck) ~> cast(V:KItem, rExpressionList)
-    ensures notBool isExpressionList(V)
-    [owise, label(castExpressionListStuck)]
-
   rule cast(A:Action, rAction) => A  [label(castAction)]
   rule (.K => stuck) ~> cast(V:KItem, rAction)
     ensures notBool isAction(V)
     [owise, label(castActionStuck)]
 
-  rule cast(A:Address, rAddress) => A  [label(castAddress)]
-  rule (.K => stuck) ~> cast(V:KItem, rAddress)
-    ensures notBool isAddress(V)
-    [owise, label(castAddressStuck)]
-
-  syntax KItem ::= defaultValue(ReflectionType)  [function, functional]
-  rule defaultValue(rUsize) => u(0)
   rule defaultValue(rUserRole) => None
-  rule defaultValue(rExpressionList) => [.]
-  rule defaultValue(rBool) => false
   rule defaultValue(rAction) => Nothing
-  // Address is not nullable
-  // rule defaultValue(rAddress) => stuck
-  rule defaultValue(rBoxedBytes) => bytes("")
-  rule defaultValue(rBigUint) => big(0)
   rule defaultValue(rCodeMetadata) => CodeMetadata::DEFAULT
 
-  syntax Bool ::= isDefaultValue(KItem, ReflectionType)  [function, functional]
-  rule isDefaultValue(K:KItem, T:ReflectionType) => K ==K defaultValue(T)
-    [owise]  // allow overriding
-
-  syntax Bool ::= valueOfType(KItem, ReflectionType)  [function, functional]
-  rule valueOfType(V:KItem, rUsize) => isUsize(V)
   rule valueOfType(V:KItem, rUserRole) => isUserRole(V)
-  rule valueOfType(V:KItem, rExpressionList) => isExpressionList(V)
-  rule valueOfType(V:KItem, rBool) => isBool(V)
   rule valueOfType(V:KItem, rAction) => isAction(V)
-  rule valueOfType(V:KItem, rAddress) => isAddress(V)
-  rule valueOfType(V:KItem, rBoxedBytes) => isBoxedBytes(V)
-  rule valueOfType(V:KItem, rBigUint) => isBigUint(V)
   rule valueOfType(V:KItem, rCodeMetadata) => isCodeMetadata(V)
 endmodule
 
-module PSEUDOCODE-INSTRUCTIONS
-  imports PSEUDOCODE-COMMON
-  imports PSEUDOCODE-CONFIGURATION
-  imports PSEUDOCODE-SYNTAX
-
-  rule runPseudoCode(I:Instruction) => runInstruction(I)
-  rule runPseudoCode(I:Instruction Is:Instructions)
-      => runInstruction(I) ~> runPseudoCode(Is)
-
-  rule  <k> error ~> (runPseudoCode(_) => .K) ...</k>
-  rule  <k> error => .K </k>
-        <stack> .stack </stack>
-
-  rule runInstruction(E:Expression;) => evaluate(E)
-  rule (evaluate(E:Expression) => .K) ~> runInstruction(_)
-    requires isKResult(E)
-  rule (evaluate(E:Expression) => .K) ~> runPseudoCode(_)
-    requires isKResult(E)
-
-  context runInstruction(require({HOLE:Expression => evaluate(HOLE)}:>Expression);)
-  rule runInstruction(require(true);) => evaluate(void)  [label(requireTrue)]
-  rule runInstruction(require(false);) => error  [label(requireError)]
-endmodule
-
-module PSEUDOCODE-EXTERNAL
-  imports PSEUDOCODE-COMMON
-  imports PSEUDOCODE-CONFIGURATION
-  imports PSEUDOCODE-SYNTAX
-
-  rule runExternalCalls(C:ExternalCommand) => runExternalCall(C)
-  rule runExternalCalls(C:ExternalCommand Cs:ExternalCommands)
-      => runExternalCall(C) ~> runExternalCalls(Cs)
-
-  syntax KItem ::= "clearExternalCallEnv"
-  rule  <k> clearExternalCallEnv => .K ... </k>
-        <caller-address> _ => uninitialized </caller-address>
-
-  rule (evaluate(E:Expression) => .K) ~> clearExternalCallEnv
-    requires isKResult(E)
-
-  rule (E:Expression => .K) ~> clearExternalCallEnv
-    requires isKResult(E)
-
-  rule  <k> (error => .K) ~> clearExternalCallEnv ...</k>
-
-  syntax KItem ::= endpointToInstruction(EndpointCall)
-  rule endpointToInstruction(Tag:EndpointTag()) => runInstruction(Tag();)
-  rule endpointToInstruction(Tag:EndpointTag(Es:ArgumentCSV)) => runInstruction(Tag(Es);)
-
-  rule  <k>
-            runExternalCall(from A:Address run Call:EndpointCall;)
-            => endpointToInstruction(Call) ~> clearExternalCallEnv
-        ...</k>
-        <caller-address> uninitialized => A </caller-address>
-
-endmodule
-
-module PSEUDOCODE-MEMORY
-  imports MAP-UTILS
-  imports PSEUDOCODE-COMMON
-  imports PSEUDOCODE-CONFIGURATION
-  imports PSEUDOCODE-SYNTAX
-
-  context runInstruction(_:Variable = {HOLE => evaluate(HOLE)}:>Expression;)
-
-  rule  <k> (runInstruction(V:Variable = E:Expression;) => evaluate(void)) ...</k>
-        <variables> M:Map => M[V <- E] </variables>
-    requires isKResult(E)
-
-  rule  <k> evaluate(V:Variable => {M[V]}:>Expression) ... </k>
-        <variables> M:Map </variables>
-    requires V in_keys(M)
-endmodule
-
-module PSEUDOCODE-FOR
-  imports PSEUDOCODE-COMMON
-  imports PSEUDOCODE-SYNTAX
-
-  syntax Instruction ::= "for" "(" indexVar:Variable "=" value:Usize "," valueVar:Variable ")" "in" ExpressionList Block
-
-  context runInstruction(for(_:Variable, _:Variable) in {HOLE:Expression => evaluate(HOLE)}:>Expression _:Block)
-  rule runInstruction(for(Index:Variable, Value:Variable) in (L:ExpressionList) B:Block)
-        => runInstruction(for(Index = u(0), Value) in L B)
-    requires isKResult(L)
-
-  rule runInstruction(for(_:Variable = _:Usize, _:Variable) in [.] _:Block)
-        => evaluate(void)
-    [label(forEnd)]
-  rule runInstruction(
-          for (IndexVar:Variable = u(Index:Int), ValueVar:Variable)
-              in [E:Expression, Es:ExpressionCSV]
-              {B:Instructions}
-        )
-        =>  runPseudoCode(IndexVar = u(Index); ValueVar = E; B)
-            ~> runInstruction(for(IndexVar = u(Index +Int 1), ValueVar) in [Es:ExpressionCSV] {B})
-    [label(forLoop)]
-endmodule
-
-module PSEUDOCODE-IF
-  imports PSEUDOCODE-COMMON
-  imports PSEUDOCODE-SYNTAX
-
-  context runInstruction(if({HOLE:Expression => evaluate(HOLE)}:>Expression) _:Block)
-  context runInstruction(if({HOLE:Expression => evaluate(HOLE)}:>Expression) _:Block else _:Block)
-
-  rule runInstruction(if(true) {Is:Instructions}) => runPseudoCode(Is)
-  rule runInstruction(if(false) _:Block) => evaluate(void)
-
-  rule runInstruction(if(true) {Is:Instructions} else _:Block) => runPseudoCode(Is)
-  rule runInstruction(if(false) _:Block else {Is:Instructions}) => runPseudoCode(Is)
-endmodule
-
 module PSEUDOCODE-EXPRESSION
-  imports PSEUDOCODE-COMMON
+  imports EXPRESSION-SYNTAX
   imports PSEUDOCODE-SYNTAX
+  imports RUNNING-SYNTAX
 
-  rule add(u(A:Int), u(B:Int)) => u(A +Int B)
-  rule sub(u(A:Int), u(B:Int)) => u(A -Int B)
-
-  context evaluate(! {HOLE:Expression => evaluate(HOLE)}:>Expression)
-  rule evaluate((! false) => true)
-  rule evaluate((! true) => false)
-
-  context evaluate({HOLE:Expression => evaluate(HOLE)}:>Expression <= _:Expression)
-  context evaluate(A:Expression <= {HOLE:Expression => evaluate(HOLE)}:>Expression) requires isKResult(A)
-  rule evaluate((u(A:Int) <= u(B:Int)) => (A <=Int B))
-
-  context evaluate({HOLE:Expression => evaluate(HOLE)}:>Expression > _:Expression)
-  context evaluate(A:Expression > {HOLE:Expression => evaluate(HOLE)}:>Expression) requires isKResult(A)
-  rule evaluate((u(A:Int) > u(B:Int)) => (A >Int B))
-
-  context evaluate({HOLE:Expression => evaluate(HOLE)}:>Expression == _:Expression)
-  context evaluate(A:Expression == {HOLE:Expression => evaluate(HOLE)}:>Expression) requires isKResult(A)
-  rule evaluate((A:Expression == B:Expression) => (A ==K B))
-    requires isKResult(A) andBool isKResult(B)
-
-  context evaluate({HOLE:Expression => evaluate(HOLE)}:>Expression + _:Expression)
-  context evaluate(A:Expression + {HOLE:Expression => evaluate(HOLE)}:>Expression) requires isKResult(A)
-  rule evaluate(A:Usize + B:Usize => add(A, B))
-
-  context evaluate({HOLE:Expression => evaluate(HOLE)}:>Expression - _:Expression)
-  context evaluate(A:Expression - {HOLE:Expression => evaluate(HOLE)}:>Expression) requires isKResult(A)
-  rule evaluate(A:Usize - B:Usize => sub(A, B))
-
-  context evaluate({HOLE:Expression => evaluate(HOLE)}:>Expression | _:Expression)
-  context evaluate(A:Expression | {HOLE:Expression => evaluate(HOLE)}:>Expression) requires isKResult(A)
-  rule evaluate((u(A:Int) | u(B:Int)) => u(A |Int B))
   rule evaluate((meta(A:Int) | meta(B:Int)) => meta(A |Int B))
-
-  context evaluate([{HOLE:ExpressionCSV => evaluateEc(HOLE)}:>ExpressionCSV])
 endmodule
 
 module PSEUDOCODE-COMMON
-  imports MAP
   imports PSEUDOCODE-SYNTAX
 
   rule CodeMetadata::DEFAULT      => meta(0)
   rule CodeMetadata::UPGRADEABLE  => meta(1 <<Int 8)
   rule CodeMetadata::PAYABLE      => meta(1 <<Int 1)
   rule CodeMetadata::READABLE     => meta(1 <<Int 10)
-
-  syntax KItem ::= "error"
-  syntax KItem ::= "stuck"
-  syntax Usize ::= add(Usize, Usize)  [function, functional]
-  syntax Usize ::= sub(Usize, Usize)  [function, functional]
-
-  syntax KItem ::= "removeValue"
-  rule (E:Expression ~> removeValue) => .K
-    requires isKResult(E)
-endmodule
-
-module PSEUDOCODE-DETAILS
-  imports PSEUDOCODE-COMMON
-  imports PSEUDOCODE-SYNTAX
-
-  context evaluateAc({HOLE:Expression => evaluate(HOLE)}:>ArgumentCSV)
-  context evaluateAc({HOLE:Expression => evaluate(HOLE)}:>Expression , _:ArgumentCSV)
-  context evaluateAc(E:Expression , {HOLE:ArgumentCSV => evaluateAc(HOLE)}:>ArgumentCSV)
-    requires isKResult(E)
-
-  context evaluateEc({HOLE:Expression => evaluate(HOLE)}:>Expression , _:ExpressionCSV)
-  context evaluateEc(E:Expression , {HOLE:ExpressionCSV => evaluateEc(HOLE)}:>ExpressionCSV)
-    requires isKResult(E)
-
 endmodule
 
 module PSEUDOCODE-FUNCTIONS-SYNTAX
@@ -460,11 +231,6 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 
   syntax KResult
 
-  syntax KItem ::= "pushContext" | "popContext" | "evaluateReturnValue" | "preCall"
-  syntax KItem ::= stuck(KItem)
-  syntax KItem ::= call(Expression)
-  syntax KItem ::= Expression
-
   syntax FunctionTag ::= "proposeActionSCDeploy"
 
   syntax KItem ::= "plusOne"
@@ -478,6 +244,28 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 
 endmodule
 
+module PSEUDOCODE-FUNCTION-CALL
+  imports PSEUDOCODE-CONFIGURATION
+  imports FUNCTION-CALL-SYNTAX
+
+  syntax CustomStackState ::= customStackState(ContractStateCell, LogCell)
+
+  rule  <k> getCustomStackState => customStackState(C, Log) ... </k>
+        <state>
+          C:ContractStateCell
+          _:PseudocodeStateCell
+          _:ExternalCallEnvCell
+          Log:LogCell
+        </state>
+
+  rule  <k> setCustomStackState(customStackState(C:ContractStateCell, Log:LogCell)) => .K ... </k>
+        <state>
+          (_:ContractStateCell => C)
+          _:PseudocodeStateCell
+          _:ExternalCallEnvCell
+          (_:LogCell => Log)
+        </state>
+endmodule
 
 module PSEUDOCODE-FUNCTIONS
   imports BOOL
@@ -487,9 +275,13 @@ module PSEUDOCODE-FUNCTIONS
   imports PSEUDOCODE-COMMON
   imports PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
-  imports PSEUDOCODE-MAP-UTILS
   imports PSEUDOCODE-SYNTAX
   imports PSEUDOCODE-TYPE-REFLECTION
+
+  imports EXPRESSION-SYNTAX
+  imports FLOW-SYNTAX
+  imports FUNCTION-CALL-SYNTAX
+  imports MAP-UTILS-SYNTAX
 
   imports ADD-ONE-IF-NOT-NEGATIVE
   imports LAST-FUNCTIONS
@@ -501,62 +293,6 @@ module PSEUDOCODE-FUNCTIONS
   imports PREPEND
   imports PUSH-LIST
   imports REMOVE-LAST
-
-  context evaluate(_:FunctionTag(
-          {HOLE => evaluateAc(HOLE)}:>ArgumentCSV
-      ))
-
-  rule  <k> evaluate(_:FunctionTag(Args:ArgumentCSV) #as FunctionCall)
-            => (pushContext ~> preCall ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
-        ...</k>
-    requires isKResult(Args)
-  rule  <k> evaluate(_:FunctionTag() #as FunctionCall)
-            => (pushContext ~> preCall ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
-        ...</k>
-
-  rule preCall => .K
-
-  rule  <k> pushContext => .K ... </k>
-        <state>
-          S:MultisigStateCell
-          <pseudocode-state>
-            <variables> V:Map => .Map </variables>
-            <stack> Stack:Stack => stack(S, V, Log, Stack) </stack>
-          </pseudocode-state>
-          _:ExternalCallEnvCell
-          <log>
-            <performed-actions>Log:List</performed-actions>
-          </log>
-        </state>
-
-  rule  <k> (evaluate(E:Expression) => E) ~> popContext ... </k>
-    requires isKResult(E)
-
-  rule  <k> E:Expression ~> (popContext => .K) ... </k>
-        <variables> _ => V </variables>
-        <stack> stack(_, V:Map, _, Stack:Stack) => Stack </stack>
-    requires isKResult(E)
-
-  rule  <k> (E:Expression ~> evaluateReturnValue) => evaluate(E) ... </k>
-    requires isKResult(E)
-
-  rule  <k> error ~> (popContext => .K) ...</k>
-        <state>
-          (_ => S)
-          <pseudocode-state>
-            <variables> _ => V </variables>
-            <stack> stack(S:MultisigStateCell, V:Map, Log:List, Stack:Stack) => Stack </stack>
-          </pseudocode-state>
-          _:ExternalCallEnvCell
-          <log>
-            <performed-actions>_:List => Log</performed-actions>
-          </log>
-        </state>
-
-  rule <k> error ~> (evaluateReturnValue => .K) ... </k>
-
-  context runInstruction(ok({HOLE:Expression => evaluate(HOLE)}:>Expression);)
-  rule runInstruction(ok(E:Expression);) => E requires isKResult(E)
 
   rule call(init(Quorum:Usize, Board:ExpressionList)) =>
       runPseudoCode(
@@ -1007,207 +743,19 @@ module PSEUDOCODE-FUNCTIONS
 
 endmodule
 
-module MAYBE
-  imports BASE-TYPES
-
-  syntax Maybe ::= just(KItem) | "nothing"
-  syntax KItem ::= Maybe
-
-  syntax KItem ::= value(KItem)
-  rule isKResult(value(K:KItem) => K)
-
-  syntax KResult ::= Maybe
-
-  syntax KItem ::= orElse(KItem, KItem)  [strict(1)]
-  rule orElse(nothing, K:KItem) => value(K)
-  rule orElse(just(K:KItem), _:KItem) => value(K)
-endmodule
-
-module MAP-UTILS
-  imports BOOL
-  imports K-EQUAL
-  imports MAP
-  imports MAYBE
-  imports PSEUDOCODE-COMMON
-
-  syntax KItem ::= concretizeMapKey(KItem, Map)
-  rule concretizeMapKey(Key:KItem, M:Map) => splitMap(Key, M, ?_Value, ?_Remainder)
-    requires Key in_keys(M)
-    [label(concretizeMapKey)]
-  rule concretizeMapKey(Key:KItem, M:Map) => .K
-    requires notBool Key in_keys(M)
-    [label(concretizeKeyNotInMap)]
-
-  syntax KItem ::= splitMap(key:KItem, toSplit:Map, value:KItem, remainder:Map)
-      [function, functional]
-  syntax KItem ::= "splitMapStuck" | "endSplitMap"
-  rule endSplitMap => .K
-
-  rule splitMap(Key:KItem, M:Map, _Value:KItem, _Remainder:Map) => splitMapStuck
-    requires notBool Key in_keys(M)
-  rule splitMap(Key:KItem, (Key |-> _:KItem) M:Map, _Value:KItem, _Remainder:Map)
-      => endSplitMap
-    ensures notBool Key in_keys(M)
-    [simplification(30)]
-  rule splitMap(Key:KItem, (K1:KItem |-> _SomeValue:KItem) M:Map, Value:KItem, Remainder:Map)
-      => splitMap(Key, M, Value, Remainder)
-    requires notBool (Key ==K K1) andBool Key in_keys(M)
-    ensures notBool K1 in_keys(M)
-    [simplification(30)]
-  rule splitMap(Key:KItem, M:Map, Value:KItem, Remainder:Map)
-      => endSplitMap
-    requires Key in_keys(M)
-    ensures M ==K (Key |-> Value Remainder)
-    [simplification(50)]
-
-  /*
-  syntax Map ::= splitMap(key:KItem, Map, Map)  [function, functional]
-
-  rule  splitMap(K:KItem, (K |-> _:KItem _:Map) #as _:Map, M:Map)
-        => M
-    [simplification]
-  rule  splitMap(K:KItem, (K1 |-> _ M:Map) #as _:Map, N:Map)
-        => splitMap(K, M, N)
-    requires notBool (K ==K K1)
-    [simplification]
-  rule  splitMap(K:KItem, M:Map, N:Map)
-        =>
-            (
-              (#Ceil(M #And (K |-> ?_:KItem ?_:Map)))
-              #And
-              {true #Equals (K in_keys(M))}
-              #And N
-            )
-            #Or (N #And {true #Equals (notBool (K in_keys(M)))})
-
-  rule  splitMap(K:KItem, M:Map, N:Map)
-        =>(
-            (
-              (#Ceil(M #And (K |-> ?_:KItem ?_:Map)))
-              #And
-              {true #Equals (K in_keys(M))}
-            )
-            #Or
-            ({true #Equals (notBool (K in_keys(M)))})
-          )
-          #And N
-
-
-  rule  splitMap(K:KItem, M:Map, N:Map) => N
-        ensures
-          (
-            (
-              (#Ceil(M #And (K |-> ?_:KItem ?_:Map)))
-              #And
-              {true #Equals (K in_keys(M))}
-            )
-            #Or
-            ({true #Equals (notBool (K in_keys(M)))})
-          )
-
-
-
-  */
-
-  // Do the map lookups in a way that makes the Haskell backend happy.
-
-  syntax KItem ::= mapLookup(KItem, Map)
-  rule mapLookup(K:KItem, M:Map)
-      =>  concretizeMapKey(K, M)
-          ~> #mapLookup(K, M)
-    requires K in_keys(M)
-    [label(mapLookupInKeys)]
-  rule mapLookup(K:KItem, M:Map)
-      =>  nothing
-    requires notBool K in_keys(M)
-    [label(mapLookupNotInKeys)]
-
-  syntax KItem ::= #mapLookup(KItem, Map)
-  rule #mapLookup(K:KItem, ((K |-> V:KItem) _:Map) #as M:Map) => just(V)
-    ensures K in_keys(M)
-  rule #mapLookup(K:KItem, M:Map) => nothing
-    ensures notBool (K in_keys(M))
-    [owise]
-
-  syntax KItem ::= mapDelete(key:KItem, Map)
-  rule mapDelete(K:KItem, M:Map) => #mapDelete(K, M)
-    requires K in_keys(M)
-  rule mapDelete(K:KItem, M:Map) => M
-    requires notBool (K in_keys(M))
-
-  syntax KItem ::= #mapDelete(key:KItem, Map)
-  rule #mapDelete(K:KItem, (K |-> _:KItem) M:Map) => M
-  rule #mapDelete(_:KItem, M:Map) => M
-    ensures false
-    [owise]
-
-  syntax KItem ::= mapSet(key:KItem, value:KItem, Map)
-  rule mapSet(K:KItem, V:KItem, M:Map) => #mapSet(K, V, M)
-    requires K in_keys(M)
-  rule mapSet(K:KItem, V:KItem, M:Map) => K |-> V M
-    requires notBool (K in_keys(M))
-
-  syntax KItem ::= #mapSet(key:KItem, value:KItem, Map)
-  rule #mapSet(K:KItem, V:KItem, (K |-> _:KItem) M:Map) => K |-> V M
-  rule #mapSet(_:KItem, _:KItem, M:Map) => M
-    ensures false
-    [owise]
-
-  rule X:KItem in_keys(Y:KItem |-> _:KItem M:Map)
-        => X ==K Y orBool X in_keys(M)
-    ensures notBool Y in_keys(M)
-    [simplification]
-  rule K1 in_keys(M [ K2 <- undef ]) => K1 in_keys(M)
-    requires notBool K1 ==K K2
-    [simplification]
-
-  rule M:Map[Key:KItem] orDefault _:KItem => M[Key]
-    requires Key in_keys(M)
-    [simplification]
-  rule M:Map[Key:KItem] orDefault D:KItem => D
-    requires notBool Key in_keys(M)
-    [simplification]
-endmodule
-
-module PSEUDOCODE-MAP-UTILS
-  imports MAP-UTILS
-  imports PSEUDOCODE-TYPE-REFLECTION
-
-  syntax KItem ::= nullableMapLookup(key:KItem, Map, ReflectionType)
-
-  rule nullableMapLookup(K:KItem, M:Map, T:ReflectionType)
-        => cast(orElse(mapLookup(K, M), defaultValue(T)), T)
-
-  syntax KItem ::= nullableMapSet(key:KItem, value:KItem, Map, ReflectionType)
-  rule nullableMapSet(Key:KItem, Value:KItem, M:Map, T:ReflectionType)
-        => mapDelete(Key, M)
-    requires isDefaultValue(Value, T)
-    [label(nullableMapSetDeleteEmpty)]
-  rule nullableMapSet(Key:KItem, Value:KItem, M:Map, T:ReflectionType)
-        => mapSet(Key, Value, M)
-    requires notBool isDefaultValue(Value, T)
-    [label(nullableMapSetAddNonEmpty)]
-
-endmodule
-
 module PSEUDOCODE-CONFIGURATION
   imports MAP
 
+  imports LANGUAGE-CONFIGURATION
   imports PSEUDOCODE-SYNTAX
   imports PSEUDOCODE-COMMON
-
-  syntax KItem ::= "uninitialized"
-
-  syntax Stack ::= ".stack"
-  syntax Stack ::= stack(MultisigStateCell, variables:Map, performedActions:List, next:Stack)
 
   configuration
     <T>
       <TT>
-        <k color="green"> runExternalCalls($PGM:ExternalCommands) </k>
-
+        <k />
         <state>
-          <multisig-state>
+          <contract-state>
             <users>
               <num-users>u(0)</num-users>
               <user-id-to-address>.Map</user-id-to-address>
@@ -1226,14 +774,9 @@ module PSEUDOCODE-CONFIGURATION
                 <action-signers>.Map</action-signers>
               </actions>
             </action-state>
-          </multisig-state>
-          <pseudocode-state>
-            <variables>.Map</variables>
-            <stack> .stack </stack>
-          </pseudocode-state>
-          <external-call-env>
-            <caller-address>uninitialized</caller-address>
-          </external-call-env>
+          </contract-state>
+          <pseudocode-state />
+          <external-call-env />
           <log>
             <performed-actions>.List</performed-actions>
           </log>
@@ -1244,7 +787,7 @@ module PSEUDOCODE-CONFIGURATION
   syntax StateCell ::= "initialState"   [function]
   rule initialState =>
       <state>
-        <multisig-state>
+        <contract-state>
           <users>
             <num-users>u(0)</num-users>
             <user-id-to-address>.Map</user-id-to-address>
@@ -1263,7 +806,7 @@ module PSEUDOCODE-CONFIGURATION
               <action-signers>.Map</action-signers>
             </actions>
           </action-state>
-        </multisig-state>
+        </contract-state>
         <pseudocode-state>
           <variables>.Map</variables>
           <stack> .stack </stack>

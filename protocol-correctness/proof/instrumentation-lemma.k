@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/base-types.k"
+require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/proof/instrumentation-concretize.k"
 
 module INSTRUMENTATION-LEMMA-SYNTAX
