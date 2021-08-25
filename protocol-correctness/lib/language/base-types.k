@@ -18,6 +18,7 @@ module BASE-TYPES-SYNTAX
                       |   Instruction Instructions
   syntax Instruction  ::= "require" "(" Expression ")" ";"
                       |   Variable "=" Expression ";"
+                      |   "let" Variable "=" Expression ";"
                       |   "if" "(" Expression ")" Block               [avoid]
                       |   "if" "(" Expression ")" Block "else" Block  [prefer]
                       |   "for" "(" index:Variable "," value:Variable ")" "in" Expression Block
@@ -31,16 +32,24 @@ module BASE-TYPES-SYNTAX
                 |   BoxedBytes
                 |   BigUint
 
+  syntax Record
+
   syntax Expression ::= FunctionCall
                     |   Variable
                     |   ExpressionList
                     |   Value
+                    |   Record
+                    |   Expression "." FunctionCall
                     |   Expression "+" Expression
                     |   Expression "-" Expression
                     |   Expression "|" Expression
                     >   Expression "==" Expression
+                    |   Expression "!=" Expression
                     |   Expression "<=" Expression
+                    |   Expression ">=" Expression
+                    |   Expression "<" Expression
                     |   Expression ">" Expression
+                    >   Expression "&&" Expression
                     |   "!" Expression
 
   syntax ExpressionCSV  ::= "."

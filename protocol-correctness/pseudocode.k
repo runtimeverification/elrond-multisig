@@ -107,7 +107,6 @@ module PSEUDOCODE-SYNTAX
                       |   "countCanSign"              // ([list])
                       |   "sendTx"                    // (address, amount, data)
                       |   "asyncCall"                 // (address, amount, [data])
-                      |   EndpointTag
 
   syntax EndpointTag  ::= "init"                // (quorum, board)
                       |   "proposeAddBoardMember"  // (user_id)
