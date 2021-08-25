@@ -45,6 +45,7 @@ klibrary(
   name = "configuration-files",
   srcs = ["configuration.k"],
   deps = [
+      ":base-types-files",
       ":caller-address-files",
       ":running-syntax-files",
       ":stack-files",
@@ -122,8 +123,10 @@ klibrary(
       ":function-call-files",
       ":language-list-files",
       ":map-utils-files",
+      ":mappers-files",
       ":maybe-files",
       ":memory-files",
+      ":record-files",
       ":running-files",
       ":type-reflection-files",
   ],
@@ -135,6 +138,18 @@ klibrary(
   srcs = ["map-utils.k"],
   deps = [
       ":maybe-files",
+      ":type-reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "mappers-files",
+  srcs = ["mappers.k"],
+  deps = [
+      ":base-types-files",
+      ":function-call-files",
+      ":running-syntax-files",
       ":type-reflection-files",
   ],
   visibility = ["//visibility:public"],
@@ -153,6 +168,16 @@ klibrary(
   srcs = ["memory.k"],
   deps = [
       ":configuration-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "record-files",
+  srcs = ["record.k"],
+  deps = [
+      ":base-types-files",
+      ":running-files",
   ],
   visibility = ["//visibility:public"],
 )
