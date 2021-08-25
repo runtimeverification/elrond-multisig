@@ -3,18 +3,21 @@ require "protocol-correctness/lib/language/flow.k"
 require "protocol-correctness/lib/language/maybe.k"
 
 module TYPE-REFLECTION-SYNTAX
-  syntax ReflectionType ::= "rUsize"
-                        | "rExpressionList"
-                        | "rBool"
-                        | "rAddress"
-                        | "rBoxedBytes"
-                        | "rBigUint"
+    syntax ReflectionType ::= "rUsize"
+                          | "rExpressionList"
+                          | "rBool"
+                          | "rAddress"
+                          | "rBoxedBytes"
+                          | "rBigUint"
 
-  syntax KItem ::= cast(KItem, ReflectionType)  [strict(1)]
+    syntax KItem ::= cast(KItem, ReflectionType)  [strict(1)]
 
-  syntax KItem ::= defaultValue(ReflectionType)  [function, functional]
-  syntax Bool ::= isDefaultValue(KItem, ReflectionType)  [function, functional]
-  syntax Bool ::= valueOfType(KItem, ReflectionType)  [function, functional]
+    syntax KItem ::= defaultValue(ReflectionType)  [function, functional]
+    syntax Bool ::= isDefaultValue(KItem, ReflectionType)  [function, functional]
+    syntax Bool ::= valueOfType(KItem, ReflectionType)  [function, functional]
+
+    syntax ValueMapperType ::= SingleValue(ReflectionType)
+
 endmodule
 
 module TYPE-REFLECTION

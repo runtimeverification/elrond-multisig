@@ -32,6 +32,9 @@ module BASE-TYPES-SYNTAX
                 |   BoxedBytes
                 |   BigUint
 
+  syntax ValueMapperType
+  syntax ValueMapper ::= valueMapper(Record, FunctionTag, ValueMapperType)
+
   syntax Record
 
   syntax Expression ::= FunctionCall
@@ -39,6 +42,7 @@ module BASE-TYPES-SYNTAX
                     |   ExpressionList
                     |   Value
                     |   Record
+                    |   ValueMapper
                     |   Expression "." FunctionCall
                     |   Expression "+" Expression
                     |   Expression "-" Expression
@@ -50,6 +54,7 @@ module BASE-TYPES-SYNTAX
                     |   Expression "<" Expression
                     |   Expression ">" Expression
                     >   Expression "&&" Expression
+                    |   Expression "||" Expression
                     |   "!" Expression
 
   syntax ExpressionCSV  ::= "."

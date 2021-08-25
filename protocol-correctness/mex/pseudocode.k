@@ -1,43 +1,11 @@
 require "protocol-correctness/lib/language/language.k"
+require "protocol-correctness/mex/pair.k"
 
 module PSEUDOCODE-SYNTAX
   imports TOKEN-IDENTIFIER-SYNTAX
+  imports MAPPERS-IDENTIFIERS-SYNTAX
   imports MEX-IDENTIFIERS-SYNTAX
   imports PAIR-BASE-SYNTAX
-  // imports INT
-  // imports LIST
-  // imports STRING
-
-  // imports BASE-TYPES-SYNTAX
-  // imports RUNNING-SYNTAX
-
-  // syntax CodeMetadata ::= "CodeMetadata::DEFAULT"     [function]
-  //                     |   "CodeMetadata::UPGRADEABLE" [function]
-  //                     |   "CodeMetadata::PAYABLE"     [function]
-  //                     |   "CodeMetadata::READABLE"    [function]
-
-  // syntax CodeMetadata ::= meta(Int)  // Assumes no operations on this.
-  // syntax UserRole ::= "None" | "Proposer" | "BoardMember"
-  // syntax Action ::= "Nothing"
-  //               |   AddBoardMember(Address)
-  //               |   AddProposer(Address)
-  //               |   RemoveUser(Address)
-  //               |   ChangeQuorum(Usize)
-  //               |   SendEgld(to: Address, amount: BigUint, data: BoxedBytes)
-  //               |   SCDeploy(
-  //                       amount: BigUint,
-  //                       code: BoxedBytes,
-  //                       codeMetadata: CodeMetadata,
-  //                       arguments: ExpressionList)  // list of BoxedBytes
-  //               |   SCCall(
-  //                       to: Address,
-  //                       amount: BigUint,
-  //                       function: BoxedBytes,
-  //                       arguments: ExpressionList)  // list of BoxedBytes
-
-  // syntax Value  ::= UserRole
-  //               |   CodeMetadata
-  // syntax Expression ::= Action
 
 endmodule
 
@@ -79,9 +47,10 @@ module PSEUDOCODE
   imports PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-EXPRESSION
   imports PSEUDOCODE-FUNCTION-CALL
-  imports PSEUDOCODE-FUNCTIONS
+  imports PAIR
   imports PSEUDOCODE-KRESULT
   imports PSEUDOCODE-SYNTAX
+  imports TOKEN-IDENTIFIER
 endmodule
 
 module PSEUDOCODE-TYPE-REFLECTION
@@ -179,6 +148,7 @@ module PSEUDOCODE-CONFIGURATION
   imports MAP
 
   imports LANGUAGE-CONFIGURATION
+  imports PAIR-CONFIGURATION
   imports PSEUDOCODE-SYNTAX
 
   configuration
@@ -187,7 +157,7 @@ module PSEUDOCODE-CONFIGURATION
         <k />
         <state>
           <blockchain-state>
-            .K
+            <pairs />
           </blockchain-state>
           <pseudocode-state />
           <external-call-env />
@@ -198,21 +168,21 @@ module PSEUDOCODE-CONFIGURATION
     </TT>
   </T>
 
-  syntax StateCell ::= "initialState"   [function]
-  rule initialState =>
-      <state>
-        <blockchain-state>
-          .K
-        </blockchain-state>
-        <pseudocode-state>
-          <variables>.Map</variables>
-          <stack> .stack </stack>
-        </pseudocode-state>
-        <external-call-env>
-          <caller-address>uninitialized</caller-address>
-        </external-call-env>
-        <log>
-          <performed-actions>.List</performed-actions>
-        </log>
-      </state>
+  // syntax StateCell ::= "initialState"   [function]
+  // rule initialState =>
+  //     <state>
+  //       <blockchain-state>
+  //         <pairs>.Bag</pairs>
+  //       </blockchain-state>
+  //       <pseudocode-state>
+  //         <variables>.Map</variables>
+  //         <stack> .stack </stack>
+  //       </pseudocode-state>
+  //       <external-call-env>
+  //         <caller-address>uninitialized</caller-address>
+  //       </external-call-env>
+  //       <log>
+  //         <performed-actions>.List</performed-actions>
+  //       </log>
+  //     </state>
 endmodule

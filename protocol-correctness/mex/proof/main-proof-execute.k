@@ -1,10 +1,10 @@
 require "protocol-correctness/mex/pseudocode.k"
 
-module PSEUDOCODE-EXECUTE-SYNTAX
+module MAIN-PROOF-EXECUTE-SYNTAX
   imports PSEUDOCODE-SYNTAX
 endmodule
 
-module PSEUDOCODE-EXECUTE
-  imports PSEUDOCODE-EXECUTE-SYNTAX
+module MAIN-PROOF-EXECUTE
+  imports MAIN-PROOF-EXECUTE-SYNTAX
   imports PSEUDOCODE
 endmodule
