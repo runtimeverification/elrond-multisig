@@ -1,8 +1,8 @@
 load("//:proof.bzl", "klibrary", "kompile")
 
 kompile(
-  name = "pseudocode-execute",
-  srcs = ["pseudocode-execute.k"],
+  name = "mex-execute",
+  srcs = ["mex-execute.k"],
   deps = [
       ":pseudocode-files",
   ],
@@ -10,8 +10,8 @@ kompile(
 )
 
 klibrary(
-  name = "pseudocode-execute-files",
-  srcs = ["pseudocode-execute.k"],
+  name = "mex-execute-files",
+  srcs = ["mex-execute.k"],
   deps = [
       ":pseudocode-files",
   ],
@@ -32,6 +32,7 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
       "//protocol-correctness/lib/language:running-syntax-files",
+      ":identifiers-files",
       "//protocol-correctness/mex/types:token-identifier-files",
   ],
   visibility = ["//visibility:public"],
@@ -42,6 +43,7 @@ klibrary(
   srcs = ["pseudocode.k"],
   deps = [
       "//protocol-correctness/lib/language:language-files",
+      ":pair-files",
   ],
   visibility = ["//visibility:public"],
 )

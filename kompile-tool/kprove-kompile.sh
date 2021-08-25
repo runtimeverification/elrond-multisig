@@ -32,7 +32,7 @@ KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprove)
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf -- "$TMP_DIR"' EXIT
 
-cp -rL $KOMPILE_DIR $TMP_DIR
+cp -RL $KOMPILE_DIR $TMP_DIR
 chmod -R a+w $TMP_DIR/*
 
 pushd $TMP_DIR > /dev/null
