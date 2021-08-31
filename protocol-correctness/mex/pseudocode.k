@@ -47,9 +47,11 @@ module PSEUDOCODE
   imports PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-EXPRESSION
   imports PSEUDOCODE-FUNCTION-CALL
-  imports PAIR
   imports PSEUDOCODE-KRESULT
   imports PSEUDOCODE-SYNTAX
+
+  imports CALL-VALUE-API
+  imports PAIR
   imports TOKEN-IDENTIFIER
 endmodule
 

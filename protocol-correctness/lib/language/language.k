@@ -8,6 +8,7 @@ require "protocol-correctness/lib/language/map-utils.k"
 require "protocol-correctness/lib/language/mappers.k"
 require "protocol-correctness/lib/language/maybe.k"
 require "protocol-correctness/lib/language/memory.k"
+require "protocol-correctness/lib/language/memory-expression.k"
 require "protocol-correctness/lib/language/record.k"
 require "protocol-correctness/lib/language/running.k"
 require "protocol-correctness/lib/language/type-reflection.k"
@@ -23,6 +24,7 @@ module LANGUAGE
   imports MAPPERS
   imports MAYBE
   imports MEMORY
+  imports MEMORY-EXPRESSION
   imports RECORD
   imports RUNNING
   imports TYPE-REFLECTION

@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/language/function-call.k"
 require "protocol-correctness/lib/language/language.k"
 require "protocol-correctness/mex/identifiers.k"

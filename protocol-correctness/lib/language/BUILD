@@ -126,6 +126,7 @@ klibrary(
       ":mappers-files",
       ":maybe-files",
       ":memory-files",
+      ":memory-expression-files",
       ":record-files",
       ":running-files",
       ":type-reflection-files",
@@ -159,6 +160,15 @@ klibrary(
   name = "maybe-files",
   srcs = ["maybe.k"],
   deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "memory-expression-files",
+  srcs = ["memory-expression.k"],
+  deps = [
+      ":configuration-files",
   ],
   visibility = ["//visibility:public"],
 )

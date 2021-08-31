@@ -11,7 +11,13 @@ module MEMORY
 
   context runInstruction(let _:Variable = {HOLE => evaluate(HOLE)}:>Expression;)
 
+  context runInstruction(let mut _:Variable = {HOLE => evaluate(HOLE)}:>Expression;)
+
   rule  <k> (runInstruction(let V:Variable = E:Expression;) => evaluate(void)) ...</k>
+        <variables> M:Map => M[V <- E] </variables>
+    requires isKResult(E)
+
+  rule  <k> (runInstruction(let mut V:Variable = E:Expression;) => evaluate(void)) ...</k>
         <variables> M:Map => M[V <- E] </variables>
     requires isKResult(E)
 

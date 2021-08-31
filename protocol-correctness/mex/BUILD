@@ -34,6 +34,7 @@ klibrary(
       "//protocol-correctness/lib/language:running-syntax-files",
       ":identifiers-files",
       "//protocol-correctness/mex/types:token-identifier-files",
+      "//protocol-correctness/mex/types:call-value-api-files",
   ],
   visibility = ["//visibility:public"],
 )

@@ -2,6 +2,7 @@ require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/language/running-syntax.k"
 require "protocol-correctness/mex/identifiers.k"
 require "protocol-correctness/mex/types/token-identifier.k"
+require "protocol-correctness/mex/types/call-value-api.k"
 
 module PAIR-BASE-SYNTAX
   imports BASE-TYPES-SYNTAX
@@ -36,25 +37,24 @@ module PAIR-TYPE-REFLECTION
 endmodule
 
 module PAIR-FUNCTIONS
+    imports PAIR-CONSTANTS
+    imports PAIR-FUNCTIONS-ENDPOINT
+    imports PAIR-FUNCTIONS-INTERNAL
+    imports PAIR-FUNCTIONS-MAPPERS
+endmodule
+
+module PAIR-FUNCTIONS-ENDPOINT
+    imports BASE-TYPES-SYNTAX
+    imports CALL-VALUE-API-SYNTAX
     imports FUNCTION-CALL-SYNTAX
-    imports LANGUAGE-CONFIGURATION
     imports MAPPERS-IDENTIFIERS-SYNTAX
-    imports MAPPERS-SYNTAX
     imports MEX-IDENTIFIERS-SYNTAX
     imports PAIR-BASE-SYNTAX
-    imports PAIR-CONFIGURATION
+    imports PAIR-CALL-VALUE-SYNTAX
+    imports PAIR-CONSTANTS-SYNTAX
     imports PAIR-SYNTAX
-    imports PAIR-TYPE-REFLECTION
     imports RUNNING-SYNTAX
     imports TOKEN-IDENTIFIER-SYNTAX
-    imports TOKEN-IDENTIFIER-TYPE-REFLECTION
-    imports TYPE-REFLECTION-SYNTAX
-
-    syntax Usize ::= "DEFAULT_TRANSFER_EXEC_GAS_LIMIT"  [function]
-    rule DEFAULT_TRANSFER_EXEC_GAS_LIMIT => u(35000000)
-
-    syntax Usize ::= "DEFAULT_EXTERN_SWAP_GAS_LIMIT"  [function]
-    rule DEFAULT_EXTERN_SWAP_GAS_LIMIT => u(50000000)
 
     rule call(init(
                   Self:Pair,
@@ -99,6 +99,75 @@ module PAIR-FUNCTIONS
             Self.special_fee_percent().set(SpecialFeePercent);
             ok(void);
         )
+
+    rule call(accept_esdt_payment_endpoint(Self:Pair, Value:CallValue))
+        =>  (  setCallValue(Self, Value)
+            ~> runPseudoCode(Self.accept_esdt_payment(Value.token(), Value.esdt_value());)
+            ~> clearCallValue(Self)
+            )
+
+    rule call(accept_esdt_payment(
+                  Self:Pair,
+                  Token:TokenIdentifier,
+                  Payment:BigUint))
+        => runPseudoCode(
+            require(Self.is_active());
+            require(Self.call_value().esdt_token_nonce() == u(0));
+            require(Payment > big(0));
+            let first_token_id = Self.first_token_id().get();
+            let second_token_id = Self.second_token_id().get();
+            require(Token == first_token_id || Token == second_token_id);
+
+            let caller = Self.blockchain().get_caller();
+            let mut temporary_funds = Self.temporary_funds(caller, Token).get();
+            temporary_funds += Payment;
+            Self.temporary_funds(caller, Token).set(temporary_funds);
+
+            ok(void);
+        )
+endmodule
+
+module PAIR-CONSTANTS-SYNTAX
+    imports BASE-TYPES-SYNTAX
+
+    syntax Usize ::= "DEFAULT_TRANSFER_EXEC_GAS_LIMIT"  [function]
+    syntax Usize ::= "DEFAULT_EXTERN_SWAP_GAS_LIMIT"  [function]
+endmodule
+
+module PAIR-CONSTANTS
+    imports PAIR-CONSTANTS-SYNTAX
+
+    rule DEFAULT_TRANSFER_EXEC_GAS_LIMIT => u(35000000)
+    rule DEFAULT_EXTERN_SWAP_GAS_LIMIT => u(50000000)
+endmodule
+
+module PAIR-FUNCTIONS-INTERNAL
+    imports BASE-TYPES-SYNTAX
+    imports FUNCTION-CALL-SYNTAX
+    imports MAPPERS-IDENTIFIERS-SYNTAX
+    imports MEX-IDENTIFIERS-SYNTAX
+    imports PAIR-BASE-SYNTAX
+    imports PAIR-SYNTAX
+    imports RUNNING-SYNTAX
+
+    rule call(is_active(Self:Pair))
+        => runPseudoCode (
+            let state = Self.state().get();
+            state == PairState::Active || state == PairState::ActiveNoSwaps;
+        )
+endmodule
+
+module PAIR-FUNCTIONS-MAPPERS
+    imports BASE-TYPES-SYNTAX
+    imports FUNCTION-CALL-SYNTAX
+    imports LANGUAGE-CONFIGURATION
+    imports MAPPERS-SYNTAX
+    imports MEX-IDENTIFIERS-SYNTAX
+    imports PAIR-CONFIGURATION
+    imports PAIR-SYNTAX
+    imports PAIR-TYPE-REFLECTION
+    imports TOKEN-IDENTIFIER-TYPE-REFLECTION
+    imports TYPE-REFLECTION-SYNTAX
 
     rule call(lp_token_identifier(Self:Pair))
         => valueMapper(Self, lp_token_identifier, SingleValue(rTokenIdentifier))
@@ -257,7 +326,49 @@ module PAIR-FUNCTIONS
         <special-fee-percent>_:Usize => E</special-fee-percent>
 endmodule
 
+module PAIR-FUNCTIONS-DATA
+    imports PAIR-CALL-VALUE
+endmodule
+
+module PAIR-CALL-VALUE-SYNTAX
+    imports PAIR-SYNTAX
+    imports CALL-VALUE-API-SYNTAX
+    syntax KItem ::= setCallValue(Pair, CallValue)
+    syntax KItem ::= clearCallValue(Pair)
+endmodule
+
+module PAIR-CALL-VALUE
+    imports PAIR-CONFIGURATION
+    imports PAIR-SYNTAX
+    // imports BASE-TYPES-SYNTAX
+    // imports FUNCTION-CALL-SYNTAX
+    // imports LANGUAGE-CONFIGURATION
+    // imports MAPPERS-SYNTAX
+    // imports MEX-IDENTIFIERS-SYNTAX
+    // imports PAIR-TYPE-REFLECTION
+    // imports TOKEN-IDENTIFIER-TYPE-REFLECTION
+    // imports TYPE-REFLECTION-SYNTAX
+
+    rule <k> call(call_value(Self:Pair)) => V ...</k>
+        <pair-id>Self</pair-id>
+        <call-value>V:CallValue</second-token-id>
+
+    rule
+        <k> setCallValue(Self::Pair, V:CallValue) => .K ... </k>
+        <pair-id>Self</pair-id>
+        <call-value>callValue() => V</second-token-id>
+
+    rule
+        <k> clearCallValue(Self::Pair) => .K ... </k>
+        <pair-id>Self</pair-id>
+        <call-value>_:CallValue => callValue()</second-token-id>
+
+    rule (E:Expression ~> (clearCallValue(...) #as C:KItem)) => C ~> E
+    rule (error ~> (clearCallValue(...) #as C:KItem)) => C ~> error
+endmodule
+
 module PAIR-CONFIGURATION
+    imports CALL-VALUE-API-SYNTAX
     imports PAIR-BASE-SYNTAX
     imports PAIR-SYNTAX
     imports TOKEN-IDENTIFIER-SYNTAX
@@ -278,6 +389,9 @@ module PAIR-CONFIGURATION
                     <total-fee-percent>u(0)</total-fee-percent>
                     <special-fee-percent>u(0)</special-fee-percent>
                 </pair-data>
+                <call-data>
+                    <call-value>callValue()</call-value>
+                </call-data>
             </pair>
         </pairs>
 

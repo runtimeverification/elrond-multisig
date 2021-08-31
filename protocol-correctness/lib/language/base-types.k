@@ -18,7 +18,9 @@ module BASE-TYPES-SYNTAX
                       |   Instruction Instructions
   syntax Instruction  ::= "require" "(" Expression ")" ";"
                       |   Variable "=" Expression ";"
+                      |   Variable "+=" Expression ";"
                       |   "let" Variable "=" Expression ";"
+                      |   "let" "mut" Variable "=" Expression ";"
                       |   "if" "(" Expression ")" Block               [avoid]
                       |   "if" "(" Expression ")" Block "else" Block  [prefer]
                       |   "for" "(" index:Variable "," value:Variable ")" "in" Expression Block
