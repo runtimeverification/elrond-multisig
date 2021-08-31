@@ -9,7 +9,7 @@ module PROOF-CAN-BE-DELETED
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports EXECUTION-PROOF-HELPERS
   imports PSEUDOCODE-CONFIGURATION
-  imports MALICIOUS-USER-HELPERS
+  imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
 
   claim <T><TT>
           <k> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress)

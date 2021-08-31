@@ -74,3 +74,17 @@ ktrusted(
   visibility = ["//visibility:public"],
 )
 
+kprove_test(
+  name = "proof-run-external-call-from-user",
+  srcs = ["proof-run-external-call-from-user.k"],
+  trusted = [
+  ],
+  semantics = "can-be-deleted-execute",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-from-user",
+  srcs = ["proof-run-external-call-from-user.k"],
+  visibility = ["//visibility:public"],
+)
+
