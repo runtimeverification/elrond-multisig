@@ -189,8 +189,10 @@ module CAN-BE-DELETED-EXECUTE
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-DELETE-INVARIANT
   imports MALICIOUS-USER-DELETE-ACTIONS
-  imports MALICIOUS-USER-HELPERS
+  imports MALICIOUS-USER-EXTERNAL-CALLS
+  imports MALICIOUS-USER-INVARIANT
   imports MAIN-PROOF-EXECUTE
+  imports ONLY-THIS-SIGNER-DIFFS
 
   // TODO: Not sure why the Haskell backend does not evaluate this.
   // Remove when it does.

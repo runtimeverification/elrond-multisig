@@ -1,3 +1,4 @@
+require "protocol-correctness/multisig/lib/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
 require "protocol-correctness/proof/properties/properties-execute.k"
@@ -38,6 +39,8 @@ endmodule
 module MALICIOUS-USER-INVARIANT
   imports INVARIANT
   imports MALICIOUS-USER-INVARIANT-FUNCTIONS
+  imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
+  imports PSEUDOCODE-FUNCTIONS-SYNTAX
 
   syntax CustomInvariantData ::= Address
 
@@ -104,23 +107,40 @@ module MALICIOUS-USER-INVARIANT
             Handling)
         andBool onlyThisSigner(CurrentAddressToUserId, MaliciousAddress, ActionSigners)
         andBool Quorum >=Int 2
+
+  syntax Bool ::= listQuorumCantBeFilledBy(quorum:Int, id:Usize, signers:ExpressionList)  [function, functional]
+  rule listQuorumCantBeFilledBy(Quorum:Int, UserId:Usize, Signers:ExpressionList)
+      => pListLen(Signers) +Int #if #listContains(Signers, UserId) #then 0 #else 1 #fi <Int Quorum
+
+  syntax Bool ::= noQuorumCanBeFilledBy(quorum:Int, id:Usize, signers:Map)  [function, functional]
+  rule noQuorumCanBeFilledBy(_Quorum:Int, _UserId:Usize, .Map) => true
+  rule noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, _:KItem |-> L:ExpressionList M:Map)
+      => true
+        andBool listQuorumCantBeFilledBy(Quorum, UserId:Usize, L)
+        andBool noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, M:Map)
+    [simplification]
 endmodule
 
-module MALICIOUS-USER-HELPERS
-  imports PSEUDOCODE-SYNTAX
-  imports INSTRUMENTATION-CONCRETIZE
-
-  syntax KResult
+module MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
+  imports BASE-TYPES-SYNTAX
+  imports INT
 
   syntax KItem ::= runExternalCallsFromUser(Address, steps:Int)
+  syntax KItem ::= runExternalCallFromUser(Address)
+endmodule
+
+module MALICIOUS-USER-EXTERNAL-CALLS
+  imports PSEUDOCODE-SYNTAX
+  imports INSTRUMENTATION-CONCRETIZE
+  imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
+
+  syntax KResult
 
   rule runExternalCallsFromUser(_:Address, Steps:Int) => .K
     requires Steps <=Int 0
   rule runExternalCallsFromUser(A:Address, Steps:Int)
       => runExternalCallFromUser(A) ~> runExternalCallsFromUser(A, Steps -Int 1)
     requires Steps >Int 0
-
-  syntax KItem ::= runExternalCallFromUser(Address)
 
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeAddBoardMember(?_UserAddress:Address);)
@@ -174,5 +194,5 @@ module MALICIOUS-USER-EXECUTE
   imports INIT-LOOP-PARTS
 
   imports MALICIOUS-USER-INVARIANT
-  imports MALICIOUS-USER-HELPERS
+  imports MALICIOUS-USER-EXTERNAL-CALLS
 endmodule
