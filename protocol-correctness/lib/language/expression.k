@@ -9,6 +9,7 @@ endmodule
 module EXPRESSION
   imports BASE-TYPES-SYNTAX
   imports EXPRESSION-SYNTAX
+  imports K-EQUAL-SYNTAX
   imports RUNNING-SYNTAX
 
   rule add(u(A:Int), u(B:Int)) => u(A +Int B)

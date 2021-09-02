@@ -46,6 +46,7 @@ module PSEUDOCODE-SYNTAX
                   |   "action_id"     [token]
                   |   "address"       [token]
                   |   "caller"        [token]
+                  |   "caller_address"[token]
                   |   "caller_id"     [token]
                   |   "caller_role"   [token]
                   |   "code_metadata" [token]
@@ -53,9 +54,18 @@ module PSEUDOCODE-SYNTAX
                   |   "gas_left"      [token]
                   |   "i"             [token]
                   |   "new_address"   [token]
+                  |   "new_board_members" [token]
+                  |   "num_board_members" [token]
+                  |   "num_proposers" [token]
+                  |   "num_users"     [token]
+                  |   "old_role"      [token]
                   |   "quorum"        [token]
-                  |   "user_id"       [token]
                   |   "result"        [token]
+                  |   "signer_ids"    [token]
+                  |   "signer_pos"    [token]
+                  |   "user_id"       [token]
+                  |   "user_role"     [token]
+                  |   "valid_signers_count" [token]
 
   syntax Value  ::= UserRole
                 |   CodeMetadata

@@ -10,6 +10,7 @@ module LEMMA-ADD-ONE-IF-NOT-NEGATIVE
 //@ end
 
   imports ADD-ONE-IF-NOT-NEGATIVE-SYNTAX
+  imports BOOL
 
   lemma
       concretizeValue(X >=Int 0) => .K

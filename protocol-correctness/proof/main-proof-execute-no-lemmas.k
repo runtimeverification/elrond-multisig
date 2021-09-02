@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/proof/induction/induction.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/execution-proof-helpers.k"
 require "protocol-correctness/proof/instrumentation-change-user-role.k"
@@ -64,6 +65,8 @@ module MAIN-PROOF-EXECUTE-NO-LEMMAS
   imports INSTRUMENTATION-DISCARD-ACTION
   imports INSTRUMENTATION-UNSIGN
   imports INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
+
+  imports INDUCTION
 
   imports BASE
   imports INVARIANT

@@ -25,6 +25,7 @@ module TYPE-REFLECTION
 
   imports BASE-TYPES-SYNTAX
   imports FLOW-SYNTAX
+  imports K-EQUAL-SYNTAX
   imports MAYBE-SYNTAX
   imports TYPE-REFLECTION-SYNTAX
 

@@ -183,6 +183,14 @@ klibrary(
 )
 
 klibrary(
+  name = "reflection-files",
+  srcs = ["reflection.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "running-syntax-files",
   srcs = ["running-syntax.k"],
   deps = [
