@@ -36,6 +36,35 @@ ktrusted(
 )
 
 kprove_test(
+  name = "lemma-list-contains-last-remove-last",
+  srcs = ["lemma-list-contains-last-remove-last.k"],
+  trusted = [
+  ],
+  semantics = "contains-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-last-remove-last",
+  srcs = ["lemma-list-contains-last-remove-last.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-last-remove-last-files",
+  srcs = [":trusted-lemma-list-contains-last-remove-last"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:list-contains-files",
+      "//protocol-correctness/lib:list-elements-are-distinct-files",
+      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-list-contains-last-remove-last",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-list-contains-last-to-start",
   srcs = ["lemma-list-contains-last-to-start.k"],
   trusted = [
@@ -57,6 +86,31 @@ klibrary(
       "//protocol-correctness/lib:last-to-start-files",
       "//protocol-correctness/lib:list-contains-files",
       ":trusted-lemma-list-contains-last-to-start",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-list-contains-pound-last",
+  srcs = ["lemma-list-contains-pound-last.k"],
+  trusted = [
+  ],
+  semantics = "contains-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-pound-last",
+  srcs = ["lemma-list-contains-pound-last.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-pound-last-files",
+  srcs = [":trusted-lemma-list-contains-pound-last"],
+  deps = [
+      "//protocol-correctness/lib:list-contains-files",
+      ":trusted-lemma-list-contains-pound-last",
   ],
   visibility = ["//visibility:public"],
 )

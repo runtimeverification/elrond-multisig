@@ -4,9 +4,11 @@ module MAP-EXECUTE-SYNTAX
 endmodule
 
 module MAP-EXECUTE
-  imports MAP
-  imports INT
   imports BASE
+  imports BOOL
+  imports INT
+  imports K-EQUAL-SYNTAX
+  imports MAP
 
   syntax MapElementProperty ::= "MEP.AlwaysFalse"
                               | "MEP.AlwaysTrue"

@@ -236,6 +236,7 @@ klibrary(
   name = "main-proof-execute-no-lemmas-files",
   srcs = ["main-proof-execute-no-lemmas.k"],
   deps = [
+      "//protocol-correctness/lib/proof/induction:induction-files",
       ":base-files",
       ":execution-proof-helpers-files",
       ":instrumentation-change-user-role-files",

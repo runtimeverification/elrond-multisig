@@ -122,8 +122,9 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 endmodule
 
 module PSEUDOCODE-FUNCTION-CALL
-  imports PSEUDOCODE-CONFIGURATION
+  imports LANGUAGE-CONFIGURATION
   imports FUNCTION-CALL-SYNTAX
+  imports PSEUDOCODE-CONFIGURATION
 
   syntax CustomStackState ::= customStackState(BlockchainStateCell, LogCell)
 
@@ -145,6 +146,7 @@ module PSEUDOCODE-FUNCTION-CALL
 endmodule
 
 module PSEUDOCODE-CONFIGURATION
+  imports LIST
   imports MAP
 
   imports LANGUAGE-CONFIGURATION

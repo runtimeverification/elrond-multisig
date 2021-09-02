@@ -6,6 +6,7 @@ module PROOF-LAST-DISTINCT
 //@ trusted
 // module TRUSTED-LAST-DISTINCT
 //@ end
+  imports K-EQUAL
   imports LAST-FUNCTIONS
   imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
 
