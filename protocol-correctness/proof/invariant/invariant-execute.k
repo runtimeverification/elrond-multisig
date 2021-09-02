@@ -1,9 +1,9 @@
-require "protocol-correctness/proof/main-proof-execute.k"
+require "protocol-correctness/proof/main-proof-execute-no-lemmas.k"
 
 require "protocol-correctness/proof/invariant/init-loop-parts.k"
 
 module INVARIANT-EXECUTE-SYNTAX
-  imports MAIN-PROOF-EXECUTE-SYNTAX
+  imports MAIN-PROOF-EXECUTE-NO-LEMMAS-SYNTAX
 endmodule
 
 module INVARIANT-FUNCTIONS
@@ -27,7 +27,7 @@ module INVARIANT-FUNCTIONS
 endmodule
 
 module INVARIANT-EXECUTE
-  imports MAIN-PROOF-EXECUTE
+  imports MAIN-PROOF-EXECUTE-NO-LEMMAS
 
   imports INVARIANT-FUNCTIONS
 
