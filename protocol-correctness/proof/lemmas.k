@@ -1,4 +1,12 @@
 require "protocol-correctness/proof/lemmas/int/trusted-lemma-add-one-if-not-negative.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-last-to-start.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-last.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-list-swap-remove.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-list-swap-remove-2.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-remove-last.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-remove-last-not-pound-last.k"
+require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-remove-last.k"
+require "protocol-correctness/proof/lemmas/list/contains/using-lemmas/trusted-lemma-list-contains-pound-last-pound-remove-last.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-usize.k"
 require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-to-start-kresult.k"
@@ -22,6 +30,14 @@ module LEMMAS
   imports TRUSTED-LEMMA-LAST-USIZE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
+  imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LAST
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LAST-POUND-REMOVE-LAST
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
+  imports TRUSTED-LEMMA-LIST-CONTAINS-REMOVE-LAST
+  imports TRUSTED-LEMMA-LIST-CONTAINS-REMOVE-LAST-NOT-POUND-LAST
   imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-POUND-LAST
   imports TRUSTED-LEMMA-POUND-LAST-EXPRESSION
@@ -34,4 +50,5 @@ module LEMMAS
   imports TRUSTED-LEMMA-REMOVE-LAST-USIZE
   imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-A
   imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
+
 endmodule

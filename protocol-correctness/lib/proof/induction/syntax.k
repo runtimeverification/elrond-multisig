@@ -5,14 +5,13 @@ module INDUCTION-SYNTAX
   imports REFLECTION-SYNTAX
 
   syntax KItem ::= induction(InductionInstructions, InductionData)
-  syntax KItem ::= matchPatternOrElse(Pattern, KItem, matched:K, notMatched:K)
 
   syntax InductionDataItem ::= "(" InductionId "," KItem ")"
   syntax InductionData  ::= InductionDataItem
                           | InductionDataItem "<>" InductionData
   syntax MaybeInductionData ::= ".EmptyInductionData" | InductionData
 
-  syntax InductionId ::= r"[A-Za-z_#][A-Za-z_0-9]*" [token]
+  syntax InductionId ::= ReflectionId
 
   syntax InductionInstructions  ::= NonEmptyInductionInstructions
                                   | ".Induction"
@@ -24,9 +23,7 @@ module INDUCTION-SYNTAX
 
   syntax InductionCases ::= InductionCase | InductionCase "|" InductionCases
 
-  syntax InductionCase ::= Pattern "->" InductionInstructions "."
-
-  syntax Pattern ::= "." | InductionId "<>" InductionId
+  syntax InductionCase ::= ReflectionPattern "->" InductionInstructions "."
 
   syntax EvaluatedExpression
 

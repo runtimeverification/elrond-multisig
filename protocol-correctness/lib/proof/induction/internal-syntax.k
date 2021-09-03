@@ -16,7 +16,7 @@ module INDUCTION-INTERNAL-SYNTAX
   syntax KItem ::= evaluate(InductionExpression, InductionData)
   syntax KItem ::= evaluateList(InductionExpressionList, InductionData)
   syntax KItem ::= mergeDataFreezer(InductionData)
-  syntax KItem ::= mergeDataFreezer2(InductionData)
+  syntax KItem ::= mergeDataFreezer2(ReflectionData)
 
   syntax KItem ::= evaluate(InductionExpression)
   syntax KItem ::= evaluateList(InductionExpressionList)
@@ -24,8 +24,9 @@ module INDUCTION-INTERNAL-SYNTAX
   syntax InductionDataNamesList ::= extractNames(InductionData)  [function, functional]
 
   syntax EvaluatedExpression ::= evaluated(KItem)
-  syntax KResult ::= EvaluatedExpression
   syntax InductionExpression  ::= EvaluatedExpression
 
-  syntax InductionError ::= unevaluatedError(KItem, String)
+  syntax InductionError ::= unevaluatedError(KItem, String) | errorNotAllCasesMatched(KItem)
+
+  syntax KResult
 endmodule

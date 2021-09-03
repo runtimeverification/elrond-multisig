@@ -36,35 +36,6 @@ ktrusted(
 )
 
 kprove_test(
-  name = "lemma-list-contains-last-remove-last",
-  srcs = ["lemma-list-contains-last-remove-last.k"],
-  trusted = [
-  ],
-  semantics = "contains-execute",
-  breadth = "1",
-)
-
-ktrusted(
-  name = "trusted-lemma-list-contains-last-remove-last",
-  srcs = ["lemma-list-contains-last-remove-last.k"],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
-  name = "trusted-lemma-list-contains-last-remove-last-files",
-  srcs = [":trusted-lemma-list-contains-last-remove-last"],
-  deps = [
-      "//protocol-correctness/lib:last-functions-files",
-      "//protocol-correctness/lib:list-contains-files",
-      "//protocol-correctness/lib:list-elements-are-distinct-files",
-      "//protocol-correctness/lib:plistlen-functions-files",
-      "//protocol-correctness/lib:remove-last-files",
-      ":trusted-lemma-list-contains-last-remove-last",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-kprove_test(
   name = "lemma-list-contains-last-to-start",
   srcs = ["lemma-list-contains-last-to-start.k"],
   trusted = [
@@ -96,7 +67,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "contains-execute",
-  breadth = "1",
+  breadth = "3",
 )
 
 ktrusted(
@@ -109,6 +80,7 @@ klibrary(
   name = "trusted-lemma-list-contains-pound-last-files",
   srcs = [":trusted-lemma-list-contains-pound-last"],
   deps = [
+      "//protocol-correctness/lib:last-functions-files",
       "//protocol-correctness/lib:list-contains-files",
       ":trusted-lemma-list-contains-pound-last",
   ],
@@ -192,6 +164,33 @@ klibrary(
       "//protocol-correctness/lib:plistlen-functions-files",
       "//protocol-correctness/lib:remove-last-files",
       ":trusted-lemma-list-contains-pound-remove-last",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-list-contains-remove-last-not-pound-last",
+  srcs = ["lemma-list-contains-remove-last-not-pound-last.k"],
+  trusted = [
+  ],
+  semantics = "contains-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-remove-last-not-pound-last",
+  srcs = ["lemma-list-contains-remove-last-not-pound-last.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-remove-last-not-pound-last-files",
+  srcs = [":trusted-lemma-list-contains-remove-last-not-pound-last"],
+  deps = [
+      "//protocol-correctness/lib:last-functions-files",
+      "//protocol-correctness/lib:list-contains-files",
+      "//protocol-correctness/lib:remove-last-files",
+      ":trusted-lemma-list-contains-remove-last-not-pound-last",
   ],
   visibility = ["//visibility:public"],
 )

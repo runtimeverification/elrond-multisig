@@ -33,11 +33,11 @@ module REINDUCTION
   rule (Data:InductionData ~> nextInductionStep(Is:InductionInstructions))
       => induction(Is, Data)
 
-  // rule pairInductionData(names(Name:InductionId), evaluated(Item:KItem)) => (Name, Item)
+  rule pairInductionData(names(Name:InductionId), evaluated(Item:KItem)) => (Name, Item)
   rule pairInductionData(
           names(Name:InductionId , Names:InductionDataNamesList),
           (evaluated(Item:KItem), Expressions:InductionExpressionList))
       => prepend((Name, Item), pairInductionData(names(Names), Expressions))
   rule pairInductionData(Names:InductionDataNames, Expressions:InductionExpressionList)
-      => errorNamePairing(Names, Expressions)
+      => errorNamePairing(Names, Expressions)  [owise]
 endmodule

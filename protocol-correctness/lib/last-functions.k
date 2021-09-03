@@ -1,4 +1,5 @@
 require "protocol-correctness/lib/language/base-types.k"
+require "protocol-correctness/lib/language/reflection.k"
 require "protocol-correctness/lib/plistlen-functions.k"
 
 module LAST-FUNCTIONS-SYNTAX
@@ -15,8 +16,9 @@ module LAST-FUNCTIONS-ADDITIONAL-SYNTAX
 endmodule
 
 module LAST-FUNCTIONS
-  imports LAST-FUNCTIONS-SYNTAX
   imports LAST-FUNCTIONS-ADDITIONAL-SYNTAX
+  imports LAST-FUNCTIONS-SYNTAX
+  imports LAST-FUNCTIONS-REFLECTION
 
   imports PLISTLEN-FUNCTIONS
 
@@ -33,4 +35,12 @@ module LAST-FUNCTIONS
       =>  {pListLen([@Es]) >Int 0 #Equals true}
           #And #Ceil(@Es)
     [anywhere, simplification]
+endmodule
+
+module LAST-FUNCTIONS-REFLECTION
+  imports LAST-FUNCTIONS-ADDITIONAL-SYNTAX
+  imports REFLECTION-SYNTAX
+
+  rule reflectionApply($#last, (reflectionArgument(E:Expression) , reflectionArgument(Es:ExpressionCSV)))
+      => #last(E, Es)
 endmodule
