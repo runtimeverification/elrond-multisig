@@ -11,6 +11,7 @@ endmodule
 module ONLY-THIS-SIGNER-DIFFS
   imports BASE-TYPES-SYNTAX
   imports BOOL
+  imports K-EQUAL
   imports MAP
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
 

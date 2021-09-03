@@ -1,31 +1,28 @@
-require "protocol-correctness/proof/lemmas/int/trusted-lemma-add-one-if-not-negative.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-last-to-start.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-last.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-list-swap-remove.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-list-swap-remove-2.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-pound-remove-last.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-remove-last-not-pound-last.k"
-require "protocol-correctness/proof/lemmas/list/contains/trusted-lemma-list-contains-remove-last.k"
-require "protocol-correctness/proof/lemmas/list/contains/using-lemmas/trusted-lemma-list-contains-pound-last-pound-remove-last.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-usize.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-to-start-kresult.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-last-to-start-usize.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-last.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-last-expression.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-last-usize.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-last-usize-kitem.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-remove-last-kresult.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-remove-last-kresult-expression.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-pound-remove-last-usize.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-remove-last-kresult.k"
-require "protocol-correctness/proof/lemmas/list/last/trusted-lemma-remove-last-usize.k"
-require "protocol-correctness/proof/lemmas/list/plistlen/trusted-lemma-plistlen.k"
-require "protocol-correctness/proof/lemmas/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-a.k"
-require "protocol-correctness/proof/lemmas/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-last-to-start.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-pound-last.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-pound-list-swap-remove.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-pound-list-swap-remove-2.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-pound-remove-last.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-remove-last-not-pound-last.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/trusted-lemma-list-contains-remove-last.k"
+require "protocol-correctness/proof/lemmas-0/list/contains/using-lemmas/trusted-lemma-list-contains-pound-last-pound-remove-last.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last-usize.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last-to-start-kresult.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last-to-start-usize.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last-expression.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last-usize.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last-usize-kitem.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remove-last-kresult.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remove-last-kresult-expression.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remove-last-usize.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-remove-last-kresult.k"
+require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-remove-last-usize.k"
+
+require "protocol-correctness/proof/lemmas-4/lemmas-3.k"
 
 module LEMMAS
-  imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
   imports TRUSTED-LEMMA-LAST
   imports TRUSTED-LEMMA-LAST-USIZE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
@@ -38,7 +35,6 @@ module LEMMAS
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
   imports TRUSTED-LEMMA-LIST-CONTAINS-REMOVE-LAST
   imports TRUSTED-LEMMA-LIST-CONTAINS-REMOVE-LAST-NOT-POUND-LAST
-  imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-POUND-LAST
   imports TRUSTED-LEMMA-POUND-LAST-EXPRESSION
   imports TRUSTED-LEMMA-POUND-LAST-USIZE
@@ -48,7 +44,4 @@ module LEMMAS
   imports TRUSTED-LEMMA-POUND-REMOVE-LAST-USIZE
   imports TRUSTED-LEMMA-REMOVE-LAST-KRESULT
   imports TRUSTED-LEMMA-REMOVE-LAST-USIZE
-  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-A
-  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
-
 endmodule

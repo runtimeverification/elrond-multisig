@@ -70,6 +70,8 @@ module EXECUTION-PROOF-HELPERS
   rule forall-v-greater-or-equal-than-u-v-not-in-m(U, M, [_:Expression , Es:ExpressionCSV])
       =>  notBool U in_keys(M)
           andBool forall-v-greater-or-equal-than-u-v-not-in-m(add(U, u(1)), M, [Es])
+  rule forall-v-greater-or-equal-than-u-v-not-in-m(_:Usize, .Map, _:ExpressionList)
+      => true  [simplification]
 
   syntax Usize ::= usizeWithDefault(KItem, Usize)  [function, functional]
   rule usizeWithDefault(uninitialized, Default:Usize) => Default

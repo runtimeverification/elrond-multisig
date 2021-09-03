@@ -16,9 +16,6 @@ module PROOF-INIT
   imports INVARIANT-EXECUTE
   imports PSEUDOCODE
 
-  rule forall-v-greater-or-equal-than-u-v-not-in-m(_:Usize, .Map, _:ExpressionList)
-      => true  [simplification]
-
   claim <T><TT>
           <k> runExternalCalls(
                   (   from _:Address run init(_Quorum:Usize, Addresses:ExpressionList);

@@ -14,8 +14,9 @@ module LIST-FIND
   imports ADD-ONE-IF-NOT-NEGATIVE-SYNTAX
 
   rule  #listFind([.], _:Expression) => -1
-  rule  #listFind([X:Usize, _:ExpressionCSV], X) => 0
-  rule  #listFind([_:Usize, Es:ExpressionCSV], X:Usize) => addOneIfNotNegative(#listFind([Es], X))
+  rule  #listFind([X:Expression, _:ExpressionCSV], X) => 0
+  rule  #listFind([E:Expression, Es:ExpressionCSV], X:Expression) => addOneIfNotNegative(#listFind([Es], X))
+    requires isKResult(E) andBool isKResult(X)
     [owise]
 
 endmodule
