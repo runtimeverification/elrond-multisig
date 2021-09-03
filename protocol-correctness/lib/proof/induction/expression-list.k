@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/proof/induction/expression.k"
 require "protocol-correctness/lib/proof/induction/internal-syntax.k"
 require "protocol-correctness/lib/proof/induction/syntax.k"
 
@@ -11,17 +12,18 @@ endmodule
 module INDUCTION-EXPRESSION-LIST
   imports BOOL
   imports INDUCTION-EXPRESSION-LIST-SYNTAX
+  imports INDUCTION-EXPRESSION-SYNTAX
   imports INDUCTION-INTERNAL-SYNTAX
 
   syntax KResult
 
   rule isKResult(Es:InductionExpressionList) => isKResultInductionExpressionList(Es)
 
-  rule isKResultInductionExpressionList(I:InductionExpression) => isKResult(I)
+  rule isKResultInductionExpressionList(I:InductionExpression) => isKResultInductionExpression(I)
   rule isKResultInductionExpressionList(
               I:InductionExpression , Is:InductionExpressionList
           )
-      => isKResult(I) andBool isKResultInductionExpressionList(Is)
+      => isKResultInductionExpression(I) andBool isKResultInductionExpressionList(Is)
 
   context evaluateList
           ( {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression

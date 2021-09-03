@@ -127,6 +127,7 @@ klibrary(
       ":maybe-files",
       ":memory-files",
       ":record-files",
+      ":reflection-match-files",
       ":running-files",
       ":type-reflection-files",
   ],
@@ -178,6 +179,16 @@ klibrary(
   deps = [
       ":base-types-files",
       ":running-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "reflection-match-files",
+  srcs = ["reflection-match.k"],
+  deps = [
+      ":base-types-files",
+      ":reflection-files",
   ],
   visibility = ["//visibility:public"],
 )

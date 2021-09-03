@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -e -x
 
 KOMPILE_DIR=`dirname $1`
 shift
@@ -27,7 +27,7 @@ MODULE_NAME=$(basename "$ORIGINAL_FILE" | sed 's/\.[^\.]*$//' | tr [:lower:] [:u
 
 KOMPILE_TOOL_DIR=kompile-tool
 
-KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprove)
+KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprovex)
 
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf -- "$TMP_DIR"' EXIT
@@ -57,7 +57,8 @@ popd > /dev/null
 
 cp $SPEC_FILE $SPEC_OUTPUT
 
-DEFINITION_FILE=$(dirname $SPEC_FILE)/vdefinition.kore
+DEFINITION_FILE=$TMP_DIR/$(basename $KOMPILE_DIR)/definition.kore
+#$(dirname $SPEC_FILE)/vdefinition.kore
 
 cp $DEFINITION_FILE $DEFINITION_OUTPUT
 

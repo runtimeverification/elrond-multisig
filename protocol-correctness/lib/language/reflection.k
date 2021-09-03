@@ -1,5 +1,8 @@
 module REFLECTION-SYNTAX
+  imports STRING
+
   syntax SymbolReflection ::= r"$[A-Za-z_#][A-Za-z_0-9]*" [token]
+  syntax SymbolReflection ::= "$"String [token]
   syntax ReflectionArgument ::= reflectionArgument(KItem)
   syntax ReflectionArguments  ::= ReflectionArgument
                                 | ReflectionArgument "," ReflectionArguments
@@ -8,6 +11,14 @@ module REFLECTION-SYNTAX
 
   syntax ReflectionError  ::= cannotApply(SymbolReflection, ReflectionArguments)
                             | cannotApply0(SymbolReflection)
+
+  syntax ReflectionIdToken ::= r"[A-Za-z_#][A-Za-z_0-9]*" [token]
+  syntax ReflectionId ::= ReflectionIdToken | String
+  syntax ReflectionPattern ::= "." | ReflectionId "<>" ReflectionId | "True" | "False"
+  syntax KItem ::= matchPatternOrElse(ReflectionPattern, KItem, matched:K, notMatched:K)
+
+  syntax ReflectionDataItem ::= "(" ReflectionId "," KItem ")"
+  syntax ReflectionData ::= List{ReflectionDataItem, "<>"}
 endmodule
 
 module REFLECTION

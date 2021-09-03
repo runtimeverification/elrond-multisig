@@ -16,7 +16,11 @@ module INDUCTION-EXPRESSION-SYNTAX
   syntax ReflectionArgumentsOrError ::= concatRAOE(ReflectionArgument, ReflectionArgumentsOrError)
     [function, functional]
 
-  syntax KItem ::= reflectionApplyOrError(SymbolReflection, ReflectionArgumentsOrError)
+  syntax KItem ::= reflectionApplyOrError(SymbolReflection, ReflectionArgumentsOrError, InductionData)
+  syntax KItem ::= wrapEvaluated(KItem, InductionData)  [function, functional]
+
+  syntax Bool ::= isKResultInductionExpression(InductionExpression)
+    [function, functional]
 endmodule
 
 module INDUCTION-EXPRESSION
@@ -59,10 +63,9 @@ module INDUCTION-EXPRESSION
           )
       requires isKResult(E)
   rule evaluate(
-              (E1:InductionExpression == E2:InductionExpression) => evaluated(E1 ==K E2),
+              (evaluated(E1:KItem) == evaluated(E2:KItem)) => evaluated(E1 ==K E2),
               _Data:InductionData
           )
-      requires isKResult(E1) andBool isKResult(E2)
 
   // application
   context evaluate(
@@ -71,15 +74,20 @@ module INDUCTION-EXPRESSION
                 ),
               Data:InductionData
           )
-  rule evaluate(SymbolId:SymbolReflection(Es:InductionExpressionList), _:InductionData)
-      => reflectionApplyOrError(SymbolId, extractReflectionArgumentList(Es))
+  rule evaluate(SymbolId:SymbolReflection(Es:InductionExpressionList), Data:InductionData)
+      => reflectionApplyOrError(SymbolId, extractReflectionArgumentList(Es), Data)
     requires isKResult(Es)
-  rule evaluate(SymbolId:SymbolReflection(), _:InductionData)
-      => reflectionApply0(SymbolId)
+  rule evaluate(SymbolId:SymbolReflection(), Data:InductionData)
+      => wrapEvaluated(reflectionApply0(SymbolId), Data)
 
-  rule reflectionApplyOrError(SymbolId:SymbolReflection, A:ReflectionArguments)
-      => reflectionApply(SymbolId, A)
-  rule reflectionApplyOrError(_:SymbolReflection, E:InductionError) => E
+  rule reflectionApplyOrError(SymbolId:SymbolReflection, A:ReflectionArguments, Data:InductionData)
+      => wrapEvaluated(reflectionApply(SymbolId, A), Data)
+  rule reflectionApplyOrError(_:SymbolReflection, E:InductionError, _:InductionData)
+      => E
+
+  rule wrapEvaluated(E:ReflectionError, _Data:InductionData) => E
+  rule wrapEvaluated(E:KItem, Data:InductionData) => evaluate(evaluated(E), Data)
+    [owise]
 
   rule extractReflectionArgumentList(evaluated(K:KItem)) => reflectionArgument(K)
   rule extractReflectionArgumentList(evaluated(K:KItem) , D:InductionExpressionList)
@@ -90,4 +98,8 @@ module INDUCTION-EXPRESSION
 
   rule concatRAOE(A:ReflectionArgument, L:ReflectionArguments) => A , L
   rule concatRAOE(_:ReflectionArgument, E:InductionError) => E
+
+  rule isKResult(E:InductionExpression) => isKResultInductionExpression(E)
+  rule isKResultInductionExpression(_:EvaluatedExpression) => true
+  rule isKResultInductionExpression(_:InductionExpression) => false [owise]
 endmodule

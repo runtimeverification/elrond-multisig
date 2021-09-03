@@ -24,6 +24,7 @@ klibrary(
   name = "expression-list-files",
   srcs = ["expression-list.k"],
   deps = [
+      ":expression-files",
       ":internal-syntax-files",
       ":syntax-files",
   ],

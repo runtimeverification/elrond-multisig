@@ -7,6 +7,7 @@ require "protocol-correctness/lib/proof/induction/syntax.k"
 
 module INDUCTION
   imports INDUCTION-INTERNAL-SYNTAX
+  imports INDUCTION-SYNTAX
 
   imports INDUCTION-CASE
   imports INDUCTION-DATA-ITEM
@@ -39,15 +40,20 @@ module INDUCTION
   rule #runInductionFreezer(.Induction) => .K
   rule #runInductionFreezer(Is:NonEmptyInductionInstructions) => runInductionFreezer(Is)
 
-  rule (.EmptyInductionData ~> mergeDataFreezer(D:InductionData)) => D
-  rule (I:InductionDataItem ~> mergeDataFreezer(D:InductionData))
-      => addDataItem(I, D)
+  rule (.ReflectionData ~> mergeDataFreezer(D:InductionData)) => D
+  rule ((I:ReflectionId, K:KItem):ReflectionDataItem ~> mergeDataFreezer(D:InductionData))
+      => addDataItem((I, K), D)
   // mergeDataFreezer2 is needed in order to allow addDataItem to stop execution
   // when an error occurs.
-  rule (I:InductionDataItem <> Is:InductionData ~> mergeDataFreezer(D:InductionData))
-      => addDataItem(I, D) ~> mergeDataFreezer2(Is)
-  rule (D:InductionData ~> mergeDataFreezer2(Is:InductionData))
+  rule ((I:ReflectionId, K:KItem) <> Is:ReflectionData ~> mergeDataFreezer(D:InductionData))
+      => addDataItem((I, K), D) ~> mergeDataFreezer2(Is)
+  rule (D:InductionData ~> mergeDataFreezer2(Is:ReflectionData))
       => Is ~> mergeDataFreezer(D)
+
+  rule  (  _:InductionData
+        ~> inductionFreezer(_:InductionInstructions, _:InductionDataNames)
+        )
+      => .K
 endmodule
 
 /*

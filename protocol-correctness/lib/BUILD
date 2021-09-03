@@ -37,6 +37,7 @@ klibrary(
   srcs = ["last-functions.k"],
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
       ":plistlen-functions-files",
   ],
   visibility = ["//visibility:public"],

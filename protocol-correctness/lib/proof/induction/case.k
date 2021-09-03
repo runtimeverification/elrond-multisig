@@ -28,13 +28,13 @@ module INDUCTION-CASE
     requires isKResult(E)
 
   rule runInductionCases(E:KItem, Case:InductionCase, Data:InductionData)
-      => runInductionCase(E, Case, Data, .K)
+      => runInductionCase(E, Case, Data, errorNotAllCasesMatched(E))
   rule runInductionCases(E:KItem, Case:InductionCase | Cases:InductionCases, Data:InductionData)
       => runInductionCase(E, Case, Data, runInductionCases(E, Cases, Data))
 
   rule runInductionCase(
-              evaluated(E:KItem),
-              P:Pattern -> Is:InductionInstructions .,
+              E:KItem,
+              P:ReflectionPattern -> Is:InductionInstructions .,
               Data:InductionData,
               NotMatchedBranch:K
           )

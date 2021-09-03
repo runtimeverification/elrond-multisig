@@ -9,6 +9,7 @@ require "protocol-correctness/lib/language/mappers.k"
 require "protocol-correctness/lib/language/maybe.k"
 require "protocol-correctness/lib/language/memory.k"
 require "protocol-correctness/lib/language/record.k"
+require "protocol-correctness/lib/language/reflection-match.k"
 require "protocol-correctness/lib/language/running.k"
 require "protocol-correctness/lib/language/type-reflection.k"
 
@@ -24,6 +25,7 @@ module LANGUAGE
   imports MAYBE
   imports MEMORY
   imports RECORD
+  imports REFLECTION-MATCH
   imports RUNNING
   imports TYPE-REFLECTION
 endmodule
