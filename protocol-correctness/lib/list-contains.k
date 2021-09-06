@@ -9,6 +9,7 @@ endmodule
 
 module LIST-CONTAINS
   imports LIST-CONTAINS-SYNTAX
+  imports K-EQUAL
 
   rule  #listContains([.], _) => false
   // rule  #listContains([E1:Expression, Es:ExpressionCSV], E2) => E1 ==K E2 orBool #listContains([Es], E2)

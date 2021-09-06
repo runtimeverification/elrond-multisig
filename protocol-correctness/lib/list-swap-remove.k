@@ -13,6 +13,8 @@ module LIST-SWAP-REMOVE
 
   imports LAST-TO-START-SYNTAX
 
+  rule  #listSwapRemove(.:ExpressionCSV, 0)
+        => .:ExpressionCSV
   rule  #listSwapRemove(_:Expression , Es:ExpressionCSV, 0)
         => lastToStart(Es)
   rule  #listSwapRemove(.:ExpressionCSV, I:Int)

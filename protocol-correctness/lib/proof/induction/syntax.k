@@ -28,8 +28,10 @@ module INDUCTION-SYNTAX
   syntax EvaluatedExpression
 
   syntax InductionExpression  ::= InductionId
+                                | Int
                                 | EvaluatedExpression
                                 | InductionExpression "==" InductionExpression
+                                | InductionExpression "-" InductionExpression
                                 | SymbolReflection "(" InductionExpressionList ")"
                                 | SymbolReflection "(" ")"
 

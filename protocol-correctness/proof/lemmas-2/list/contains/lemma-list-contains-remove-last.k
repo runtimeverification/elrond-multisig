@@ -1,7 +1,9 @@
-// breadth = 1
+// breadth = 2
 //@ proof
 module LEMMA-LIST-CONTAINS-REMOVE-LAST
   imports LEMMAS-0-EXECUTE-SYNTAX
+  imports INDUCTION-SYNTAX
+
 //@ trusted
 // require "protocol-correctness/lib/last-functions.k"
 // require "protocol-correctness/lib/list-contains.k"
@@ -19,7 +21,23 @@ module LEMMA-LIST-CONTAINS-REMOVE-LAST
   imports REMOVE-LAST-SYNTAX
 
   lemma
-      lemmaSplitList([Es]) => .K
+        induction(
+          case "es" of
+            | . -> .Induction .
+            | "e1" <> "es1" ->
+              case "es1" of
+                | . -> .Induction .
+                | "e2" <> "es2" ->
+                  case "e1" == $#last("e2", "es2") of
+                    | True -> .Induction .
+                    | False -> reinduction("es1") .
+                  esac .
+              esac
+              .
+          esac,
+          ("es", Es:ExpressionCSV)
+        )
+        => .K
     proves
       #listContains([removeLast(Es:ExpressionCSV)], last(Es)) => false
     requires

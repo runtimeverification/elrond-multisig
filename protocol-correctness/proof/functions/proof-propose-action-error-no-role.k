@@ -1,3 +1,4 @@
+// timeout = moderate
 //@ proof
 module PROOF-PROPOSE-ACTION-ERROR-NO-ROLE
 //@ trusted

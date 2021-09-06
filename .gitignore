@@ -1,4 +1,5 @@
 kompile-tool/k
 kompile-tool/k.old
+kompile-tool/k.*
 bazel-*
 __pycache__

@@ -2,6 +2,7 @@
 //@ proof
 module LEMMA-LIST-CONTAINS-POUND-LAST
   imports INDUCTION-SYNTAX
+  imports K-EQUAL
 //@ trusted
 // require "protocol-correctness/lib/last-functions.k"
 // require "protocol-correctness/lib/list-contains.k"

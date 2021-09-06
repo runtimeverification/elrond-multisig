@@ -14,7 +14,13 @@ module REFLECTION-SYNTAX
 
   syntax ReflectionIdToken ::= r"[A-Za-z_#][A-Za-z_0-9]*" [token]
   syntax ReflectionId ::= ReflectionIdToken | String
-  syntax ReflectionPattern ::= "." | ReflectionId "<>" ReflectionId | "True" | "False"
+  syntax ReflectionPattern  ::= "."
+                              | ReflectionId "<>" ReflectionId
+                              | "True"
+                              | "False"
+                              | "=" KItem
+                              | "<" KItem
+                              | ">" KItem
   syntax KItem ::= matchPatternOrElse(ReflectionPattern, KItem, matched:K, notMatched:K)
 
   syntax ReflectionDataItem ::= "(" ReflectionId "," KItem ")"

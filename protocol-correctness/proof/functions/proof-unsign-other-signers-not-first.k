@@ -54,6 +54,7 @@ module PROOF-UNSIGN-OTHER-SIGNERS-NOT-FIRST
       andBool isKResult(Signers)
 
       andBool #listFind([Signers], UserId) >=Int 0
+      andBool pListLen([Signers]) >Int 1
       andBool notBool First ==K UserId  // TODO: Combine with the above.
       // andBool pListLen([Signers]) >=Int 2
     ensures true

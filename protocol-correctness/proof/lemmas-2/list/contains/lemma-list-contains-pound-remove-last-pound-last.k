@@ -1,7 +1,8 @@
-// breadth = 1
+// breadth = 2
 //@ proof
-module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
-  imports LEMMAS-0-EXECUTE-SYNTAX
+module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
+  imports LEMMAS-1-EXECUTE-SYNTAX
+  imports INDUCTION
 //@ trusted
 // require "protocol-correctness/lib/last-functions.k"
 // require "protocol-correctness/lib/list-contains.k"
@@ -9,7 +10,7 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
 // require "protocol-correctness/lib/plistlen-functions.k"
 // require "protocol-correctness/lib/remove-last.k"
 // 
-// module TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
+// module TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
 //@ end
 
   imports LAST-FUNCTIONS
@@ -19,7 +20,18 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
   imports REMOVE-LAST-ADDITIONAL-SYNTAX
 
   lemma
-      lemmaIterateListContains1([Es], E) => .K
+      induction(
+        case "es" of
+          | . -> .Induction .
+          | "e1" <> "es1" ->
+            case "e" == $#last("e1", "es1") of
+              | True -> .Induction .
+              | False -> reinduction("e1", "es1") .
+            esac .
+        esac,
+        ("e", E:Expression) <> ("es", Es:ExpressionCSV)
+      )
+      => .K
     proves
       #listContains([#removeLast(E, Es:ExpressionCSV)], #last(E, Es)) => false
     requires

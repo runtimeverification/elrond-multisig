@@ -28,8 +28,6 @@ module INSTRUMENTATION-LEMMA-SYNTAX
   syntax KItem ::= splitIntSign(Int)
   syntax KItem ::= splitIntSign2(Int)
 
-  syntax KItem ::= lemmaLastDistinct(Expression, Expression, ExpressionCSV)
-
   syntax KItem ::= lemmaIterateMap(Map, IterateArguments)
 
   syntax KItem ::= lemmaIterateMapSplitInKeys(Map, IterateArguments, Map)
@@ -67,33 +65,36 @@ module INSTRUMENTATION-LEMMA
         => lemmaIterateList2([L], A)
 
   rule lemmaIterateListContains1([.:ExpressionCSV], _:Expression) => .K
-  rule lemmaIterateListContains1([E1:Expression, .:ExpressionCSV], E2:Expression) => concretizeValue(E2 ==K E1)
+    [label(lemmaIterateListContains1Empty)]
+  rule lemmaIterateListContains1([E1:Expression, .:ExpressionCSV], E2:Expression)
+        => concretizeValue(E2 ==K E1)
+    [label(lemmaIterateListContains1One)]
   rule lemmaIterateListContains1([E1:Expression, ((_, _:ExpressionCSV) #as L:ExpressionCSV)], E2:Expression)
         =>  concretizeValue(E1 ==K last(L))
             ~> concretizeValue(E2 ==K last(L))
             ~> concretizeValue(E2 ==K E1)
             ~> lemmaIterateListContains1([L], E2)
+    [label(lemmaIterateListContains1AtLeastTwo)]
 
   rule lemmaIterateListContains2([.:ExpressionCSV], I:Int) => splitIntSign(I)
+    [label(lemmaIterateListContains2Empty)]
   rule lemmaIterateListContains2([_:Expression, .:ExpressionCSV], I:Int) => splitIntSign2(I)
+    [label(lemmaIterateListContains2One)]
   rule lemmaIterateListContains2([_:Expression, ((_, _:ExpressionCSV) #as L:ExpressionCSV)], I:Int)
         =>  splitIntSign2(I)
             ~> lemmaIterateListContains2([L], I)
+    [label(lemmaIterateListContains2AtLeastTwo)]
 
   rule lemmaNop() => .K
 
-  rule splitIntSign(I:Int) => .K requires I <Int 0
-  rule splitIntSign(I:Int) => .K requires I ==Int 0
-  rule splitIntSign(I:Int) => .K requires I >Int 0
+  rule splitIntSign(I:Int) => .K requires I <Int 0  [label(splitIntSignLe0)]
+  rule splitIntSign(I:Int) => .K requires I ==Int 0  [label(splitIntSign0)]
+  rule splitIntSign(I:Int) => .K requires I >Int 0  [label(splitIntSignGt0)]
 
-  rule splitIntSign2(I:Int) => .K requires I <Int 0
-  rule splitIntSign2(I:Int) => .K requires I ==Int 0
-  rule splitIntSign2(I:Int) => .K requires I ==Int 1
-  rule splitIntSign2(I:Int) => .K requires I >Int 1
-
-  rule lemmaLastDistinct(E1:Expression, E2:Expression, .:ExpressionCSV) => concretizeValue(E1 ==K E2)
-  rule lemmaLastDistinct(E:Expression, E1:Expression, (E2:Expression, Es:ExpressionCSV))
-      => concretizeValue(E ==K E2) ~> concretizeValue(E ==K E1) ~> concretizeValue(E1 ==K E2) ~> lemmaLastDistinct(E, E2, Es)
+  rule splitIntSign2(I:Int) => .K requires I <Int 0  [label(splitIntSign2Le0)]
+  rule splitIntSign2(I:Int) => .K requires I ==Int 0  [label(splitIntSign20)]
+  rule splitIntSign2(I:Int) => .K requires I ==Int 1  [label(splitIntSign21)]
+  rule splitIntSign2(I:Int) => .K requires I >Int 1  [label(splitIntSign2Gt1)]
 
   rule lemmaIterateMap(.Map, _:IterateArguments) => .K
   rule lemmaIterateMap(M:Map, A:IterateArguments) => lemmaIterateMap(?M:Map, A)

@@ -25,6 +25,7 @@ endmodule
 
 module INDUCTION-EXPRESSION
   imports BOOL
+  imports INT
   imports INDUCTION-EXPRESSION-SYNTAX
   imports INDUCTION-INTERNAL-SYNTAX
   imports K-EQUAL
@@ -50,6 +51,12 @@ module INDUCTION-EXPRESSION
       => findInductionDataValue(Identifier1, Data)
     requires Identifier1 =/=K Identifier2
 
+  // raw values
+  rule evaluate(
+              I:Int => evaluated(I),
+              _Data:InductionData
+          )
+
   // ==
   context evaluate(
               {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression
@@ -64,6 +71,23 @@ module INDUCTION-EXPRESSION
       requires isKResult(E)
   rule evaluate(
               (evaluated(E1:KItem) == evaluated(E2:KItem)) => evaluated(E1 ==K E2),
+              _Data:InductionData
+          )
+
+  // -
+  context evaluate(
+              {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression
+                  - _:InductionExpression,
+              Data:InductionData
+          )
+  context evaluate(
+              E:InductionExpression
+                  - {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression,
+              Data:InductionData
+          )
+      requires isKResult(E)
+  rule evaluate(
+              (evaluated(E1:Int) - evaluated(E2:Int)) => evaluated(E1 -Int E2),
               _Data:InductionData
           )
 

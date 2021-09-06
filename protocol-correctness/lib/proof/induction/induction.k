@@ -40,7 +40,7 @@ module INDUCTION
   rule #runInductionFreezer(.Induction) => .K
   rule #runInductionFreezer(Is:NonEmptyInductionInstructions) => runInductionFreezer(Is)
 
-  rule (.ReflectionData ~> mergeDataFreezer(D:InductionData)) => D
+  rule (.ReflectionData ~> mergeDataFreezer(D:InductionData)) => D  [label(xyzzy)]
   rule ((I:ReflectionId, K:KItem):ReflectionDataItem ~> mergeDataFreezer(D:InductionData))
       => addDataItem((I, K), D)
   // mergeDataFreezer2 is needed in order to allow addDataItem to stop execution

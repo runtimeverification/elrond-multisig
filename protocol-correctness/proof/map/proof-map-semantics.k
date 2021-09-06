@@ -1,4 +1,5 @@
 // breadth = 3
+// Not working because of https://github.com/kframework/kore/issues/2828
 //@ proof
 module PROOF-MAP-SEMANTICS
 //@ trusted

@@ -24,6 +24,7 @@ klibrary(
   name = "lemmas-3-files",
   srcs = ["lemmas-3.k"],
   deps = [
+      "//protocol-correctness/proof/lemmas-3/list/contains:trusted-lemma-list-contains-pound-last-pound-remove-last-files",
       "//protocol-correctness/proof/lemmas-3/list/plistlen:trusted-lemma-plistlen-list-swap-remove-list-find-files",
       "//protocol-correctness/proof/lemmas-3:lemmas-2-files",
   ],

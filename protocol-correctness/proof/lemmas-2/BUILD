@@ -24,6 +24,9 @@ klibrary(
   name = "lemmas-1-files",
   srcs = ["lemmas-1.k"],
   deps = [
+      "//protocol-correctness/proof/lemmas-1/list/contains:trusted-lemma-list-contains-last-to-start-files",
+      "//protocol-correctness/proof/lemmas-1/list/contains:trusted-lemma-list-contains-pound-last-files",
+      "//protocol-correctness/proof/lemmas-1/list/contains:trusted-lemma-list-contains-remove-last-not-pound-last-files",
       "//protocol-correctness/proof/lemmas-1/list/plistlen:trusted-lemma-plistlen-remove-last-files",
       "//protocol-correctness/proof/lemmas-1:lemmas-0-files",
   ],

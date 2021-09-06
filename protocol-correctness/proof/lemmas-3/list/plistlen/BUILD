@@ -6,7 +6,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "//protocol-correctness/proof/lemmas-3:lemmas-3-execute",
-  breadth = "3",
+  breadth = "2",
 )
 
 ktrusted(

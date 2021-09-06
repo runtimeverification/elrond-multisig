@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e -x
+set -e
 
 KOMPILE_DIR=`dirname $1`
 shift
@@ -27,7 +27,7 @@ MODULE_NAME=$(basename "$ORIGINAL_FILE" | sed 's/\.[^\.]*$//' | tr [:lower:] [:u
 
 KOMPILE_TOOL_DIR=kompile-tool
 
-KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprovex)
+KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprove)
 
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf -- "$TMP_DIR"' EXIT

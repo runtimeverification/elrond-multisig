@@ -1,5 +1,4 @@
-// breadth = 3
-// Not working because of https://github.com/kframework/kore/issues/2786
+// breadth = 2
 //@ proof
 module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
   imports INDUCTION-SYNTAX
@@ -25,7 +24,16 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
             | "e1" <> "es1" -> 
               case "e" == "e1" of
                 | True -> .Induction .
-                | False -> reinduction("e", "es1") .
+                | False ->
+                  // TODO: The case below should not be needed, it just
+                  // forces predicate re-evaluation. Should
+                  // minimize and report a Haskell backend error.
+                  case "es1" of
+                    | . -> .Induction .
+                    | "e2" <> "es2" -> .Induction .
+                  esac
+                  ~~> reinduction("e", "es1")
+                  .
               esac
               .
           esac,
@@ -33,7 +41,8 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
         )
       => .K
     proves
-      pListLen([#listSwapRemove(Es:ExpressionCSV, #listFind([Es], E:Expression))]) => pListLen([Es]) -Int 1
+      pListLen([#listSwapRemove(Es:ExpressionCSV, #listFind([Es], E:Expression))])
+      => pListLen([Es]) -Int 1
     requires
       #listFind([Es], E) >=Int 0 andBool isKResult(Es) andBool isKResult(E)
     [simplification]
