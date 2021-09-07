@@ -1,21 +1,22 @@
 //@ proof
+// Not working because of https://github.com/kframework/kore/issues/2829
 
-require "../../../functions/trusted-unsign-no-action.k"  //@ Bazel remove
+//require "../../../functions/trusted-unsign-no-action.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
-require "../../../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
+// require "../../../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
 
 module PROOF-RECFU-UNSIGN-VOID
-  imports TRUSTED-UNSIGN-NO-ACTION
+  // imports TRUSTED-UNSIGN-NO-ACTION
   imports TRUSTED-UNSIGN-NO-SIGNERS
   imports TRUSTED-UNSIGN-NOT-SIGNED
   imports TRUSTED-UNSIGN-ONLY-SIGNER
   imports TRUSTED-UNSIGN-OTHER-SIGNERS-FIRST
   imports TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
-  imports TRUSTED-UNSIGN-PROPOSER
+  // imports TRUSTED-UNSIGN-PROPOSER
 //@ trusted
 // module TRUSTED-RECFU-UNSIGN-VOID
 //@ end

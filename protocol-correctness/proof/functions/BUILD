@@ -2059,6 +2059,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
