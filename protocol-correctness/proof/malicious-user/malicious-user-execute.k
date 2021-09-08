@@ -134,6 +134,7 @@ module MALICIOUS-USER-EXTERNAL-CALLS
   imports PSEUDOCODE-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
+  imports INSTRUMENTATION-PROOF
 
   syntax KResult
 
@@ -145,15 +146,20 @@ module MALICIOUS-USER-EXTERNAL-CALLS
 
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeAddBoardMember(?_UserAddress:Address);)
+    [label(runProposeAddBoardMember)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeAddProposer(?_UserAddress:Address);)
+    [label(runProposeAddBoardProposer)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeRemoveUser(?_UserAddress:Address);)
+    [label(runProposeRemoveUser)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeChangeQuorum(?_Quorum:Usize);)
+    [label(runProposeChangeQuorum)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeSendEgld(
             ?_To:Address, ?_Amount:BigUint, ?_Data:BoxedBytes);)
+    [label(runProposeSendEgld)]
   rule  runExternalCallFromUser(A:Address)
         =>  concretizeValue(?Amount)
             ~> concretizeValue(?Code)
@@ -166,6 +172,7 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                   ?_Readable:Bool,
                   ?Args:ExpressionList);)
     ensures isKResult(?Args)
+    [label(runProposeSCDeploy)]
   rule  runExternalCallFromUser(A:Address)
         => concretizeValue(?To)
             ~> concretizeValue(?Amount)
@@ -177,14 +184,44 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                 ?Function:BoxedBytes,
                 ?Args:ExpressionList);)
     ensures isKResult(?Args)
+    [label(runProposeSCCall)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run sign(?_ActionId:Usize);)
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run unsign(?_ActionId:Usize);)
+    [label(runSign)]
+  // rule  runExternalCallFromUser(A:Address)
+  //         =>  runExternalCall(from A run unsign(?_ActionId:Usize);)
+  rule  <k> runExternalCallFromUser(A:Address)
+          =>  branchK(A in_keys(AddressToUserId),
+                  makeConcreteValue(A, rUsize, AddressToUserId)
+                    ~>  branchK(AddressToUserId[A] orDefault void in_keys(UserIdToRole),
+                            makeConcreteValue(AddressToUserId[A] orDefault void, rUserRole, UserIdToRole),
+                            .K
+                        ),
+                  .K
+              )
+              ~> concretizeValue(?ActionId)
+              ~> concretizeValue(?ActionId in_keys(ActionData))
+              ~> runExternalCall(from A run unsign(?ActionId:Usize);)
+          ...
+        </k>
+        <address-to-user-id>
+          AddressToUserId:Map
+        </address-to-user-id>
+        <user-roles>
+          UserIdToRole:Map
+        </user-roles>
+        <action-data>
+          ActionData:Map
+        </action-data>
+  //       <action-signers>
+  //       </action-signers>        
+    [label(runUnsign)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run performActionEndpoint(?_ActionId:Usize);)
+    [label(runPerformAction)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run discardAction(?_ActionId:Usize);)
+    [label(runDiscardAction)]
 endmodule
 
 module MALICIOUS-USER-EXECUTE

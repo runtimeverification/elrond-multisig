@@ -1,4 +1,6 @@
 require "protocol-correctness/lib/proof/induction/induction.k"
+require "protocol-correctness/lib/proof/unsorted/equality-without-substitution.k"
+require "protocol-correctness/lib/list-to-map-set.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/execution-proof-helpers.k"
 require "protocol-correctness/proof/instrumentation-change-user-role.k"
@@ -18,6 +20,7 @@ require "protocol-correctness/proof/instrumentation-sign.k"
 require "protocol-correctness/proof/instrumentation-unsign.k"
 require "protocol-correctness/proof/instrumentation/pushlist/pushlist-instrumentation.k"
 require "protocol-correctness/proof/invariant.k"
+require "protocol-correctness/proof/named-lemmas.k"
 require "protocol-correctness/pseudocode.k"
 
 module MAIN-PROOF-EXECUTE-NO-LEMMAS-SYNTAX
@@ -28,6 +31,8 @@ module MAIN-PROOF-EXECUTE-NO-LEMMAS-SYNTAX
   imports LIST-ELEMENTS-ARE-USIZE-SYNTAX
 
   imports EXECUTION-PROOF-HELPERS-SYNTAX
+  imports NAMED-LEMMAS-SYNTAX
+  imports EQUALITY-WITHOUT-SUBSTITUTION-SYNTAX
 endmodule
 
 module MAIN-PROOF-EXECUTE-BOOL
@@ -72,4 +77,7 @@ module MAIN-PROOF-EXECUTE-NO-LEMMAS
   imports INVARIANT
 
   imports PUSHLIST-INSTRUMENTATION
+  imports NAMED-LEMMAS
+  imports EQUALITY-WITHOUT-SUBSTITUTION
+  imports LIST-TO-MAP-SET
 endmodule

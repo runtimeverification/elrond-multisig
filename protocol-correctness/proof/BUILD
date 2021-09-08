@@ -234,6 +234,8 @@ klibrary(
   srcs = ["main-proof-execute-no-lemmas.k"],
   deps = [
       "//protocol-correctness/lib/proof/induction:induction-files",
+      "//protocol-correctness/lib/proof/unsorted:equality-without-substitution-files",
+      "//protocol-correctness/lib:list-to-map-set-files",
       ":base-files",
       ":execution-proof-helpers-files",
       ":instrumentation-change-user-role-files",
@@ -253,7 +255,19 @@ klibrary(
       ":instrumentation-unsign-files",
       "//protocol-correctness/proof/instrumentation/pushlist:pushlist-instrumentation-files",
       ":invariant-files",
+      ":named-lemmas-files",
       "//protocol-correctness:pseudocode-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "named-lemmas-files",
+  srcs = ["named-lemmas.k"],
+  deps = [
+      "//protocol-correctness/lib/language:map-utils-files",
+      "//protocol-correctness/lib/language:reflection-files",
+      ":instrumentation-proof-files",
   ],
   visibility = ["//visibility:public"],
 )

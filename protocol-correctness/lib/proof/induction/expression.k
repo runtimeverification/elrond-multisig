@@ -53,7 +53,12 @@ module INDUCTION-EXPRESSION
 
   // raw values
   rule evaluate(
-              I:Int => evaluated(I),
+              v(I:Int) => evaluated(I),
+              _Data:InductionData
+          )
+
+  rule evaluate(
+              v(B:Bool) => evaluated(B),
               _Data:InductionData
           )
 
@@ -71,6 +76,24 @@ module INDUCTION-EXPRESSION
       requires isKResult(E)
   rule evaluate(
               (evaluated(E1:KItem) == evaluated(E2:KItem)) => evaluated(E1 ==K E2),
+              _Data:InductionData
+          )
+
+  // ==
+  context evaluate(
+              {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression
+                  key _:InductionExpression,
+              Data:InductionData
+          )
+  context evaluate(
+              E:InductionExpression
+                  key {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression,
+              Data:InductionData
+          )
+      requires isKResult(E)
+  rule evaluate(
+              (evaluated(E1:KItem) key evaluated(E2:KItem))
+                  => evaluated(reflectionKey(E1, E2)),
               _Data:InductionData
           )
 

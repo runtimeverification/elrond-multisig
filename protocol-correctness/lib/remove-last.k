@@ -1,4 +1,5 @@
 require "protocol-correctness/lib/language/base-types.k"
+require "protocol-correctness/lib/language/reflection.k"
 require "protocol-correctness/lib/plistlen-functions.k"
 
 module REMOVE-LAST-SYNTAX
@@ -15,9 +16,10 @@ module REMOVE-LAST-ADDITIONAL-SYNTAX
 endmodule
 
 module REMOVE-LAST
-  imports REMOVE-LAST-SYNTAX
-  imports REMOVE-LAST-ADDITIONAL-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
+  imports REMOVE-LAST-ADDITIONAL-SYNTAX
+  imports REMOVE-LAST-REFLECTION
+  imports REMOVE-LAST-SYNTAX
 
 
   rule removeLast(E:Expression, Es:ExpressionCSV) => #removeLast(E, Es)
@@ -35,4 +37,12 @@ module REMOVE-LAST
       =>  {pListLen([@Es]) >Int 0 #Equals true}
           #And #Ceil(@Es)
     [anywhere, simplification]
+endmodule
+
+module REMOVE-LAST-REFLECTION
+  imports REMOVE-LAST-ADDITIONAL-SYNTAX
+  imports REFLECTION-SYNTAX
+
+  rule reflectionApply($#removeLast, (reflectionArgument(E:Expression) , reflectionArgument(Es:ExpressionCSV)))
+      => #removeLast(E, Es)
 endmodule

@@ -8,6 +8,7 @@ module REFLECTION-SYNTAX
                                 | ReflectionArgument "," ReflectionArguments
   syntax KItem ::= reflectionApply0(SymbolReflection)  [function, functional]
   syntax KItem ::= reflectionApply(SymbolReflection, ReflectionArguments)  [function, functional]
+  syntax KItem ::= reflectionKey(KItem, KItem)
 
   syntax ReflectionError  ::= cannotApply(SymbolReflection, ReflectionArguments)
                             | cannotApply0(SymbolReflection)
@@ -16,6 +17,7 @@ module REFLECTION-SYNTAX
   syntax ReflectionId ::= ReflectionIdToken | String
   syntax ReflectionPattern  ::= "."
                               | ReflectionId "<>" ReflectionId
+                              | ReflectionId "[" ReflectionId "<-" ReflectionId "]"
                               | "True"
                               | "False"
                               | "=" KItem

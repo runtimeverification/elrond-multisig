@@ -28,6 +28,7 @@ klibrary(
       "//protocol-correctness/proof/lemmas-0/list/plistlen:trusted-lemma-plistlen-files",
       "//protocol-correctness/proof/lemmas-0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-a-files",
       "//protocol-correctness/proof/lemmas-0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-b-files",
+      "//protocol-correctness/proof/lemmas-0/map/square-bracket:trusted-lemma-square-bracket-square-bracket-undef-files",
   ],
   visibility = ["//visibility:public"],
 )

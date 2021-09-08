@@ -5,6 +5,7 @@ klibrary(
   srcs = ["only-this-signer-diffs.k"],
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib:list-to-map-set-files",
   ],
   visibility = ["//visibility:public"],
 )

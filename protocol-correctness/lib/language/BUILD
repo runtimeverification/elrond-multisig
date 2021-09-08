@@ -25,6 +25,16 @@ klibrary(
 )
 
 klibrary(
+  name = "base-types-reflection-files",
+  srcs = ["base-types-reflection.k"],
+  deps = [
+      ":base-types-files",
+      ":reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "base-types-files",
   srcs = ["base-types.k"],
   deps = [
@@ -117,6 +127,7 @@ klibrary(
   srcs = ["language.k"],
   deps = [
       ":base-types-files",
+      ":base-types-reflection-files",
       ":expression-files",
       ":for-files",
       ":if-files",
@@ -139,6 +150,7 @@ klibrary(
   srcs = ["map-utils.k"],
   deps = [
       ":maybe-files",
+      ":reflection-files",
       ":type-reflection-files",
   ],
   visibility = ["//visibility:public"],
@@ -188,6 +200,7 @@ klibrary(
   srcs = ["reflection-match.k"],
   deps = [
       ":base-types-files",
+      ":map-utils-files",
       ":reflection-files",
   ],
   visibility = ["//visibility:public"],

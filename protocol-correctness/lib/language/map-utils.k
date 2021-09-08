@@ -1,4 +1,5 @@
 require "protocol-correctness/lib/language/maybe.k"
+require "protocol-correctness/lib/language/reflection.k"
 require "protocol-correctness/lib/language/type-reflection.k"
 
 module MAP-UTILS-SYNTAX
@@ -12,6 +13,7 @@ module MAP-UTILS-SYNTAX
 endmodule
 
 module MAP-UTILS
+  imports MAP-REFLECTION
   imports MAP-UTILS-BASIC
   imports MAP-UTILS-LANGUAGE
 endmodule
@@ -187,4 +189,18 @@ module MAP-UTILS-LANGUAGE
         => mapSet(Key, Value, M)
     requires notBool isDefaultValue(Value, T)
     [label(nullableMapSetAddNonEmpty)]
+endmodule
+
+module MAP-REFLECTION
+  imports MAP
+  imports REFLECTION-SYNTAX
+
+  rule reflectionApply(
+          $mapUpdate,
+          ( reflectionArgument(M:Map)
+          , reflectionArgument(K:KItem)
+          , reflectionArgument(V:KItem)
+          )
+        )
+      => M[K <- V]
 endmodule

@@ -1,6 +1,16 @@
 load("//:proof.bzl", "klibrary")
 
 klibrary(
+  name = "call-files",
+  srcs = ["call.k"],
+  deps = [
+      ":syntax-files",
+      ":internal-syntax-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "case-files",
   srcs = ["case.k"],
   deps = [
@@ -46,6 +56,7 @@ klibrary(
   name = "induction-files",
   srcs = ["induction.k"],
   deps = [
+      ":call-files",
       ":case-files",
       ":data-item-files",
       ":expression-files",

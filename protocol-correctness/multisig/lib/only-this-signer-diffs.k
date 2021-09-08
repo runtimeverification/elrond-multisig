@@ -1,4 +1,5 @@
 require "protocol-correctness/lib/language/base-types.k"
+require "protocol-correctness/lib/list-to-map-set.k"
 
 module ONLY-THIS-SIGNER-DIFFS-SYNTAX
   imports BASE-TYPES-SYNTAX
@@ -12,12 +13,10 @@ module ONLY-THIS-SIGNER-DIFFS
   imports BASE-TYPES-SYNTAX
   imports BOOL
   imports K-EQUAL
+  imports LIST-TO-MAP-SET-SYNTAX
   imports MAP
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
 
-  syntax Map ::= listToMapSet(ExpressionList)  [function, functional]
-  rule listToMapSet([.]) => .Map
-  rule listToMapSet([E, Es]) => listToMapSet([Es])[E <- 0]
 
   syntax Bool ::= sameListElementsExceptOne(Expression, ExpressionList, ExpressionList)  [function, functional]
   rule sameListElementsExceptOne(E:Expression, First:ExpressionList, Second:ExpressionList)

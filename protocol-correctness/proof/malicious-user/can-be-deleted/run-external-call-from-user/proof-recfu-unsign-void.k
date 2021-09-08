@@ -74,8 +74,8 @@ module PROOF-RECFU-UNSIGN-VOID
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
-        // andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners)
-        // andBool actionSignersInvariant(?NewActionSigners)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners)
+        andBool actionSignersInvariant(?NewActionSigners)
     //@ proof
     //@ trusted
     // [trusted]

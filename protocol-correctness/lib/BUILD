@@ -104,6 +104,16 @@ klibrary(
 )
 
 klibrary(
+  name = "list-to-map-set-files",
+  srcs = ["list-to-map-set.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "plistlen-functions-files",
   srcs = ["plistlen-functions.k"],
   deps = [
@@ -136,6 +146,7 @@ klibrary(
   srcs = ["remove-last.k"],
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
       ":plistlen-functions-files",
   ],
   visibility = ["//visibility:public"],

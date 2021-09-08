@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/proof/induction/call.k"
 require "protocol-correctness/lib/proof/induction/case.k"
 require "protocol-correctness/lib/proof/induction/data-item.k"
 require "protocol-correctness/lib/proof/induction/expression.k"
@@ -9,6 +10,7 @@ module INDUCTION
   imports INDUCTION-INTERNAL-SYNTAX
   imports INDUCTION-SYNTAX
 
+  imports INDUCTION-CALL
   imports INDUCTION-CASE
   imports INDUCTION-DATA-ITEM
   imports INDUCTION-EXPRESSION
@@ -40,7 +42,7 @@ module INDUCTION
   rule #runInductionFreezer(.Induction) => .K
   rule #runInductionFreezer(Is:NonEmptyInductionInstructions) => runInductionFreezer(Is)
 
-  rule (.ReflectionData ~> mergeDataFreezer(D:InductionData)) => D  [label(xyzzy)]
+  rule (.ReflectionData ~> mergeDataFreezer(D:InductionData)) => D
   rule ((I:ReflectionId, K:KItem):ReflectionDataItem ~> mergeDataFreezer(D:InductionData))
       => addDataItem((I, K), D)
   // mergeDataFreezer2 is needed in order to allow addDataItem to stop execution

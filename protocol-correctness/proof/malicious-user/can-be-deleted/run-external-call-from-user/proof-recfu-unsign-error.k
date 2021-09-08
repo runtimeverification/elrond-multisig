@@ -71,7 +71,7 @@ module PROOF-RECFU-UNSIGN-ERROR
 
         andBool actionDataInvariant(ActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
-        andBool actionSignersInvariant(OldActionSigners)
+        // andBool actionSignersInvariant(ActionSigners)
 
     ensures true
     //@ proof

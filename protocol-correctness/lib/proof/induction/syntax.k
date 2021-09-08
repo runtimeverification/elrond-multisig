@@ -20,6 +20,7 @@ module INDUCTION-SYNTAX
 
   syntax InductionInstruction ::= reinduction(InductionExpressionList)
                     | "case" InductionExpression "of" "|" InductionCases "esac"
+                    | "call" InductionExpression
 
   syntax InductionCases ::= InductionCase | InductionCase "|" InductionCases
 
@@ -28,9 +29,11 @@ module INDUCTION-SYNTAX
   syntax EvaluatedExpression
 
   syntax InductionExpression  ::= InductionId
-                                | Int
+                                | v(Int)
+                                | v(Bool)
                                 | EvaluatedExpression
                                 | InductionExpression "==" InductionExpression
+                                | InductionExpression "key" InductionExpression
                                 | InductionExpression "-" InductionExpression
                                 | SymbolReflection "(" InductionExpressionList ")"
                                 | SymbolReflection "(" ")"
