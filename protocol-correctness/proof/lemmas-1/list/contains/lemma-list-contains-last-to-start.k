@@ -11,15 +11,15 @@ module LEMMA-LIST-CONTAINS-LAST-TO-START
 
   imports LAST-TO-START-SYNTAX
   imports LAST-FUNCTIONS
-  imports LIST-CONTAINS-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
   imports REMOVE-LAST-SYNTAX
 
   lemma
       lemmaIterateListContains1([Es], E) => .K
     proves
-      #listContains([lastToStart(Es:ExpressionCSV)], E:Expression)
-          => #listContains([Es], E)
+      #listContainsUnsafe([lastToStart(Es:ExpressionCSV)], E:Expression)
+          => #listContainsUnsafe([Es], E)
     requires
       true
     [simplification]

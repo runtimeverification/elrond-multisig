@@ -4,9 +4,12 @@ kprove_test(
   name = "lemma-list-to-map-set-list-swap-remove-list-find-delete",
   srcs = ["lemma-list-to-map-set-list-swap-remove-list-find-delete.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas-0/map/square-bracket:trusted-commute-square-bracket",
+      "//protocol-correctness/proof/lemmas-0/map/square-bracket:trusted-square-bracket-substitution",
   ],
   semantics = "//protocol-correctness/proof/lemmas-3:lemmas-3-execute",
-  breadth = "1",
+  timeout = "moderate",
+  breadth = "5",
 )
 
 ktrusted(

@@ -224,7 +224,7 @@ klibrary(
       "//protocol-correctness/proof/lemmas-0/list/last:trusted-lemma-pound-remove-last-usize-files",
       "//protocol-correctness/proof/lemmas-0/list/last:trusted-lemma-remove-last-kresult-files",
       "//protocol-correctness/proof/lemmas-0/list/last:trusted-lemma-remove-last-usize-files",
-      "//protocol-correctness/proof/lemmas-4:lemmas-3-files",
+      "//protocol-correctness/proof/lemmas-final:lemmas-final-files",
   ],
   visibility = ["//visibility:public"],
 )

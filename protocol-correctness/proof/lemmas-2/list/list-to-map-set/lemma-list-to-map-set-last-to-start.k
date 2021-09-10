@@ -1,14 +1,14 @@
 // timeout = moderate
 // breadth = 3
 //@ proof
-require "../../../lemmas-0/map/square-bracket/trusted-commute-square-bracket-assignment-same-value.k"  //@ Bazel remove
+require "../../../lemmas-0/map/square-bracket/trusted-commute-square-bracket.k"  //@ Bazel remove
 require "../../../lemmas-0/map/square-bracket/trusted-square-bracket-substitution.k"  //@ Bazel remove
 require "../../../lemmas-0/equality/trusted-equality-transitivity.k"  //@ Bazel remove
 
 module LEMMA-LIST-TO-MAP-SET-LAST-TO-START
   imports INDUCTION-SYNTAX
   imports K-EQUAL
-  imports TRUSTED-COMMUTE-SQUARE-BRACKET-ASSIGNMENT-SAME-VALUE
+  imports TRUSTED-COMMUTE-SQUARE-BRACKET
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
 //@ trusted

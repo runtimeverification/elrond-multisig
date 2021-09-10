@@ -1,4 +1,5 @@
 // breadth = 2
+// timeout = moderate
 //@ proof
 module PROOF-SIGN-CALLER-NOT-USER
 //@ trusted

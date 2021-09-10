@@ -41,7 +41,7 @@ module PROOF-UNSIGN-OTHER-SIGNERS-NOT-FIRST
               Quorum,
               u(ActionLastIndex),
               ActionData,
-              ActionId |-> [#listSwapRemove(Signers, #listFind([Signers], UserId))] ActionSigners,
+              ActionId |-> [#listSwapRemove(Signers, #listFindSafe([Signers], UserId))] ActionSigners,
               CallerAddress,
               Stack:Stack,
               ?_Variables,
@@ -53,7 +53,7 @@ module PROOF-UNSIGN-OTHER-SIGNERS-NOT-FIRST
       andBool valueIsNotEmpty(Action, rAction)
       andBool isKResult(Signers)
 
-      andBool #listFind([Signers], UserId) >=Int 0
+      andBool #listFindSafe([Signers], UserId) >=Int 0
       andBool pListLen([Signers]) >Int 1
       andBool notBool First ==K UserId  // TODO: Combine with the above.
       // andBool pListLen([Signers]) >=Int 2

@@ -1,3 +1,4 @@
+// timeout = moderate
 //@ proof
 require "../functions/trusted-perform-action-endpoint-change-quorum-no-quorum.k"  //@ Bazel remove
 

@@ -53,7 +53,7 @@ module PROOF-UNSIGN-NOT-SIGNED
       andBool valueIsNotEmpty(Action, rAction)
       andBool isKResult(Signers)
 
-      andBool #listFind(Signers, UserId) <Int 0
+      andBool #listFindSafe(Signers, UserId) <Int 0
     ensures true
     //@ proof
     //@ trusted

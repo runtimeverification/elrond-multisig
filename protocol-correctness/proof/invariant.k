@@ -75,7 +75,7 @@ module INVARIANT-HELPERS
       andBool isExpressionList(V) andBool listElementsAreUsize(V) // valuesAreExpressionListOfUsize(ActionSigners)
       andBool isKResult(V)  // valuesAreKResult(ActionSigners)
       andBool valueIsNotEmpty(V, rExpressionList)  // valuesAreNotEmpty(ActionSigners, rExpressionList)
-      andBool listElementsAreDistinct(V)
+      andBool listElementsAreDistinctSafe(V)
 
       andBool actionSignersInvariant(ActionSigners)
     [simplification]
@@ -104,6 +104,10 @@ module INVARIANT-HELPERS
   rule valuesAreDistinct(M:Map) => true
     requires false
       orBool addressToUserIdInvariant(M)
+    
+  rule isKResult(M[K1:KItem] orDefault K2:KItem) => true
+    requires actionSignersInvariant(M) andBool isKResult(K2)
+    [simplification]
 
 endmodule
 

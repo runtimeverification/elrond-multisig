@@ -1,7 +1,7 @@
 module ADD-ONE-IF-NOT-NEGATIVE-SYNTAX
   imports INT
   
-  syntax Int ::= addOneIfNotNegative(Int)  [function, functional]
+  syntax Int ::= addOneIfNotNegative(Int)  [function, functional, smtlib(addOneIfNotNegative)]
 
 endmodule
 

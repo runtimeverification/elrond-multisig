@@ -440,6 +440,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-None",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -470,6 +471,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-board-member-BoardMember-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -502,6 +504,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-board-member-BoardMember",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -534,6 +537,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-board-member-New",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -566,6 +570,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-board-member-None",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -598,6 +603,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-board-member-Proposer-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -630,6 +636,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-board-member-Proposer",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -662,6 +669,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-BoardMember-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -694,6 +702,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-BoardMember",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -709,6 +718,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-BoardMember-no-quorum-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -741,6 +751,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-BoardMember-no-quorum",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -790,6 +801,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-New",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -822,6 +834,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-None",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -854,6 +867,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-Proposer-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -886,6 +900,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-add-proposer-Proposer",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -918,6 +933,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-change-quorum-no-quorum",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -950,6 +966,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-change-quorum",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1045,6 +1062,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-no-quorum",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1075,6 +1093,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-nothing",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1107,6 +1126,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-BoardMember-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1139,6 +1159,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-BoardMember",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1154,6 +1175,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-BoardMember-too-few-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1186,6 +1208,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-BoardMember-too-few",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1235,6 +1258,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-New",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1267,6 +1291,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-None",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1299,6 +1324,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-Proposer-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1331,6 +1357,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-Proposer",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1346,6 +1373,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-Proposer-nobody-left-eq",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1378,6 +1406,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-remove-user-Proposer-nobody-left",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1427,6 +1456,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-sc-call",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1459,6 +1489,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-sc-deploy",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1491,6 +1522,7 @@ kprove_test(
       ":trusted-perform-action-endpoint-send-egld",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1676,6 +1708,7 @@ kprove_test(
       ":trusted-perform-action-change-quorum-no-quorum",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
   breadth = "3",
 )
 
@@ -1692,6 +1725,7 @@ kprove_test(
       ":trusted-perform-action-change-quorum",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
   breadth = "3",
 )
 
@@ -1908,6 +1942,7 @@ kprove_test(
       ":trusted-change-user-role-BoardMember",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
 )
 
 ktrusted(
@@ -1970,6 +2005,7 @@ kprove_test(
       ":trusted-change-user-role-Proposer",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
   breadth = "2",
 )
 
@@ -2188,6 +2224,7 @@ kprove_test(
   trusted = [
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
   breadth = "2",
 )
 

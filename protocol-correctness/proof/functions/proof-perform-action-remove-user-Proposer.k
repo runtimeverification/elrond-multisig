@@ -1,4 +1,5 @@
 // breadth = 2
+// timeout = moderate
 //@ proof
 require "trusted-change-user-role-Proposer.k"  //@ Bazel remove
 

@@ -9,6 +9,7 @@ module LIST-SWAP-REMOVE-SYNTAX
 endmodule
 
 module LIST-SWAP-REMOVE
+  imports LIST-SWAP-REMOVE-REFLECTION
   imports LIST-SWAP-REMOVE-SYNTAX
 
   imports LAST-TO-START-SYNTAX
@@ -27,4 +28,14 @@ module LIST-SWAP-REMOVE
         => Es
     requires I <Int 0
 
+endmodule
+
+module LIST-SWAP-REMOVE-REFLECTION
+  imports LIST-SWAP-REMOVE-SYNTAX
+  imports REFLECTION-SYNTAX
+
+  rule reflectionApply(
+          $#listSwapRemove,
+          (reflectionArgument(Es:ExpressionCSV), reflectionArgument(I:Int)))
+      => #listSwapRemove(Es, I)
 endmodule

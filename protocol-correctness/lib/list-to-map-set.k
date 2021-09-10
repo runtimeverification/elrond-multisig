@@ -22,4 +22,6 @@ module LIST-TO-MAP-SET-REFLECTION
 
   rule reflectionApply($listToMapSet, reflectionArgument(Es:ExpressionList))
       => listToMapSet(Es)
+  rule reflectionApply($listToMapSet, reflectionArgument(Es:ExpressionCSV))
+      => listToMapSet([Es])
 endmodule

@@ -8,5 +8,5 @@ endmodule
 module LEMMAS-4-EXECUTE
   imports LEMMAS-3
   imports LEMMAS-3-EXECUTE
-  imports LEMMAS-3-EXECUTE-SYNTAX
+  imports LEMMAS-4-EXECUTE-SYNTAX
 endmodule

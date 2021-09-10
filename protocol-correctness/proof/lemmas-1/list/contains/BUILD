@@ -27,6 +27,32 @@ klibrary(
 )
 
 kprove_test(
+  name = "lemma-list-contains-list-find",
+  srcs = ["lemma-list-contains-list-find.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas-1:lemmas-1-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-list-find",
+  srcs = ["lemma-list-contains-list-find.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-list-find-files",
+  srcs = [":trusted-lemma-list-contains-list-find"],
+  deps = [
+      "//protocol-correctness/lib:list-contains-files",
+      "//protocol-correctness/lib:list-find-files",
+      ":trusted-lemma-list-contains-list-find",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-list-contains-pound-last",
   srcs = ["lemma-list-contains-pound-last.k"],
   trusted = [

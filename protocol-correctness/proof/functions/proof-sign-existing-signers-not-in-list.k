@@ -55,7 +55,7 @@ module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 
       andBool ActionId in_keys(ActionData)
       andBool isKResult(Signers)
-      andBool notBool #listContains([Signers], UserId)
+      andBool notBool #listContainsSafe([Signers], UserId)
     ensures true
     //@ proof
     //@ trusted

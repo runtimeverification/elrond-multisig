@@ -12,7 +12,7 @@ require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remov
 require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-remove-last-kresult.k"
 require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-remove-last-usize.k"
 
-require "protocol-correctness/proof/lemmas-4/lemmas-3.k"
+require "protocol-correctness/proof/lemmas-final/lemmas-final.k"
 
 module LEMMAS
   imports TRUSTED-LEMMA-LAST
@@ -29,5 +29,5 @@ module LEMMAS
   imports TRUSTED-LEMMA-REMOVE-LAST-KRESULT
   imports TRUSTED-LEMMA-REMOVE-LAST-USIZE
 
-  imports LEMMAS-3
+  imports LEMMAS-FINAL
 endmodule

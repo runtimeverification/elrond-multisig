@@ -1,3 +1,4 @@
+// timeout = moderate
 //@ proof
 require "../functions/trusted-perform-action-endpoint-add-proposer-BoardMember.k"  //@ Bazel remove
 

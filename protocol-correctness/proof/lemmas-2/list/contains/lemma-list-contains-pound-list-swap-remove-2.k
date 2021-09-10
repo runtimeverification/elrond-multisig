@@ -10,7 +10,7 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
 // module TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
 //@ end
 
-  imports LIST-CONTAINS-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LIST-SWAP-REMOVE-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
   imports REMOVE-LAST-SYNTAX
@@ -47,9 +47,9 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
         )
         => .K
     proves
-      #listContains([E1:Expression, #listSwapRemove(Es:ExpressionCSV, I:Int)], E:Expression) => false
+      #listContainsUnsafe([E1:Expression, #listSwapRemove(Es:ExpressionCSV, I:Int)], E:Expression) => false
     requires
-      notBool #listContains([E1, Es], E)
+      notBool #listContainsUnsafe([E1, Es], E)
     [simplification]
     endlemma
 

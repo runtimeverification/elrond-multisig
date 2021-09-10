@@ -14,8 +14,8 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
 //@ end
 
   imports LAST-FUNCTIONS
-  imports LIST-CONTAINS-SYNTAX
-  imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
+  imports LIST-ELEMENTS-ARE-DISTINCT-ADDITIONAL-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
   imports REMOVE-LAST-ADDITIONAL-SYNTAX
 
@@ -33,9 +33,9 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
       )
       => .K
     proves
-      #listContains([#removeLast(E, Es:ExpressionCSV)], #last(E, Es)) => false
+      #listContainsUnsafe([#removeLast(E, Es:ExpressionCSV)], #last(E, Es)) => false
     requires
-      listElementsAreDistinct([E, Es])
+      listElementsAreDistinctUnsafe([E, Es])
     [simplification]
     endlemma
 endmodule

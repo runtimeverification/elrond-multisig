@@ -18,7 +18,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
   timeout = "eternal",
-  breadth = "11",
+  breadth = "20",
 )
 
 ktrusted(

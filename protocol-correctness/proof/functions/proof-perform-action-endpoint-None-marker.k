@@ -1,3 +1,4 @@
+// timeout = moderate
 //@ proof
 require "trusted-perform-action-endpoint-None.k"  //@ Bazel remove
 

@@ -82,7 +82,7 @@ module INSTRUMENTATION-UNSIGN
 
   rule  splitUnsign5(Signers:ExpressionList, UserId:Usize)
         =>  branchK(
-                #listFind(Signers, UserId) >=Int 0,
+                #listFindSafe(Signers, UserId) >=Int 0,
                 concretizeExpressionList(Signers, 2)
                 ~>  branchK(
                         pListLen(Signers) >=Int 1,
@@ -111,58 +111,7 @@ module INSTRUMENTATION-UNSIGN
                               ),
                         stuck
                     ),
-                // branchK(
-                //     ActionSigners[ActionId] ==K [?UserId1:Expression, .],
-                //     makeConcrete(?UserId1, rUsize)
-                //       ~>  branchK(
-                //               ?UserId1 ==K AddressToUserId[CallerAddress],
-                //               .K,
-                //               .K
-                //           ),
-                //     branchK(
-                //         ActionSigners[ActionId] ==K [?UserId2:Expression, ?UserId3:Expression, ?_:ExpressionCSV],
-                //         makeConcrete(?UserId2, rUsize)
-                //           ~>  makeConcrete(?UserId3, rUsize)
-                //           ~>  branchK(
-                //                   ?UserId2 ==K AddressToUserId[CallerAddress],
-                //                   .K,
-                //                   .K
-                //               ),
-                //         .K
-                //     )
-                // ),
                 .K
             )
     requires true
-
-  // rule  splitUnsign6(ActionId:Usize, Signers:ExpressionList, UserId:Usize)
-  //       =>  branchK(
-  //               #listFind(Signers, UserId) >=Int 0,
-  //               concretizeExpressionList(Signers, 2)
-  //               ~>  branchK(
-  //                       pListLen(Signers) >=Int 1,
-  //                       makeConcrete(expressionListGetOrDefault(Signers, 0, void), rUsize)
-  //                         ~>  branchK(
-  //                                 pListLen(Signers) ==Int 1,
-  //                                 branchK(
-  //                                     expressionListGetOrDefault(Signers, 0, void) ==K UserId,
-  //                                     .K,
-  //                                     .K
-  //                                 ),
-  //                                 branchK(
-  //                                     pListLen(Signers) >=Int 2,
-  //                                     makeConcrete(expressionListGetOrDefault(Signers, 1, void), rUsize)
-  //                                       ~>  branchK(
-  //                                               expressionListGetOrDefault(Signers, 1, void) ==K UserId,
-  //                                               .K,
-  //                                               .K
-  //                                           ),
-  //                                     stuck
-  //                                 )
-  //                             ),
-  //                       stuck
-  //                   ),
-  //               .K
-  //           )
-  //   requires true
 endmodule

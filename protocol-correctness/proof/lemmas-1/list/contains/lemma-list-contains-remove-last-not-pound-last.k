@@ -11,7 +11,7 @@ module LEMMA-LIST-CONTAINS-REMOVE-LAST-NOT-POUND-LAST
 //@ end
 
   imports K-EQUAL
-  imports LIST-CONTAINS-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LAST-FUNCTIONS-ADDITIONAL-SYNTAX
   imports REMOVE-LAST-ADDITIONAL-SYNTAX
 
@@ -30,7 +30,7 @@ module LEMMA-LIST-CONTAINS-REMOVE-LAST-NOT-POUND-LAST
         )
       => .K
     proves
-      #listContains([#removeLast(Exp, Exps)], E) => #listContains([Exp, Exps], E)
+      #listContainsUnsafe([#removeLast(Exp, Exps)], E) => #listContainsUnsafe([Exp, Exps], E)
     requires
       E =/=K #last(Exp, Exps)
     [simplification]

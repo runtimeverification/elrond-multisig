@@ -1,3 +1,4 @@
+// timeout = moderate
 //@ proof
 require "../functions/trusted-perform-action-endpoint-remove-user-BoardMember-too-few-eq.k"  //@ Bazel remove
 

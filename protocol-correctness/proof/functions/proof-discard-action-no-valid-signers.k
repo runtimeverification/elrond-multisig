@@ -60,7 +60,7 @@ module PROOF-DISCARD-ACTION-NO-VALID-SIGNERS
 
       andBool isKResult(SignerIds)
       andBool listElementsAreUsize(SignerIds)
-      andBool listElementsAreDistinct(SignerIds)
+      andBool listElementsAreDistinctSafe(SignerIds)
       andBool userIdToRoleInvariant(UserIdToRole)
 
 

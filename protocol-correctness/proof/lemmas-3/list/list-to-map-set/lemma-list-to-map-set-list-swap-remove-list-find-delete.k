@@ -1,8 +1,14 @@
-// breadth = 1
+// timeout = moderate
+// breadth = 5
 //@ proof
+require "../../../lemmas-0/map/square-bracket/trusted-commute-square-bracket.k"  //@ Bazel remove
+require "../../../lemmas-0/map/square-bracket/trusted-square-bracket-substitution.k"  //@ Bazel remove
+
 module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
   imports INDUCTION-SYNTAX
   imports K-EQUAL
+  imports TRUSTED-COMMUTE-SQUARE-BRACKET
+  imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
 //@ trusted
 // require "protocol-correctness/lib/list-find.k"
@@ -12,7 +18,7 @@ module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
 // module TRUSTED-LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
 //@ end
 
-  imports LIST-FIND-SYNTAX
+  imports LIST-FIND-ADDITIONAL-SYNTAX
   imports LIST-SWAP-REMOVE-SYNTAX
   imports LIST-TO-MAP-SET-SYNTAX
 
@@ -21,50 +27,50 @@ module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
           case "es" of
             | . -> .Induction .
             | "e1" <> "es1" ->
-              case $#listFind("es", "e") of
+              case "e" == "e1" of
+                | True -> .Induction .
+                | False -> .Induction .
+              esac
+              ~~> case $#listFindUnsafe("es", "e") of
                 | < 0 -> .Induction .
                 | = 0 -> .Induction .
                 | > 0 ->
-                  case "e" == "e1" of
-                    | True -> .Induction .
-                    | False ->
-                      call $lemmaCommuteMapSquareBracketAssignmentDelete(
-                              $listToMapSet("es1"), "e1", 0, "e")
-                      ~~> call $lemmaCommuteMapSquareBracketAssignmentDelete(
-                              $listToMapSet(
-                                  $listSwapRemove("es1", $#listFind("es1", "e")
-                              ),
-                              "e1", 0, "e"
-                          )
-                      ~~> case  $mapDelete(
+                  call $lemmaCommuteMapSquareBracketAssignmentDelete(
+                          $listToMapSet("es1"), "e1", 0, "e")
+                  ~~> call $lemmaCommuteMapSquareBracketAssignmentDelete(
+                          $listToMapSet(
+                              $#listSwapRemove("es1", $#listFindUnsafe("es1", "e"))
+                          ),
+                          "e1", 0, "e"
+                      )
+                  ~~> case  $mapDelete(
+                                $listToMapSet(
+                                    $#listSwapRemove(
+                                        "es1", $#listFindUnsafe("es1", "e")
+                                    )
+                                )
+                                , "e"
+                            )
+                            ==
+                            $mapDelete($listToMapSet("es1"), "e")
+                      of
+                        | False -> reinduction("e", "es1") .
+                        | True ->
+                            call $lemmaSquareBracketSubstitution(
+                                $mapDelete(
                                     $listToMapSet(
-                                        $listSwapRemove(
-                                            "es1", $#listFind("es1", "e"
+                                        $#listSwapRemove(
+                                            "es1", $#listFindUnsafe("es1", "e")
                                         )
                                     )
                                     , "e"
-                                )
-                                ==
-                                $mapDelete($listToMapSet("es1"), "e")
-                          of
-                            | False -> reinduction("e", "es1") .
-                            | True ->
-                                call $lemmaSquareBracketSubstitution(
-                                    $mapDelete(
-                                        $listToMapSet(
-                                            $listSwapRemove(
-                                                "es1", $#listFind("es1", "e"
-                                            )
-                                        )
-                                        , "e"
-                                    ),
-                                    "e1", 0,
-                                    $mapDelete($listToMapSet("es1"), "e"),
-                                    "e1", 0
-                                ) .
-                          esac
-                      .
-                  esac
+                                ),
+                                "e1", 0,
+                                $mapDelete($listToMapSet("es1"), "e"),
+                                "e1", 0,
+                                true
+                            ) .
+                      esac
                   .
               esac
               .
@@ -73,8 +79,8 @@ module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
         )
       => .K
     proves
-      listToMapSet([#listSwapRemove(Es, #listFind([Es], E))])[E <- undef]
-      => listToMapSet([L])[E <- undef]
+      listToMapSet([#listSwapRemove(Es, #listFindUnsafe([Es], E))])[E <- undef]
+      => listToMapSet([Es])[E <- undef]
     requires
       true
     [simplification]

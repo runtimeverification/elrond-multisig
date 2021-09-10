@@ -39,11 +39,11 @@ module EXECUTION-PROOF-HELPERS
   rule pListLen([#pushList(_, _)]) >Int 0 => true
       [simplification]
 
-  rule listElementsAreDistinct([removeLast(L:ExpressionCSV)]) => true
-    requires listElementsAreDistinct([L])
+  rule listElementsAreDistinctUnsafe([removeLast(L:ExpressionCSV)]) => true
+    requires listElementsAreDistinctUnsafe([L])
     [simplification]
-  rule listElementsAreDistinct([#removeLast(E:Expression, L:ExpressionCSV)]) => true
-    requires listElementsAreDistinct([E, L])
+  rule listElementsAreDistinctUnsafe([#removeLast(E:Expression, L:ExpressionCSV)]) => true
+    requires listElementsAreDistinctUnsafe([E, L])
     [simplification]
 
   syntax Bool ::= noCommonItem(Usize, Map, ExpressionList)  [function, functional]
@@ -85,15 +85,15 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreAddresses([E:Expression , Es:ExpressionCSV])
       => isAddress(E) andBool listElementsAreAddresses([Es])
 
-  rule listElementsAreDistinct([#pushList(L:ExpressionCSV, E:Expression)])
-      => listElementsAreDistinct([L])
-    requires notBool #listContains([L], E)
+  rule listElementsAreDistinctUnsafe([#pushList(L:ExpressionCSV, E:Expression)])
+      => listElementsAreDistinctUnsafe([L])
+    requires notBool #listContainsSafe([L], E)
     [simplification]
-  rule listElementsAreDistinct([#listSwapRemove(L:ExpressionCSV, _:Int)])
+  rule listElementsAreDistinctUnsafe([#listSwapRemove(L:ExpressionCSV, _:Int)])
       => true
-    requires listElementsAreDistinct([L])
+    requires listElementsAreDistinctUnsafe([L])
     [simplification]
-  rule listElementsAreDistinct([lastToStart(L:ExpressionCSV) => L])
+  rule listElementsAreDistinctUnsafe([lastToStart(L:ExpressionCSV) => L])
     [simplification]
 
   syntax Bool ::= valuesAreExpressionListOfUsize(Map)  [function, functional]
@@ -355,7 +355,7 @@ module EXECUTION-PROOF-HELPERS
     [simplification]
   rule noMapKeyInList((K:KItem |-> _:KItem M:Map) #as _:Map, L:ExpressionList)
     => true
-      andBool notBool #listContains(L, K)
+      andBool notBool #listContainsSafe(L, K)
       andBool noMapKeyInList(M, L)
     [simplification]
   rule noMapKeyInList(M:Map, [#pushList(L:ExpressionCSV, E:Expression)])
@@ -417,12 +417,18 @@ module EXECUTION-PROOF-HELPERS
     [simplification]
 
   rule countCanSignFunction(Es, UserId |-> Role:UserRole M:Map)
-      =>  boolToInt(canSignFunction(Role) andBool #listContains(Es, UserId))
+      =>  boolToInt(canSignFunction(Role) andBool #listContainsSafe(Es, UserId))
           +Int countCanSignFunction(Es, M)
     ensures notBool UserId in_keys(M)
     [simplification]
 
   rule 0 <=Int countCanSignFunction(_, _) => true  [simplification, smt-lemma]
 
+  rule isKResult(toExpressionListOrDefault(K:KItem, L:ExpressionList)) => true
+    requires isKResult(K) andBool isKResult(L)
+    [simplification]
+  rule isKResultExpressionList(toExpressionListOrDefault(K:KItem, L:ExpressionList)) => true
+    requires isKResult(K) andBool isKResult(L)
+    [simplification]
 
 endmodule

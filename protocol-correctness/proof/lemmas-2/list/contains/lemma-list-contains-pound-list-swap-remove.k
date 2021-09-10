@@ -13,7 +13,7 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
 // module TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
 //@ end
 
-  imports LIST-CONTAINS-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LIST-SWAP-REMOVE-SYNTAX
 
   lemma
@@ -37,6 +37,8 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
                       // TODO: The case below should not be needed, it just
                       // forces predicate re-evaluation. Should
                       // minimize and report a Haskell backend error.
+                      // Might be caused by
+                      // https://github.com/kframework/kore/issues/2829
                       case "es1" of
                         | . -> .Induction .
                         | "e2" <> "es2" -> .Induction .
@@ -50,9 +52,9 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
           ("e", E:Expression) <> ("es", Es:ExpressionCSV) <> ("i", I:Int)
         ) => .K
     proves
-      #listContains([#listSwapRemove(Es:ExpressionCSV, I:Int)], E:Expression) => false
+      #listContainsUnsafe([#listSwapRemove(Es:ExpressionCSV, I:Int)], E:Expression) => false
     requires
-      notBool #listContains([Es], E)
+      notBool #listContainsUnsafe([Es], E)
     [simplification]
     endlemma
 

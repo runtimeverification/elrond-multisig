@@ -111,7 +111,7 @@ module MALICIOUS-USER-INVARIANT
 
   syntax Bool ::= listQuorumCantBeFilledBy(quorum:Int, id:Usize, signers:ExpressionList)  [function, functional]
   rule listQuorumCantBeFilledBy(Quorum:Int, UserId:Usize, Signers:ExpressionList)
-      => pListLen(Signers) +Int #if #listContains(Signers, UserId) #then 0 #else 1 #fi <Int Quorum
+      => pListLen(Signers) +Int #if #listContainsSafe(Signers, UserId) #then 0 #else 1 #fi <Int Quorum
 
   syntax Bool ::= noQuorumCanBeFilledBy(quorum:Int, id:Usize, signers:Map)  [function, functional]
   rule noQuorumCanBeFilledBy(_Quorum:Int, _UserId:Usize, .Map) => true

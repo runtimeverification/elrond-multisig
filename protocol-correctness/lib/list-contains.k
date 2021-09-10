@@ -3,18 +3,27 @@ require "protocol-correctness/lib/language/base-types.k"
 module LIST-CONTAINS-SYNTAX
   imports BASE-TYPES-SYNTAX
 
-  syntax Bool ::= #listContains(ExpressionList, KItem)  [function, functional]
+  syntax Bool ::= #listContainsSafe(ExpressionList, KItem)  [function]
+endmodule
 
+module LIST-CONTAINS-ADDITIONAL-SYNTAX
+  imports BASE-TYPES-SYNTAX
+
+  syntax Bool ::= #listContainsUnsafe(ExpressionList, KItem)  [function, functional]
 endmodule
 
 module LIST-CONTAINS
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LIST-CONTAINS-SYNTAX
   imports K-EQUAL
 
-  rule  #listContains([.], _) => false
-  // rule  #listContains([E1:Expression, Es:ExpressionCSV], E2) => E1 ==K E2 orBool #listContains([Es], E2)
-  rule  #listContains([E:Expression, _:ExpressionCSV], E) => true
-  rule  #listContains([_:Expression, Es:ExpressionCSV], X:KItem)
-          => #listContains([Es], X)  [owise]
+  rule #listContainsSafe(Es, E) => #listContainsUnsafe(Es, E)
+    requires isKResult(Es) andBool isKResult(E)
+
+  rule  #listContainsUnsafe([.], _) => false
+  rule  #listContainsUnsafe([E:Expression, _:ExpressionCSV], E) => true
+  rule  #listContainsUnsafe([_:Expression, Es:ExpressionCSV], X:KItem)
+          => #listContainsUnsafe([Es], X)
+    [owise]
 
 endmodule

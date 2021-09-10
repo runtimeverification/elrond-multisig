@@ -21,4 +21,22 @@ module LEMMA-ADD-ONE-IF-NOT-NEGATIVE
     [simplification]
     endlemma
 
+  lemma
+      concretizeValue(X >=Int 0) => .K
+    proves
+      addOneIfNotNegative(X:Int) >Int 0 => X >=Int 0
+    requires
+      true
+    [simplification]
+    endlemma
+
+  lemma
+      concretizeValue(X >=Int 0) => .K
+    proves
+      addOneIfNotNegative(X:Int) <Int 0 => X <Int 0
+    requires
+      true
+    [simplification]
+    endlemma
+
 endmodule

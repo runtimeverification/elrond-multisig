@@ -13,7 +13,7 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
 
   imports K-EQUAL-SYNTAX
   imports LAST-FUNCTIONS
-  imports LIST-CONTAINS-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports REMOVE-LAST-ADDITIONAL-SYNTAX
 
   lemma
@@ -30,8 +30,8 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST
       )
       => .K
     proves
-      #listContains([#removeLast(E1, Es:ExpressionCSV)], E)
-      => #listContains([E1, Es:ExpressionCSV], E)
+      #listContainsUnsafe([#removeLast(E1, Es:ExpressionCSV)], E)
+      => #listContainsUnsafe([E1, Es:ExpressionCSV], E)
     requires
       notBool E ==K #last(E1, Es)
     [simplification]

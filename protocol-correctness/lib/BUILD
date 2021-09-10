@@ -87,8 +87,9 @@ klibrary(
   name = "list-find-files",
   srcs = ["list-find.k"],
   deps = [
-      "//protocol-correctness/lib/language:base-types-files",
       ":add-one-if-not-negative-files",
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
   ],
   visibility = ["//visibility:public"],
 )

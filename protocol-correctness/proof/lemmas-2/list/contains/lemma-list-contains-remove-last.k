@@ -15,8 +15,8 @@ module LEMMA-LIST-CONTAINS-REMOVE-LAST
 //@ end
 
   imports LAST-FUNCTIONS
-  imports LIST-CONTAINS-SYNTAX
-  imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
+  imports LIST-ELEMENTS-ARE-DISTINCT-ADDITIONAL-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
   imports REMOVE-LAST-SYNTAX
 
@@ -39,9 +39,9 @@ module LEMMA-LIST-CONTAINS-REMOVE-LAST
         )
         => .K
     proves
-      #listContains([removeLast(Es:ExpressionCSV)], last(Es)) => false
+      #listContainsUnsafe([removeLast(Es:ExpressionCSV)], last(Es)) => false
     requires
-      listElementsAreDistinct([Es]) andBool pListLen([Es]) >Int 0
+      listElementsAreDistinctUnsafe([Es]) andBool pListLen([Es]) >Int 0
     [simplification]
     endlemma
 

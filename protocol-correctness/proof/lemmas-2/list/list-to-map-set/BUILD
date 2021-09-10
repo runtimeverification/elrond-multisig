@@ -4,7 +4,7 @@ kprove_test(
   name = "lemma-list-to-map-set-last-to-start",
   srcs = ["lemma-list-to-map-set-last-to-start.k"],
   trusted = [
-      "//protocol-correctness/proof/lemmas-0/map/square-bracket:trusted-commute-square-bracket-assignment-same-value",
+      "//protocol-correctness/proof/lemmas-0/map/square-bracket:trusted-commute-square-bracket",
       "//protocol-correctness/proof/lemmas-0/map/square-bracket:trusted-square-bracket-substitution",
       "//protocol-correctness/proof/lemmas-0/equality:trusted-equality-transitivity",
   ],

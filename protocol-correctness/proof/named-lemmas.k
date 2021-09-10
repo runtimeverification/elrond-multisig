@@ -104,6 +104,7 @@ module NAMED-LEMMAS
             _:Map, _:KItem, _:KItem, _:Map, _:KItem, _:KItem, false)
       => .K
 
+  // You must not forget the last bool arg (true).
   rule reflectionApply($lemmaSquareBracketSubstitution,
           ( reflectionArgument(M:Map)
           , reflectionArgument(K1:KItem)

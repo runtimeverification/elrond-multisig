@@ -1,4 +1,5 @@
 //@ proof
+// timeout = moderate
 require "trusted-change-user-role-BoardMember.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-REMOVE-USER-BOARDMEMBER

@@ -25,6 +25,7 @@ klibrary(
   srcs = ["lemmas-0.k"],
   deps = [
       "//protocol-correctness/proof/lemmas-0/int:trusted-lemma-add-one-if-not-negative-files",
+      "//protocol-correctness/proof/lemmas-0/int:trusted-lemma-add-one-if-not-negative-not-zero-files",
       "//protocol-correctness/proof/lemmas-0/list/plistlen:trusted-lemma-plistlen-files",
       "//protocol-correctness/proof/lemmas-0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-a-files",
       "//protocol-correctness/proof/lemmas-0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-b-files",

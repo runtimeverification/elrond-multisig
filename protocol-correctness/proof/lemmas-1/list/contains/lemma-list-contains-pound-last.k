@@ -10,7 +10,7 @@ module LEMMA-LIST-CONTAINS-POUND-LAST
 // module TRUSTED-LEMMA-LIST-CONTAINS-POUND-LAST
 //@ end
 
-  imports LIST-CONTAINS-SYNTAX
+  imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LAST-FUNCTIONS-ADDITIONAL-SYNTAX
 
   lemma
@@ -28,7 +28,7 @@ module LEMMA-LIST-CONTAINS-POUND-LAST
         )
       => .K
     proves
-      #listContains([Exp, Exps], #last(Exp, Exps)) => true
+      #listContainsUnsafe([Exp, Exps], #last(Exp, Exps)) => true
     requires
       true
     [simplification]

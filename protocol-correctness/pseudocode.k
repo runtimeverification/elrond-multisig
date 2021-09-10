@@ -557,9 +557,9 @@ module PSEUDOCODE-FUNCTIONS
         ... </k>
         <action-signers> M:Map </action-signers>
 
-  rule call(listContains(Es:ExpressionList, E:Expression)) => #listContains(Es, E)
+  rule call(listContains(Es:ExpressionList, E:Expression)) => #listContainsSafe(Es, E)
 
-  rule call(listFind(Es:ExpressionList, E:Expression)) => u(#listFind(Es, E))
+  rule call(listFind(Es:ExpressionList, E:Expression)) => u(#listFindSafe(Es, E))
   
   rule  call(listSwapRemove([L:ExpressionCSV], u(I:Int)))
         => [#listSwapRemove(L, I)]

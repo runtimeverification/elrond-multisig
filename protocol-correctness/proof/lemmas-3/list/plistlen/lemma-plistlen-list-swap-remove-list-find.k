@@ -13,7 +13,7 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
 
   imports INT
   imports K-EQUAL
-  imports LIST-FIND-SYNTAX
+  imports LIST-FIND-ADDITIONAL-SYNTAX
   imports LIST-SWAP-REMOVE-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
 
@@ -28,6 +28,8 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
                   // TODO: The case below should not be needed, it just
                   // forces predicate re-evaluation. Should
                   // minimize and report a Haskell backend error.
+                  // Might be caused by
+                  // https://github.com/kframework/kore/issues/2829
                   case "es1" of
                     | . -> .Induction .
                     | "e2" <> "es2" -> .Induction .
@@ -41,10 +43,10 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
         )
       => .K
     proves
-      pListLen([#listSwapRemove(Es:ExpressionCSV, #listFind([Es], E:Expression))])
+      pListLen([#listSwapRemove(Es:ExpressionCSV, #listFindUnsafe([Es], E:Expression))])
       => pListLen([Es]) -Int 1
     requires
-      #listFind([Es], E) >=Int 0 andBool isKResult(Es) andBool isKResult(E)
+      #listFindUnsafe([Es], E) >=Int 0
     [simplification]
     endlemma
 

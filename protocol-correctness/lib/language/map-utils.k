@@ -203,4 +203,12 @@ module MAP-REFLECTION
           )
         )
       => M[K <- V]
+
+  rule reflectionApply(
+          $mapDelete,
+          ( reflectionArgument(M:Map)
+          , reflectionArgument(K:KItem)
+          )
+        )
+      => M[K <- undef]
 endmodule
