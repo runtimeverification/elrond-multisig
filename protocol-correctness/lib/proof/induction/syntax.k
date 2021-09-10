@@ -26,12 +26,12 @@ module INDUCTION-SYNTAX
 
   syntax InductionCase ::= ReflectionPattern "->" InductionInstructions "."
 
-  syntax EvaluatedExpression
+  syntax InductionEvaluatedExpression
 
   syntax InductionExpression  ::= InductionId
-                                | v(Int)
-                                | v(Bool)
-                                | EvaluatedExpression
+                                | Int
+                                | Bool
+                                | InductionEvaluatedExpression
                                 | InductionExpression "==" InductionExpression
                                 | InductionExpression "key" InductionExpression
                                 | InductionExpression "-" InductionExpression

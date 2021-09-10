@@ -41,7 +41,7 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
                         | . -> .Induction .
                         | "e2" <> "es2" -> .Induction .
                       esac
-                      ~~> reinduction("e", "es1", "i" - v(1)) .
+                      ~~> reinduction("e", "es1", "i" - 1) .
                   esac
                   .
               esac

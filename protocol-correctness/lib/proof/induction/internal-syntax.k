@@ -7,7 +7,7 @@ module INDUCTION-INTERNAL-SYNTAX
   syntax InductionDataNamesList ::= InductionId
                                   | InductionId "," InductionDataNamesList
   syntax InductionDataNames ::= names(InductionDataNamesList)
-  
+
   syntax KItem ::= runInduction(InductionInstructions, InductionData)
   syntax KItem ::= runInductionInstruction(InductionInstruction, InductionData)
   syntax KItem ::= inductionFreezer(InductionInstructions, InductionDataNames)
@@ -23,10 +23,7 @@ module INDUCTION-INTERNAL-SYNTAX
 
   syntax InductionDataNamesList ::= extractNames(InductionData)  [function, functional]
 
-  syntax EvaluatedExpression ::= evaluated(KItem)
-  syntax InductionExpression  ::= EvaluatedExpression
+  syntax InductionEvaluatedExpression ::= evaluated(KItem)
 
   syntax InductionError ::= unevaluatedError(KItem, String) | errorNotAllCasesMatched(KItem)
-
-  syntax KResult
 endmodule

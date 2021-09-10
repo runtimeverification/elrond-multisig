@@ -13,10 +13,8 @@ module INDUCTION-CALL
   context runInductionInstruction(
           call {HOLE:InductionExpression => evaluate(HOLE, D)}:>InductionExpression,
           D:InductionData)
+      [result(InductionEvaluatedExpression)]
 
-  rule runInductionInstruction(
-          call evaluated(K:KItem) #as E:InductionExpression,
-          D:InductionData)
+  rule runInductionInstruction(call evaluated(K:KItem), D:InductionData)
       => K ~> D
-    requires isKResult(E)
 endmodule

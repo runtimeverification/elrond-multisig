@@ -5,7 +5,7 @@ require "protocol-correctness/lib/proof/induction/syntax.k"
 module INDUCTION-EXPRESSION-LIST-SYNTAX
   imports INDUCTION-SYNTAX
 
-  syntax Bool ::= isKResultInductionExpressionList(InductionExpressionList)
+  syntax Bool ::= isInductionEvaluatedExpressionInductionExpressionList(InductionExpressionList)
     [function, functional]
 endmodule
 
@@ -15,31 +15,34 @@ module INDUCTION-EXPRESSION-LIST
   imports INDUCTION-EXPRESSION-SYNTAX
   imports INDUCTION-INTERNAL-SYNTAX
 
-  syntax KResult
+  rule isInductionEvaluatedExpression(Es:InductionExpressionList)
+      => isInductionEvaluatedExpressionInductionExpressionList(Es)
 
-  rule isKResult(Es:InductionExpressionList) => isKResultInductionExpressionList(Es)
-
-  rule isKResultInductionExpressionList(I:InductionExpression) => isKResultInductionExpression(I)
-  rule isKResultInductionExpressionList(
+  rule isInductionEvaluatedExpressionInductionExpressionList(I:InductionExpression)
+      => #isInductionEvaluatedExpression(I)
+  rule isInductionEvaluatedExpressionInductionExpressionList(
               I:InductionExpression , Is:InductionExpressionList
           )
-      => isKResultInductionExpression(I) andBool isKResultInductionExpressionList(Is)
+      => #isInductionEvaluatedExpression(I) andBool isInductionEvaluatedExpressionInductionExpressionList(Is)
 
   context evaluateList
           ( {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression
           , Data:InductionData
           )
+    [result(InductionEvaluatedExpression)]
   context evaluateList
           ( ({HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression
             , _Is:InductionExpressionList
             )
           , Data:InductionData
           )
+    [result(InductionEvaluatedExpression)]
   context evaluateList
           ( ( I:InductionExpression
             , {HOLE:InductionExpressionList => evaluateList(HOLE, Data)}:>InductionExpressionList
             )
           , Data:InductionData
           )
-    requires isKResult(I)
+    requires isInductionEvaluatedExpression(I)
+    [result(InductionEvaluatedExpression)]
 endmodule

@@ -32,19 +32,19 @@ module LEMMA-LIST-TO-MAP-SET-POUND-REMOVE-LAST-POUND-LAST
                     $listToMapSet($expressionList($#removeLast("e1", "es1"))),
                     "e",
                     $#last("e1", "es1"),
-                    v(0)
+                    0
                   )
               ~~> case
                     $mapUpdate(
                       $listToMapSet($expressionList($#removeLast("e1", "es1"))),
                       $#last("e1", "es1"),
-                      v(0)
+                      0
                     )
                     ==
                     $mapUpdate(
                       $listToMapSet($expressionList("es1")),
                       "e1",
-                      v(0)
+                      0
                     )
                   of
                     | False -> reinduction("e1", "es1") .
@@ -53,18 +53,18 @@ module LEMMA-LIST-TO-MAP-SET-POUND-REMOVE-LAST-POUND-LAST
                           $mapUpdate(
                             $listToMapSet($expressionList($#removeLast("e1", "es1"))),
                             $#last("e1", "es1"),
-                            v(0)
+                            0
                           ),
                           "e",
-                          v(0),
+                          0,
                           $mapUpdate(
                             $listToMapSet($expressionList("es1")),
                             "e1",
-                            v(0)
+                            0
                           ),
                           "e",
-                          v(0),
-                          v(true)
+                          0,
+                          true
                         )
                         .
                   esac

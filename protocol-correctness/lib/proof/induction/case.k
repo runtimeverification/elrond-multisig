@@ -18,14 +18,14 @@ module INDUCTION-CASE
               | _Cases:InductionCases
           esac,
           D:InductionData)
+      [result(InductionEvaluatedExpression)]
 
   rule runInductionInstruction(
-          case evaluated(K:KItem) #as E:InductionExpression of
+          case evaluated(K:KItem) of
             | Cases:InductionCases
           esac,
           D:InductionData)
       => runInductionCases(K, Cases, D)
-    requires isKResult(E)
 
   rule runInductionCases(E:KItem, Case:InductionCase, Data:InductionData)
       => runInductionCase(E, Case, Data, errorNotAllCasesMatched(E))

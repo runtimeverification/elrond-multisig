@@ -24,18 +24,19 @@ module REINDUCTION
               ),
               Data:InductionData
           )
+      [result(InductionEvaluatedExpression)]
 
   rule  runInductionInstruction(reinduction(E:InductionExpressionList), Data:InductionData)
         ~>  (  runInductionFreezer(_) #as Freezer:KItem
             => afterReinduction(Data ~> Freezer)
             )
-    requires isKResult(E)
+    requires isInductionEvaluatedExpression(E)
 
   rule  runInductionInstruction(reinduction(E:InductionExpressionList), _Data:InductionData)
         ~>  (  afterReinduction(After:K) ~> runInductionFreezer(_) #as Freezer:KItem
             => afterReinduction(After ~> Freezer)
             )
-    requires isKResult(E)
+    requires isInductionEvaluatedExpression(E)
 
 
   rule  (  runInductionInstruction(reinduction(E:InductionExpressionList), _Data:InductionData)
@@ -43,13 +44,13 @@ module REINDUCTION
         ~> inductionFreezer(Is:InductionInstructions, Names:InductionDataNames) #as Freezer:KItem
         )
       => pairInductionData(Names, E) ~> nextInductionStep(Is) ~> After ~> Freezer
-    requires isKResult(E)
+    requires isInductionEvaluatedExpression(E)
 
   rule  (  runInductionInstruction(reinduction(E:InductionExpressionList), _Data:InductionData)
         ~> inductionFreezer(Is:InductionInstructions, Names:InductionDataNames)
         )
       => pairInductionData(Names, E) ~> nextInductionStep(Is)
-    requires isKResult(E)
+    requires isInductionEvaluatedExpression(E)
 
   rule (Data:InductionData ~> nextInductionStep(Is:InductionInstructions))
       => induction(Is, Data)

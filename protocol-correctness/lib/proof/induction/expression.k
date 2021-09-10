@@ -7,7 +7,7 @@ module INDUCTION-EXPRESSION-SYNTAX
   imports INDUCTION-SYNTAX
   imports REFLECTION-SYNTAX
 
-  syntax EvaluatedExpression ::= findInductionDataValue(InductionId, InductionData)
+  syntax InductionEvaluatedExpression ::= findInductionDataValue(InductionId, InductionData)
     [function, functional]
 
   syntax ReflectionArgumentsOrError ::= ReflectionArguments | InductionError
@@ -19,7 +19,7 @@ module INDUCTION-EXPRESSION-SYNTAX
   syntax KItem ::= reflectionApplyOrError(SymbolReflection, ReflectionArgumentsOrError, InductionData)
   syntax KItem ::= wrapEvaluated(KItem, InductionData)  [function, functional]
 
-  syntax Bool ::= isKResultInductionExpression(InductionExpression)
+  syntax Bool ::= #isInductionEvaluatedExpression(InductionExpression)
     [function, functional]
 endmodule
 
@@ -53,12 +53,12 @@ module INDUCTION-EXPRESSION
 
   // raw values
   rule evaluate(
-              v(I:Int) => evaluated(I),
+              I:Int => evaluated(I),
               _Data:InductionData
           )
 
   rule evaluate(
-              v(B:Bool) => evaluated(B),
+              B:Bool => evaluated(B),
               _Data:InductionData
           )
 
@@ -68,12 +68,14 @@ module INDUCTION-EXPRESSION
                   == _:InductionExpression,
               Data:InductionData
           )
+      [result(InductionEvaluatedExpression)]
   context evaluate(
               E:InductionExpression
                   == {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression,
               Data:InductionData
           )
-      requires isKResult(E)
+      requires isInductionEvaluatedExpression(E)
+      [result(InductionEvaluatedExpression)]
   rule evaluate(
               (evaluated(E1:KItem) == evaluated(E2:KItem)) => evaluated(E1 ==K E2),
               _Data:InductionData
@@ -85,12 +87,14 @@ module INDUCTION-EXPRESSION
                   key _:InductionExpression,
               Data:InductionData
           )
+      [result(InductionEvaluatedExpression)]
   context evaluate(
               E:InductionExpression
                   key {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression,
               Data:InductionData
           )
-      requires isKResult(E)
+      requires isInductionEvaluatedExpression(E)
+      [result(InductionEvaluatedExpression)]
   rule evaluate(
               (evaluated(E1:KItem) key evaluated(E2:KItem))
                   => evaluated(reflectionKey(E1, E2)),
@@ -103,12 +107,14 @@ module INDUCTION-EXPRESSION
                   - _:InductionExpression,
               Data:InductionData
           )
+      [result(InductionEvaluatedExpression)]
   context evaluate(
               E:InductionExpression
                   - {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression,
               Data:InductionData
           )
-      requires isKResult(E)
+      requires isInductionEvaluatedExpression(E)
+      [result(InductionEvaluatedExpression)]
   rule evaluate(
               (evaluated(E1:Int) - evaluated(E2:Int)) => evaluated(E1 -Int E2),
               _Data:InductionData
@@ -121,9 +127,10 @@ module INDUCTION-EXPRESSION
                 ),
               Data:InductionData
           )
+      [result(InductionEvaluatedExpression)]
   rule evaluate(SymbolId:SymbolReflection(Es:InductionExpressionList), Data:InductionData)
       => reflectionApplyOrError(SymbolId, extractReflectionArgumentList(Es), Data)
-    requires isKResult(Es)
+    requires isInductionEvaluatedExpression(Es)
   rule evaluate(SymbolId:SymbolReflection(), Data:InductionData)
       => wrapEvaluated(reflectionApply0(SymbolId), Data)
 
@@ -146,7 +153,7 @@ module INDUCTION-EXPRESSION
   rule concatRAOE(A:ReflectionArgument, L:ReflectionArguments) => A , L
   rule concatRAOE(_:ReflectionArgument, E:InductionError) => E
 
-  rule isKResult(E:InductionExpression) => isKResultInductionExpression(E)
-  rule isKResultInductionExpression(_:EvaluatedExpression) => true
-  rule isKResultInductionExpression(_:InductionExpression) => false [owise]
+  rule isInductionEvaluatedExpression(E:InductionExpression) => #isInductionEvaluatedExpression(E)
+  rule #isInductionEvaluatedExpression(_:InductionEvaluatedExpression) => true
+  rule #isInductionEvaluatedExpression(_:InductionExpression) => false [owise]
 endmodule
