@@ -7,6 +7,9 @@ module NAMED-LEMMAS-SYNTAX
   imports MAP
 
   syntax KItem ::= lemmaCommuteMapSquareBracketAssignmentSameValue(Map, key1:KItem, key2:KItem, value:KItem)
+  syntax KItem ::= lemmaCommuteMapSquareBracketAssignmentDifferentKeys(Map, key1:KItem, value1:KItem, key2:KItem, value2:KItem)
+  syntax KItem ::= lemmaCommuteMapSquareBracketAssignmentDelete(Map, key1:KItem, value1:KItem, key2:KItem)
+  syntax KItem ::= lemmaCommuteMapSquareBracketDelete(Map, key1:KItem, key2:KItem)
   syntax KItem ::= lemmaSquareBracketSubstitution(
             m1:Map, k1:KItem, v1:KItem, m2:Map, k2:KItem, v2:KItem, Bool)
   syntax KItem ::= lemmaEqualityTransitivity(KItem, KItem, KItem)
@@ -32,12 +35,66 @@ module NAMED-LEMMAS
               )
           )
 
+  rule lemmaCommuteMapSquareBracketAssignmentDifferentKeys(M:Map, K1:KItem, _V1:KItem, K2:KItem, _V2:KItem)
+      =>  branchK(K1 in_keys(M),
+              concretizeMapKey(K1, M),
+              .K
+            )
+          ~> branchK(K2 in_keys(M),
+              concretizeMapKey(K2, M),
+              .K
+            )
+
+  rule lemmaCommuteMapSquareBracketAssignmentDelete(M:Map, K1:KItem, _V1:KItem, K2:KItem)
+      =>  branchK(K1 in_keys(M),
+              concretizeMapKey(K1, M),
+              .K
+            )
+          ~> branchK(K2 in_keys(M),
+              concretizeMapKey(K2, M),
+              .K
+            )
+
+  rule lemmaCommuteMapSquareBracketDelete(M:Map, K1:KItem, K2:KItem)
+      =>  branchK(K1 in_keys(M),
+              concretizeMapKey(K1, M),
+              .K
+            )
+          ~> branchK(K1 ==K K2,
+              .K,
+              branchK(K2 in_keys(M),
+                  concretizeMapKey(K2, M),
+                  .K
+                )
+            )
+
   rule reflectionApply($lemmaCommuteMapSquareBracketAssignmentSameValue,
           ( reflectionArgument(M:Map)
           , reflectionArgument(K1:KItem)
           , reflectionArgument(K2:KItem)
           , reflectionArgument(V:KItem)))
     => lemmaCommuteMapSquareBracketAssignmentSameValue(M, K1, K2, V)
+
+  rule reflectionApply($lemmaCommuteMapSquareBracketAssignmentDifferentKeys,
+          ( reflectionArgument(M:Map)
+          , reflectionArgument(K1:KItem)
+          , reflectionArgument(V1:KItem)
+          , reflectionArgument(K2:KItem)
+          , reflectionArgument(V2:KItem)))
+    => lemmaCommuteMapSquareBracketAssignmentDifferentKeys(M, K1, V1, K2, V2)
+
+  rule reflectionApply($lemmaCommuteMapSquareBracketAssignmentDelete,
+          ( reflectionArgument(M:Map)
+          , reflectionArgument(K1:KItem)
+          , reflectionArgument(V1:KItem)
+          , reflectionArgument(K2:KItem)))
+    => lemmaCommuteMapSquareBracketAssignmentDelete(M, K1, V1, K2)
+
+  rule reflectionApply($lemmaCommuteMapSquareBracketDelete,
+          ( reflectionArgument(M:Map)
+          , reflectionArgument(K1:KItem)
+          , reflectionArgument(K2:KItem)))
+    => lemmaCommuteMapSquareBracketDelete(M, K1, K2)
 
 
   rule lemmaSquareBracketSubstitution(

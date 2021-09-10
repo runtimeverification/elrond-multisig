@@ -1,8 +1,8 @@
 load("//:proof.bzl", "klibrary", "kprove_test", "ktrusted")
 
 kprove_test(
-  name = "proof-commute-square-bracket-assignment-same-value",
-  srcs = ["proof-commute-square-bracket-assignment-same-value.k"],
+  name = "proof-commute-square-bracket",
+  srcs = ["proof-commute-square-bracket.k"],
   trusted = [
   ],
   semantics = "//protocol-correctness/proof/lemmas-0:lemmas-0-execute",
@@ -10,8 +10,8 @@ kprove_test(
 )
 
 ktrusted(
-  name = "trusted-commute-square-bracket-assignment-same-value",
-  srcs = ["proof-commute-square-bracket-assignment-same-value.k"],
+  name = "trusted-commute-square-bracket",
+  srcs = ["proof-commute-square-bracket.k"],
   visibility = ["//visibility:public"],
 )
 
