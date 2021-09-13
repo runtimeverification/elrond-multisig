@@ -28,7 +28,7 @@ module LIST-FIND
 
   rule  #listFindUnsafe([.], _:Expression) => -1
   rule  #listFindUnsafe([X:Expression, _:ExpressionCSV], X) => 0
-  rule  #listFindUnsafe([E:Expression, Es:ExpressionCSV], X:Expression)
+  rule  #listFindUnsafe([_:Expression, Es:ExpressionCSV], X:Expression)
       => addOneIfNotNegative(#listFindUnsafe([Es], X))
     [owise]
 

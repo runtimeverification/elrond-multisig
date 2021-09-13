@@ -105,7 +105,7 @@ module INVARIANT-HELPERS
     requires false
       orBool addressToUserIdInvariant(M)
     
-  rule isKResult(M[K1:KItem] orDefault K2:KItem) => true
+  rule isKResult(M[_K1:KItem] orDefault K2:KItem) => true
     requires actionSignersInvariant(M) andBool isKResult(K2)
     [simplification]
 

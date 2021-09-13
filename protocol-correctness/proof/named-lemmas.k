@@ -22,7 +22,7 @@ module NAMED-LEMMAS
   imports NAMED-LEMMAS-SYNTAX
   imports REFLECTION-SYNTAX
 
-  rule lemmaCommuteMapSquareBracketAssignmentSameValue(M:Map, K1:KItem, K2:KItem, V:KItem)
+  rule lemmaCommuteMapSquareBracketAssignmentSameValue(M:Map, K1:KItem, K2:KItem, _V:KItem)
       =>  branchK(K1 ==K K2,
             .K,
             branchK(K1 in_keys(M),

@@ -1,18 +1,5 @@
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last-usize.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last-to-start-kresult.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-last-to-start-usize.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last-expression.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last-usize.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-last-usize-kitem.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remove-last-kresult.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remove-last-kresult-expression.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-pound-remove-last-usize.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-remove-last-kresult.k"
-require "protocol-correctness/proof/lemmas-0/list/last/trusted-lemma-remove-last-usize.k"
 
-require "protocol-correctness/proof/lemmas-final/lemmas-final.k"
+require "protocol-correctness/proof/lemmas/lemmas.k"
 
 module LEMMAS
   imports TRUSTED-LEMMA-LAST
