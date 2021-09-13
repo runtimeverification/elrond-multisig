@@ -1,5 +1,6 @@
 // breadth = 4
 //@ proof
+// Not working because of https://github.com/kframework/kore/issues/2828
 require "../../functions/trusted-propose-action-BoardMember.k"  //@ Bazel remove
 require "../../map/trusted-map-semantics.k"  //@ Bazel remove
 

@@ -1,24 +1,10 @@
-// breadth = 3
 //@ proof
+require "../../../functions/trusted-sign-no-signers.k"  //@ Bazel remove
 
-require "../../../functions/trusted-unsign-no-action.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
-require "../../../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
-
-module PROOF-RECFU-UNSIGN-ERROR
-  imports TRUSTED-UNSIGN-NO-ACTION
-  // imports TRUSTED-UNSIGN-NO-SIGNERS
-  // imports TRUSTED-UNSIGN-NOT-SIGNED
-  // imports TRUSTED-UNSIGN-ONLY-SIGNER
-  // imports TRUSTED-UNSIGN-OTHER-SIGNERS-FIRST
-  // imports TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
-  imports TRUSTED-UNSIGN-PROPOSER
+module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
+  imports TRUSTED-SIGN-NO-SIGNERS
 //@ trusted
-// module TRUSTED-RECFU-UNSIGN-ERROR
+// module TRUSTED-RECFU-SIGN-VOID-NO-SIGNERS
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
@@ -26,7 +12,7 @@ module PROOF-RECFU-UNSIGN-ERROR
 
   claim <T><TT>
           <k> pushContext ~> preCall
-              ~> call(unsign ( ActionId:Usize ))
+              ~> call(sign(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
               ~> K:K
           </k>
@@ -40,14 +26,14 @@ module PROOF-RECFU-UNSIGN-ERROR
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               ActionData:Map,
-              ActionSigners:Map,
+              OldActionSigners:Map,
               address(MaliciousAddress:Int),
               Stack:Stack,
               PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
-          <k> error ~> K </k>
+          <k> evaluate(void) ~> K </k>
           invariantStateStack(
               NumUsers,
               UserIdToAddress,
@@ -58,22 +44,31 @@ module PROOF-RECFU-UNSIGN-ERROR
               u(Quorum),
               u(ActionLastIndex),
               ActionData,
-              ActionSigners,
+              ?NewActionSigners,
               address(MaliciousAddress),
               Stack:Stack,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool notBool (true
-            andBool ActionId in_keys ( ActionData )
-            andBool MaliciousRole ==K BoardMember
-        )
+        andBool ActionId in_keys ( ActionData )
+        andBool MaliciousRole ==K BoardMember
+        andBool notBool ActionId in_keys(OldActionSigners)
 
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners)
+        andBool Quorum >Int 1
+
+        andBool notBool u(0) in_keys(UserIdToRole)
         andBool actionDataInvariant(ActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
-        // andBool actionSignersInvariant(ActionSigners)
+        andBool actionSignersInvariant(OldActionSigners)
+        andBool addressToUserIdInvariant(AddressToUserId)
+        andBool userIdToRoleInvariant(UserIdToRole)
+        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
 
     ensures true
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners)
+        andBool actionSignersInvariant(?NewActionSigners)
     //@ proof
     //@ trusted
     // [trusted]

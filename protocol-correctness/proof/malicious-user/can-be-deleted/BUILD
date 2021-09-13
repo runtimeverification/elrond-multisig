@@ -65,6 +65,7 @@ kprove_test(
       ":trusted-concretize-board-member",
   ],
   semantics = "can-be-deleted-execute",
+  timeout = "long",
   breadth = "6",
 )
 
@@ -78,6 +79,9 @@ kprove_test(
   name = "proof-run-external-call-from-user",
   srcs = ["proof-run-external-call-from-user.k"],
   trusted = [
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-error",
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-void-no-signers",
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-void-signers",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-unsign-error",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-unsign-void",
   ],

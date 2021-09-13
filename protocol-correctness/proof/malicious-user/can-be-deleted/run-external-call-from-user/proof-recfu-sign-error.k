@@ -1,24 +1,14 @@
-// breadth = 3
+// breadth = 1
 //@ proof
 
-require "../../../functions/trusted-unsign-no-action.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
-// require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
-require "../../../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
+require "../../../functions/trusted-sign-caller-proposer.k"  //@ Bazel remove
+require "../../../functions/trusted-sign-empty-action.k"  //@ Bazel remove
 
-module PROOF-RECFU-UNSIGN-ERROR
-  imports TRUSTED-UNSIGN-NO-ACTION
-  // imports TRUSTED-UNSIGN-NO-SIGNERS
-  // imports TRUSTED-UNSIGN-NOT-SIGNED
-  // imports TRUSTED-UNSIGN-ONLY-SIGNER
-  // imports TRUSTED-UNSIGN-OTHER-SIGNERS-FIRST
-  // imports TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
-  imports TRUSTED-UNSIGN-PROPOSER
+module PROOF-RECFU-SIGN-ERROR
+  imports TRUSTED-SIGN-CALLER-PROPOSER
+  imports TRUSTED-SIGN-EMPTY-ACTION
 //@ trusted
-// module TRUSTED-RECFU-UNSIGN-ERROR
+// module TRUSTED-RECFU-SIGN-ERROR
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
@@ -26,7 +16,7 @@ module PROOF-RECFU-UNSIGN-ERROR
 
   claim <T><TT>
           <k> pushContext ~> preCall
-              ~> call(unsign ( ActionId:Usize ))
+              ~> call(sign(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
               ~> K:K
           </k>
@@ -65,13 +55,15 @@ module PROOF-RECFU-UNSIGN-ERROR
         </TT></T>
     requires true
         andBool notBool (true
-            andBool ActionId in_keys ( ActionData )
+            andBool ActionId in_keys (ActionData)
             andBool MaliciousRole ==K BoardMember
         )
 
+        andBool notBool u(0) in_keys(UserIdToRole)
         andBool actionDataInvariant(ActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
-        // andBool actionSignersInvariant(ActionSigners)
+        andBool addressToUserIdInvariant(AddressToUserId)
+        andBool userIdToRoleInvariant(UserIdToRole)
 
     ensures true
     //@ proof

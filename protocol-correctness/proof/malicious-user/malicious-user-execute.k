@@ -185,8 +185,29 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                 ?Args:ExpressionList);)
     ensures isKResult(?Args)
     [label(runProposeSCCall)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run sign(?_ActionId:Usize);)
+  rule  <k> runExternalCallFromUser(A:Address)
+          => branchK(A in_keys(AddressToUserId),
+                  makeConcreteValue(A, rUsize, AddressToUserId)
+                    ~>  branchK(AddressToUserId[A] orDefault void in_keys(UserIdToRole),
+                            makeConcreteValue(AddressToUserId[A] orDefault void, rUserRole, UserIdToRole),
+                            .K
+                        ),
+                  .K
+              )
+            ~> concretizeValue(?ActionId)
+            ~> concretizeValue(?ActionId in_keys(ActionData))
+            ~> runExternalCall(from A run sign(?ActionId:Usize);)
+          ...
+        </k>
+        <address-to-user-id>
+          AddressToUserId:Map
+        </address-to-user-id>
+        <user-roles>
+          UserIdToRole:Map
+        </user-roles>
+        <action-data>
+          ActionData:Map
+        </action-data>
     [label(runSign)]
   // rule  runExternalCallFromUser(A:Address)
   //         =>  runExternalCall(from A run unsign(?_ActionId:Usize);)
@@ -213,8 +234,6 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         <action-data>
           ActionData:Map
         </action-data>
-  //       <action-signers>
-  //       </action-signers>        
     [label(runUnsign)]
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run performActionEndpoint(?_ActionId:Usize);)

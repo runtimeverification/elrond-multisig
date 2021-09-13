@@ -4,6 +4,7 @@ require "protocol-correctness/lib/list-elements-are-distinct.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/map/map-execute.k"
 require "protocol-correctness/pseudocode.k"
+require "protocol-correctness/lib/list-to-map-set.k"
 
 module EXECUTION-PROOF-HELPERS-SYNTAX
   imports LIST-ELEMENTS-ARE-USIZE-SYNTAX
@@ -20,6 +21,7 @@ module EXECUTION-PROOF-HELPERS
   imports EXPLICIT-KITEM-INJECTION
   imports LIST-ELEMENTS-ARE-USIZE
   imports LIST-ELEMENTS-ARE-DISTINCT
+  imports LIST-TO-MAP-SET-SYNTAX
 
   imports ALL-KEYS-BECOME-KEYS
 
@@ -431,4 +433,15 @@ module EXECUTION-PROOF-HELPERS
     requires isKResult(K) andBool isKResult(L)
     [simplification]
 
+  rule pListLen([#pushList(Es:ExpressionCSV, E:Expression)]) => pListLen([E, Es])
+    [simplification]
+  rule listElementsAreDistinctUnsafe([#pushList(Es:ExpressionCSV, E:Expression)])
+      => listElementsAreDistinctUnsafe([E, Es]) 
+    [simplification]
+  rule listToMapSet([#pushList(Es:ExpressionCSV, E:Expression)])
+      => listToMapSet([E, Es])
+    [simplification]
+  rule #listContainsUnsafe([#pushList(Es:ExpressionCSV, E1:Expression)], E2:Expression)
+      => #listContainsUnsafe([E1, Es], E2)
+    [simplification]
 endmodule

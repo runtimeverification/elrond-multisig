@@ -38,6 +38,7 @@ klibrary(
       ":base-files",
       "//protocol-correctness/proof/map:map-execute-files",
       "//protocol-correctness:pseudocode-files",
+      "//protocol-correctness/lib:list-to-map-set-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -182,6 +183,7 @@ klibrary(
   name = "instrumentation-sign-files",
   srcs = ["instrumentation-sign.k"],
   deps = [
+      "//protocol-correctness/lib:list-first-with-default-files",
       ":instrumentation-map-files",
       "//protocol-correctness:pseudocode-files",
       "//protocol-correctness/proof/instrumentation/pushlist:pushlist-instrumentation-files",

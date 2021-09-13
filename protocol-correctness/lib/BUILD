@@ -95,6 +95,16 @@ klibrary(
 )
 
 klibrary(
+  name = "list-first-with-default-files",
+  srcs = ["list-first-with-default.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "list-swap-remove-files",
   srcs = ["list-swap-remove.k"],
   deps = [

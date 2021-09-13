@@ -1,9 +1,15 @@
 //@ proof
 
+require "run-external-call-from-user/trusted-recfu-sign-error.k"  //@ Bazel remove
+require "run-external-call-from-user/trusted-recfu-sign-void-no-signers.k"  //@ Bazel remove
+require "run-external-call-from-user/trusted-recfu-sign-void-signers.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-unsign-error.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-unsign-void.k"  //@ Bazel remove
 
 module PROOF-RUN-EXTERNAL-CALL-FROM-USER
+  imports TRUSTED-RECFU-SIGN-ERROR
+  imports TRUSTED-RECFU-SIGN-VOID-NO-SIGNERS
+  imports TRUSTED-RECFU-SIGN-VOID-SIGNERS
   imports TRUSTED-RECFU-UNSIGN-ERROR
   imports TRUSTED-RECFU-UNSIGN-VOID
 
@@ -52,6 +58,11 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
+        andBool addressToUserIdInvariant(AddressToUserId)
+        andBool userIdToRoleInvariant(UserIdToRole)
+        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionData), usesExpanded)
+        andBool notBool u(0) in_keys(UserIdToRole)
+        andBool Quorum >Int 1
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)

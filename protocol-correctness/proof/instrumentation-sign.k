@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/list-first-with-default.k"
 require "protocol-correctness/proof/instrumentation-map.k"
 require "protocol-correctness/pseudocode.k"
 require "protocol-correctness/proof/instrumentation/pushlist/pushlist-instrumentation.k"
@@ -8,6 +9,8 @@ module INSTRUMENTATION-SIGN
 
   imports PSEUDOCODE
   imports PUSHLIST-INSTRUMENTATION-SYNTAX
+  imports LIST-FIRST-WITH-DEFAULT-SYNTAX
+  imports LIST-FIRST-WITH-DEFAULT
 
   syntax KItem ::= splitSign(Usize)
   syntax KItem ::= splitSign2(Usize)
@@ -69,6 +72,7 @@ module INSTRUMENTATION-SIGN
 
   rule  <k> splitSign4(ActionId:Usize)
             =>    lemmaPushListNotEmpty(Signers, CallerId)
+              ~>  concretizeValue(#listFirstWithDefault([Signers], void) ==K CallerId)
         ...</k>
         <address-to-user-id> CallerAddress |-> CallerId _AddressToUserId:Map </address-to-user-id>
         <caller-address>CallerAddress:CallerAddress</caller-address>
