@@ -1,6 +1,42 @@
 load("//:proof.bzl", "kprove_test", "ktrusted")
 
 kprove_test(
+  name = "proof-recfu-propose-add-board-member",
+  srcs = ["proof-recfu-propose-add-board-member.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-propose-action-BoardMember",
+      "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-recfu-propose-add-board-member",
+  srcs = ["proof-recfu-propose-add-board-member.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-recfu-propose-add-proposer",
+  srcs = ["proof-recfu-propose-add-proposer.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-propose-action-BoardMember",
+      "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-recfu-propose-add-proposer",
+  srcs = ["proof-recfu-propose-add-proposer.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-recfu-propose-change-quorum",
   srcs = ["proof-recfu-propose-change-quorum.k"],
   trusted = [
