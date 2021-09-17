@@ -79,6 +79,7 @@ kprove_test(
   name = "proof-run-external-call-from-user",
   srcs = ["proof-run-external-call-from-user.k"],
   trusted = [
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-propose-send-egld",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-error",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-void-no-signers",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-void-signers",
