@@ -1,5 +1,6 @@
 //@ proof
 
+require "run-external-call-from-user/trusted-recfu-propose-remove-user.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-send-egld.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-sign-error.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-sign-void-no-signers.k"  //@ Bazel remove
@@ -8,6 +9,7 @@ require "run-external-call-from-user/trusted-recfu-unsign-error.k"  //@ Bazel re
 require "run-external-call-from-user/trusted-recfu-unsign-void.k"  //@ Bazel remove
 
 module PROOF-RUN-EXTERNAL-CALL-FROM-USER
+  imports TRUSTED-RECFU-PROPOSE-REMOVE-USER
   imports TRUSTED-RECFU-PROPOSE-SEND-EGLD
   imports TRUSTED-RECFU-SIGN-ERROR
   imports TRUSTED-RECFU-SIGN-VOID-NO-SIGNERS

@@ -1,6 +1,24 @@
 load("//:proof.bzl", "kprove_test", "ktrusted")
 
 kprove_test(
+  name = "proof-recfu-propose-remove-user",
+  srcs = ["proof-recfu-propose-remove-user.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-propose-action-BoardMember",
+      "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-recfu-propose-remove-user",
+  srcs = ["proof-recfu-propose-remove-user.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-recfu-propose-send-egld",
   srcs = ["proof-recfu-propose-send-egld.k"],
   trusted = [
