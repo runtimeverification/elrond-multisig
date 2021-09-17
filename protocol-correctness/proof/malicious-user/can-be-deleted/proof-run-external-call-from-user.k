@@ -4,6 +4,8 @@ require "run-external-call-from-user/trusted-recfu-propose-add-board-member.k"  
 require "run-external-call-from-user/trusted-recfu-propose-add-proposer.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-change-quorum.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-remove-user.k"  //@ Bazel remove
+require "run-external-call-from-user/trusted-recfu-propose-sc-call.k"  //@ Bazel remove
+require "run-external-call-from-user/trusted-recfu-propose-sc-deploy.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-send-egld.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-sign-error.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-sign-void-no-signers.k"  //@ Bazel remove
@@ -16,6 +18,8 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports TRUSTED-RECFU-PROPOSE-ADD-PROPOSER
   imports TRUSTED-RECFU-PROPOSE-CHANGE-QUORUM
   imports TRUSTED-RECFU-PROPOSE-REMOVE-USER
+  imports TRUSTED-RECFU-PROPOSE-SC-CALL
+  imports TRUSTED-RECFU-PROPOSE-SC-DEPLOY
   imports TRUSTED-RECFU-PROPOSE-SEND-EGLD
   imports TRUSTED-RECFU-SIGN-ERROR
   imports TRUSTED-RECFU-SIGN-VOID-NO-SIGNERS

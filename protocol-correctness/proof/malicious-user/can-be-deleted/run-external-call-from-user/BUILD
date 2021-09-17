@@ -73,6 +73,42 @@ ktrusted(
 )
 
 kprove_test(
+  name = "proof-recfu-propose-sc-call",
+  srcs = ["proof-recfu-propose-sc-call.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-propose-action-BoardMember",
+      "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-recfu-propose-sc-call",
+  srcs = ["proof-recfu-propose-sc-call.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-recfu-propose-sc-deploy",
+  srcs = ["proof-recfu-propose-sc-deploy.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-propose-sc-deploy-BoardMember",
+      "//protocol-correctness/proof/functions:trusted-propose-sc-deploy-Proposer",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-recfu-propose-sc-deploy",
+  srcs = ["proof-recfu-propose-sc-deploy.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-recfu-propose-send-egld",
   srcs = ["proof-recfu-propose-send-egld.k"],
   trusted = [
