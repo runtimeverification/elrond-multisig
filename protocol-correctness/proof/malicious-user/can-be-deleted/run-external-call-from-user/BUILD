@@ -134,7 +134,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-sign-empty-action",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  breadth = "1",
+  breadth = "2",
 )
 
 ktrusted(
@@ -150,6 +150,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-sign-no-signers",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
 )
 
 ktrusted(

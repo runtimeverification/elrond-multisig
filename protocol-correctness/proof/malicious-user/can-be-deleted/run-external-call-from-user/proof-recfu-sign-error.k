@@ -1,4 +1,4 @@
-// breadth = 1
+// breadth = 2
 //@ proof
 
 require "../../../functions/trusted-sign-caller-proposer.k"  //@ Bazel remove

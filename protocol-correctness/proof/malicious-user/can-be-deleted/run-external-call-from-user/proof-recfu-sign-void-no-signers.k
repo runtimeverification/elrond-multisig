@@ -1,3 +1,4 @@
+// timeout = moderate
 //@ proof
 require "../../../functions/trusted-sign-no-signers.k"  //@ Bazel remove
 
