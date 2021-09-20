@@ -7,6 +7,7 @@ module PROOF-LISTLEN
 //@ end
   imports FUNCTION-CALL-SYNTAX
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
+  imports PLISTLEN-FUNCTIONS-SYNTAX
 
   //@ proof
   claim call(listLen([.])) => u(0)

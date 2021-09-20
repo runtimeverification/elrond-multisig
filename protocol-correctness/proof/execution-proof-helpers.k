@@ -1,6 +1,10 @@
-require "protocol-correctness/lib/all-keys-become-keys.k"
-require "protocol-correctness/lib/list-elements-are-usize.k"
-require "protocol-correctness/lib/list-elements-are-distinct.k"
+require "protocol-correctness/lib/functions/all-keys-become-keys.k"
+require "protocol-correctness/lib/functions/list-elements-are-usize.k"
+require "protocol-correctness/lib/functions/list-elements-are-distinct.k"
+require "protocol-correctness/lib/functions/list-to-map-set.k"
+require "protocol-correctness/lib/functions/push-list.k"
+require "protocol-correctness/lib/language/cast.k"
+
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/map/map-execute.k"
 require "protocol-correctness/pseudocode.k"
@@ -18,10 +22,18 @@ module EXECUTION-PROOF-HELPERS
 
   imports PSEUDOCODE
   imports MAP-EXECUTE
+
+  imports CAST-SYNTAX
   imports EXPLICIT-KITEM-INJECTION
+  imports LAST-TO-START-SYNTAX
+  imports LIST-CONTAINS-SYNTAX
   imports LIST-ELEMENTS-ARE-USIZE
   imports LIST-ELEMENTS-ARE-DISTINCT
   imports LIST-TO-MAP-SET-SYNTAX
+  imports PLISTLEN-FUNCTIONS-SYNTAX
+  imports PUSH-LIST-SYNTAX
+  imports REMOVE-LAST-ADDITIONAL-SYNTAX
+  imports REMOVE-LAST-SYNTAX
 
   imports ALL-KEYS-BECOME-KEYS
 
@@ -49,12 +61,6 @@ module EXECUTION-PROOF-HELPERS
     requires listElementsAreDistinctUnsafe([E, L])
     [simplification]
 
-  syntax Bool ::= noCommonItem(Usize, Map, ExpressionList)  [function, functional]
-  rule noCommonItem(_:Usize, _:Map, [.]) => true
-  rule noCommonItem(U:Usize, M:Map, [E:Expression , Es:ExpressionCSV])
-      =>  notBool (E in_keys(M))
-          andBool noCommonItem(add(U, u(1)), (E |-> U) M, [Es])
-
   syntax Bool ::= noReusedIndexAddress(Usize, Map, ExpressionList)  [function, functional]
   rule noReusedIndexAddress(U:Usize, M:Map, [.]) => forall-v-greater-or-equal-than-u-v-not-in-m(U, M, [.])
   rule noReusedIndexAddress(U:Usize, M:Map, [E:Expression , Es:ExpressionCSV] #as L)
@@ -67,21 +73,8 @@ module EXECUTION-PROOF-HELPERS
       =>  forall-v-greater-or-equal-than-u-v-not-in-m(U, M, L)
           andBool noReusedIndexRole(add(U, u(1)), (U |-> BoardMember) M, [Es])
 
-  syntax Bool ::= "forall-v-greater-or-equal-than-u-v-not-in-m" "(" Usize "," Map "," ExpressionList ")"   [function, functional]
-  rule forall-v-greater-or-equal-than-u-v-not-in-m(U, M, [.])
-      =>  notBool U in_keys(M)
-  rule forall-v-greater-or-equal-than-u-v-not-in-m(U, M, [_:Expression , Es:ExpressionCSV])
-      =>  notBool U in_keys(M)
-          andBool forall-v-greater-or-equal-than-u-v-not-in-m(add(U, u(1)), M, [Es])
   rule forall-v-greater-or-equal-than-u-v-not-in-m(_:Usize, .Map, _:ExpressionList)
       => true  [simplification]
-
-  syntax Usize ::= usizeWithDefault(KItem, Usize)  [function, functional]
-  rule usizeWithDefault(uninitialized, Default:Usize) => Default
-  rule usizeWithDefault(V:Usize, _:Usize) => V
-
-  syntax Int ::= usizeToInt(Usize)  [function, functional]
-  rule usizeToInt(u(V:Int)) => V
 
   syntax Bool ::= listElementsAreAddresses(ExpressionList)  [function, functional]
   rule listElementsAreAddresses([.]) => true
@@ -380,35 +373,6 @@ module EXECUTION-PROOF-HELPERS
           #And #Ceil(@K)
           #And #Ceil(@V)
     [anywhere, simplification(20)]
-
-  syntax Int ::= boolToInt(Bool)  [function, functional, smtlib(boolToInt)]
-  rule boolToInt(true) => 1
-  rule boolToInt(false) => 0
-  rule 0 <=Int boolToInt(_:Bool) => true  [simplification, smt-lemma]
-  rule boolToInt(_:Bool) <=Int 1 => true [simplification, smt-lemma]
-
-  syntax ExpressionList ::= toExpressionListOrDefault(KItem, ExpressionList)  [function, functional]
-  rule toExpressionListOrDefault(E:ExpressionList, _Default:ExpressionList) => E
-  rule toExpressionListOrDefault(_:KItem, Default:ExpressionList) => Default
-    [owise]
-
-  // TODO: Proof for this.
-  syntax Bool ::= canSignFunction(UserRole)  [function, functional]
-  rule canSignFunction(Role:UserRole) => Role ==K BoardMember
-
-  syntax Int ::= countCanSignFunction(signerIDs:ExpressionList, userIdToRole:Map)  [function, functional, smtlib(countCanSignFunction)]
-  syntax Int ::= #countCanSignFunction(userID:Usize, signerIDs:ExpressionList, userIdToRole:Map, value:KItem)  [function, functional]
-
-  rule countCanSignFunction([.], _:Map) => 0
-  rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], UserId |-> Role:UserRole M:Map)
-      => 1 +Int countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
-    requires canSignFunction(Role)
-  rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], M:Map)
-      => countCanSignFunction([Es], M)
-    requires notBool UserId in_keys(M)
-  rule countCanSignFunction([_:Expression, Es:ExpressionCSV], M)
-      => countCanSignFunction([Es], M)
-    [owise]
 
   rule countCanSignFunction([#pushList(Es:ExpressionCSV, UserId:Usize)], UserId |-> Role:UserRole M:Map)
       => 1 +Int countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.

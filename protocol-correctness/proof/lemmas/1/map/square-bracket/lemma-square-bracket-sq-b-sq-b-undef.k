@@ -8,8 +8,8 @@ module LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
   imports TRUSTED-COMMUTE-SQUARE-BRACKET
 
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/list-contains.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
 // 
 // module TRUSTED-LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
 //@ end

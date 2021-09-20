@@ -3,8 +3,8 @@
 module LEMMA-LIST-CONTAINS-LAST-TO-START
   imports LEMMAS-0-EXECUTE-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/last-to-start.k"
-// require "protocol-correctness/lib/list-contains.k"
+// require "protocol-correctness/lib/functions/last-to-start.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
 // 
 // module TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
 //@ end

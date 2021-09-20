@@ -254,7 +254,7 @@ def loadFileContents(contents, name):
   return KFile(name, require.strings(), tout, br)
 
 def removeExtension(file_name):
-  assert(file_name.endswith('.k'))
+  assert file_name.endswith('.k'), file_name
   return file_name[:-2]
 
 def semanticsName(file_name):
@@ -460,7 +460,7 @@ def generateBuildFile(current_dir, bazel_root):
 
   to_load = ['"//:proof.bzl"']
   if main:
-    assert not semantics
+    assert not semantics, [current_dir, semantics, main]
     semantics = semanticsName(main)
     to_load.append('"kompile"')
     to_load.append('"klibrary"')

@@ -1,6 +1,6 @@
 require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/language/reflection.k"
-require "protocol-correctness/lib/plistlen-functions.k"
+require "protocol-correctness/lib/functions/plistlen-functions.k"
 
 module LAST-FUNCTIONS-SYNTAX
   imports BASE-TYPES-SYNTAX

@@ -3,7 +3,7 @@
 module LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports LEMMAS-0-EXECUTE-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/all-keys-become-keys.k"
+// require "protocol-correctness/lib/functions/all-keys-become-keys.k"
 // 
 // module TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
 //   imports BOOL

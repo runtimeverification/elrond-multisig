@@ -12,9 +12,9 @@ module LEMMA-LIST-TO-MAP-SET-POUND-REMOVE-LAST-POUND-LAST
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/list-to-map-set.k"
-// require "protocol-correctness/lib/remove-last.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/list-to-map-set.k"
+// require "protocol-correctness/lib/functions/remove-last.k"
 // 
 // module TRUSTED-LEMMA-LIST-TO-MAP-SET-POUND-REMOVE-LAST-POUND-LAST
 //@ end

@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/add-one-if-not-negative.k"
+require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
 require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/language/reflection.k"
 

@@ -20,8 +20,8 @@ klibrary(
   name = "trusted-lemma-square-bracket-sq-b-sq-b-undef-files",
   srcs = [":trusted-lemma-square-bracket-sq-b-sq-b-undef"],
   deps = [
-      "//protocol-correctness/lib:last-functions-files",
-      "//protocol-correctness/lib:list-contains-files",
+      "//protocol-correctness/lib/functions:last-functions-files",
+      "//protocol-correctness/lib/functions:list-contains-files",
       ":trusted-lemma-square-bracket-sq-b-sq-b-undef",
   ],
   visibility = ["//visibility:public"],

@@ -32,13 +32,15 @@ klibrary(
   name = "execution-proof-helpers-files",
   srcs = ["execution-proof-helpers.k"],
   deps = [
-      "//protocol-correctness/lib:all-keys-become-keys-files",
-      "//protocol-correctness/lib:list-elements-are-usize-files",
-      "//protocol-correctness/lib:list-elements-are-distinct-files",
+      "//protocol-correctness/lib/functions:all-keys-become-keys-files",
+      "//protocol-correctness/lib/functions:list-elements-are-usize-files",
+      "//protocol-correctness/lib/functions:list-elements-are-distinct-files",
+      "//protocol-correctness/lib/functions:list-to-map-set-files",
+      "//protocol-correctness/lib/functions:push-list-files",
+      "//protocol-correctness/lib/language:cast-files",
       ":base-files",
       "//protocol-correctness/proof/map:map-execute-files",
       "//protocol-correctness:pseudocode-files",
-      "//protocol-correctness/lib:list-to-map-set-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -183,7 +185,7 @@ klibrary(
   name = "instrumentation-sign-files",
   srcs = ["instrumentation-sign.k"],
   deps = [
-      "//protocol-correctness/lib:list-first-with-default-files",
+      "//protocol-correctness/lib/functions:list-first-with-default-files",
       ":instrumentation-map-files",
       "//protocol-correctness:pseudocode-files",
       "//protocol-correctness/proof/instrumentation/pushlist:pushlist-instrumentation-files",
@@ -224,7 +226,7 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/proof/induction:induction-files",
       "//protocol-correctness/lib/proof/unsorted:equality-without-substitution-files",
-      "//protocol-correctness/lib:list-to-map-set-files",
+      "//protocol-correctness/lib/functions:list-to-map-set-files",
       ":base-files",
       ":execution-proof-helpers-files",
       ":instrumentation-change-user-role-files",

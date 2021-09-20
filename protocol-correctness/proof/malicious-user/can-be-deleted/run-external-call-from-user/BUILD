@@ -1,6 +1,45 @@
 load("//:proof.bzl", "kprove_test", "ktrusted")
 
 kprove_test(
+  name = "proof-recfu-discard-action-error",
+  srcs = ["proof-recfu-discard-action-error.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-discard-action-has-signers",
+      "//protocol-correctness/proof/functions:trusted-discard-action-no-role",
+      "//protocol-correctness/proof/functions:trusted-discard-action-no-user",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "8",
+)
+
+ktrusted(
+  name = "trusted-recfu-discard-action-error",
+  srcs = ["proof-recfu-discard-action-error.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-recfu-discard-action-void",
+  srcs = ["proof-recfu-discard-action-void.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-discard-action-no-signers",
+      "//protocol-correctness/proof/functions:trusted-discard-action-no-signers-no-action",
+      "//protocol-correctness/proof/functions:trusted-discard-action-no-valid-signers",
+      "//protocol-correctness/proof/functions:trusted-discard-action-no-valid-signers-no-action",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-recfu-discard-action-void",
+  srcs = ["proof-recfu-discard-action-void.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-recfu-propose-add-board-member",
   srcs = ["proof-recfu-propose-add-board-member.k"],
   trusted = [

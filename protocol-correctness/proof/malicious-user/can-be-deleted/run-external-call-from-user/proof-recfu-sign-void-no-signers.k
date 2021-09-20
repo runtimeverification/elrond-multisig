@@ -10,6 +10,7 @@ module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
+  imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
 
   claim <T><TT>
           <k> pushContext ~> preCall
@@ -68,7 +69,7 @@ module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(?NewActionSigners)
     //@ proof
     //@ trusted

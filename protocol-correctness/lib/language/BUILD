@@ -52,6 +52,15 @@ klibrary(
 )
 
 klibrary(
+  name = "cast-files",
+  srcs = ["cast.k"],
+  deps = [
+      ":base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "configuration-files",
   srcs = ["configuration.k"],
   deps = [
@@ -128,6 +137,7 @@ klibrary(
   deps = [
       ":base-types-files",
       ":base-types-reflection-files",
+      ":cast-files",
       ":expression-files",
       ":for-files",
       ":if-files",

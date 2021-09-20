@@ -6,6 +6,7 @@ module PROOF-PROPOSE-SC-DEPLOY-FRAGMENT
 //@ end
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports CODE-METADATA-FUNCTION-SYNTAX
 
   claim <T><TT>
           <k> runPseudoCode(

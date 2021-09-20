@@ -19,7 +19,7 @@ klibrary(
   name = "trusted-lemma-all-keys-become-keys-a-files",
   srcs = [":trusted-lemma-all-keys-become-keys-a"],
   deps = [
-      "//protocol-correctness/lib:all-keys-become-keys-files",
+      "//protocol-correctness/lib/functions:all-keys-become-keys-files",
       ":trusted-lemma-all-keys-become-keys-a",
   ],
   visibility = ["//visibility:public"],
@@ -44,7 +44,7 @@ klibrary(
   name = "trusted-lemma-all-keys-become-keys-b-files",
   srcs = [":trusted-lemma-all-keys-become-keys-b"],
   deps = [
-      "//protocol-correctness/lib:all-keys-become-keys-files",
+      "//protocol-correctness/lib/functions:all-keys-become-keys-files",
       ":trusted-lemma-all-keys-become-keys-b",
   ],
   visibility = ["//visibility:public"],

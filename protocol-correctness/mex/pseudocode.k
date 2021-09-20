@@ -112,10 +112,6 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 
   // syntax KItem ::= "plusOne"
 
-  // syntax ExpressionCSV ::= reverseExpressionCsv(ExpressionCSV, ExpressionCSV)  [function, functional]
-
-  // syntax Int ::= metadataToInt(CodeMetadata)  [function, functional]
-
   // syntax CodeMetadata ::= codeMetadataFunction(upgradeable:Bool, payable:Bool, readable:Bool)
   //     [function, functional]
 

@@ -3,8 +3,8 @@
 module LEMMA-POUND-LAST
   imports LEMMAS-0-EXECUTE-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
 // 
 // module TRUSTED-LEMMA-POUND-LAST
 //@ end

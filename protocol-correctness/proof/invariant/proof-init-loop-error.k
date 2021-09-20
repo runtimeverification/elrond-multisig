@@ -6,6 +6,7 @@ module PROOF-INIT-LOOP-ERROR
 // module TRUSTED-INIT-LOOP-ERROR
 //@ end
   imports INIT-LOOP-PARTS
+  imports LIST-NO-COMMON-ITEM-SYNTAX
 
   claim <T> initLoopLhs(
               PrevIndex:Usize,
@@ -45,7 +46,7 @@ module PROOF-INIT-LOOP-ERROR
             UserIdToAddress0,
             AddressToUserId0,
             UserIdToRole0)
-        andBool notBool noCommonItem(add(PrevIndex, u(2)), AddressToUserId0, Addresses)
+        andBool notBool listNoCommonItem(add(PrevIndex, u(2)), AddressToUserId0, Addresses)
     //@ proof
     //@ trusted
     // [trusted]

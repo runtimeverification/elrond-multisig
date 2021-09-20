@@ -5,8 +5,8 @@ module LEMMA-PLISTLEN-LAST-TO-START
   imports K-EQUAL
 
 //@ trusted
-// require "protocol-correctness/lib/plistlen-functions.k"
-// require "protocol-correctness/lib/last-to-start.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/last-to-start.k"
 // 
 // module TRUSTED-LEMMA-PLISTLEN-LAST-TO-START
 //@ end

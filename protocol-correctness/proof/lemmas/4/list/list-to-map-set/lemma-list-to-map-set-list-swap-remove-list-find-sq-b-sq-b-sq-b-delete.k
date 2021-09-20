@@ -11,9 +11,9 @@ module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-SQ-B-SQ-B-SQ-B-DELETE
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
 //@ trusted
-// require "protocol-correctness/lib/list-find.k"
-// require "protocol-correctness/lib/list-swap-remove.k"
-// require "protocol-correctness/lib/list-to-map-set.k"
+// require "protocol-correctness/lib/functions/list-find.k"
+// require "protocol-correctness/lib/functions/list-swap-remove.k"
+// require "protocol-correctness/lib/functions/list-to-map-set.k"
 // 
 // module TRUSTED-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-SQ-B-SQ-B-SQ-B-DELETE
 //@ end

@@ -19,8 +19,8 @@ klibrary(
   name = "trusted-lemma-plistlen-remove-last-files",
   srcs = [":trusted-lemma-plistlen-remove-last"],
   deps = [
-      "//protocol-correctness/lib:plistlen-functions-files",
-      "//protocol-correctness/lib:remove-last-files",
+      "//protocol-correctness/lib/functions:plistlen-functions-files",
+      "//protocol-correctness/lib/functions:remove-last-files",
       ":trusted-lemma-plistlen-remove-last",
   ],
   visibility = ["//visibility:public"],

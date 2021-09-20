@@ -12,8 +12,8 @@ module LEMMA-LIST-TO-MAP-SET-LAST-TO-START
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
 //@ trusted
-// require "protocol-correctness/lib/last-to-start.k"
-// require "protocol-correctness/lib/list-to-map-set.k"
+// require "protocol-correctness/lib/functions/last-to-start.k"
+// require "protocol-correctness/lib/functions/list-to-map-set.k"
 // 
 // module TRUSTED-LEMMA-LIST-TO-MAP-SET-LAST-TO-START
 //@ end

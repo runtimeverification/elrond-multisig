@@ -36,6 +36,7 @@ endmodule
 module INSTRUMENTATION-LEMMA
   imports INSTRUMENTATION-CONCRETIZE
   imports INSTRUMENTATION-LEMMA-SYNTAX
+  imports LAST-FUNCTIONS-SYNTAX
 
   rule  lemmaSplitList([.:ExpressionCSV]) => .K
   rule  lemmaSplitList([_, L:ExpressionCSV])

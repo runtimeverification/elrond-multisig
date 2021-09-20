@@ -22,9 +22,9 @@ klibrary(
   name = "trusted-lemma-list-to-map-set-list-swap-remove-list-find-delete-files",
   srcs = [":trusted-lemma-list-to-map-set-list-swap-remove-list-find-delete"],
   deps = [
-      "//protocol-correctness/lib:list-find-files",
-      "//protocol-correctness/lib:list-swap-remove-files",
-      "//protocol-correctness/lib:list-to-map-set-files",
+      "//protocol-correctness/lib/functions:list-find-files",
+      "//protocol-correctness/lib/functions:list-swap-remove-files",
+      "//protocol-correctness/lib/functions:list-to-map-set-files",
       ":trusted-lemma-list-to-map-set-list-swap-remove-list-find-delete",
   ],
   visibility = ["//visibility:public"],

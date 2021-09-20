@@ -182,8 +182,9 @@ def _kprove_kompile_impl(ctx):
     ctx.actions.declare_file(ctx.label.name + '-kompiled/' + name)
     for name in [
       'allRules.txt', 'cache.bin', 'compiled.bin', 'compiled.txt',
-      'configVars.sh', 'definition.kore', 'macros.kore', 'mainModule.txt',
-      'parsed.txt', 'syntaxDefinition.kore', 'timestamp']
+      # 'compiled.json',
+      'configVars.sh', 'definition.kore', 'macros.kore',
+      'mainModule.txt', 'parsed.txt', 'syntaxDefinition.kore', 'timestamp']
   ]
 
   runfiles = depset(

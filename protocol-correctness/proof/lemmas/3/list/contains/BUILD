@@ -19,9 +19,9 @@ klibrary(
   name = "trusted-lemma-list-contains-pound-last-pound-remove-last-files",
   srcs = [":trusted-lemma-list-contains-pound-last-pound-remove-last"],
   deps = [
-      "//protocol-correctness/lib:last-functions-files",
-      "//protocol-correctness/lib:list-contains-files",
-      "//protocol-correctness/lib:remove-last-files",
+      "//protocol-correctness/lib/functions:last-functions-files",
+      "//protocol-correctness/lib/functions:list-contains-files",
+      "//protocol-correctness/lib/functions:remove-last-files",
       ":trusted-lemma-list-contains-pound-last-pound-remove-last",
   ],
   visibility = ["//visibility:public"],

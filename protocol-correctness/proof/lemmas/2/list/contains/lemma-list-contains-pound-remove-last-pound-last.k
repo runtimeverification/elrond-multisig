@@ -4,11 +4,11 @@ module LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
   imports LEMMAS-1-EXECUTE-SYNTAX
   imports INDUCTION
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/list-contains.k"
-// require "protocol-correctness/lib/list-elements-are-distinct.k"
-// require "protocol-correctness/lib/plistlen-functions.k"
-// require "protocol-correctness/lib/remove-last.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
+// require "protocol-correctness/lib/functions/list-elements-are-distinct.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/remove-last.k"
 // 
 // module TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
 //@ end

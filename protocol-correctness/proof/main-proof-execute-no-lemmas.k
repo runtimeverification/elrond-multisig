@@ -1,6 +1,6 @@
 require "protocol-correctness/lib/proof/induction/induction.k"
 require "protocol-correctness/lib/proof/unsorted/equality-without-substitution.k"
-require "protocol-correctness/lib/list-to-map-set.k"
+require "protocol-correctness/lib/functions/list-to-map-set.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/execution-proof-helpers.k"
 require "protocol-correctness/proof/instrumentation-change-user-role.k"

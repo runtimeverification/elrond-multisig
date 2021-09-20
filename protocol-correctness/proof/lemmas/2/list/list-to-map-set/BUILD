@@ -23,8 +23,8 @@ klibrary(
   name = "trusted-lemma-list-to-map-set-last-to-start-files",
   srcs = [":trusted-lemma-list-to-map-set-last-to-start"],
   deps = [
-      "//protocol-correctness/lib:last-to-start-files",
-      "//protocol-correctness/lib:list-to-map-set-files",
+      "//protocol-correctness/lib/functions:last-to-start-files",
+      "//protocol-correctness/lib/functions:list-to-map-set-files",
       ":trusted-lemma-list-to-map-set-last-to-start",
   ],
   visibility = ["//visibility:public"],

@@ -1,5 +1,5 @@
 require "protocol-correctness/lib/language/base-types.k"
-require "protocol-correctness/lib/list-contains.k"
+require "protocol-correctness/lib/functions/list-contains.k"
 
 module LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
   syntax KItem

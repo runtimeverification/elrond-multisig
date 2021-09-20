@@ -1,7 +1,7 @@
 require "protocol-correctness/lib/language/base-types.k"
-require "protocol-correctness/lib/last-functions.k"
-require "protocol-correctness/lib/plistlen-functions.k"
-require "protocol-correctness/lib/remove-last.k"
+require "protocol-correctness/lib/functions/last-functions.k"
+require "protocol-correctness/lib/functions/plistlen-functions.k"
+require "protocol-correctness/lib/functions/remove-last.k"
 
 module LAST-TO-START-SYNTAX
   imports BASE-TYPES-SYNTAX

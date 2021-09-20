@@ -23,9 +23,9 @@ klibrary(
   name = "trusted-lemma-list-to-map-set-pound-remove-last-pound-last-files",
   srcs = [":trusted-lemma-list-to-map-set-pound-remove-last-pound-last"],
   deps = [
-      "//protocol-correctness/lib:last-functions-files",
-      "//protocol-correctness/lib:list-to-map-set-files",
-      "//protocol-correctness/lib:remove-last-files",
+      "//protocol-correctness/lib/functions:last-functions-files",
+      "//protocol-correctness/lib/functions:list-to-map-set-files",
+      "//protocol-correctness/lib/functions:remove-last-files",
       ":trusted-lemma-list-to-map-set-pound-remove-last-pound-last",
   ],
   visibility = ["//visibility:public"],

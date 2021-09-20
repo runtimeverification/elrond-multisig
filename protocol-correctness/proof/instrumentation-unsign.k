@@ -3,6 +3,7 @@ require "protocol-correctness/proof/instrumentation-map.k"
 module INSTRUMENTATION-UNSIGN
   // TODO: Do I need this?
   imports INSTRUMENTATION-MAP
+  imports PLISTLEN-FUNCTIONS-SYNTAX
 
   syntax KItem ::= splitUnsign(actionId:Usize)
   syntax KItem ::= splitUnsign2(actionId:Usize)

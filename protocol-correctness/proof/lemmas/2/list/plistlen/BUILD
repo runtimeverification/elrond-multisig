@@ -19,8 +19,8 @@ klibrary(
   name = "trusted-lemma-plistlen-last-to-start-files",
   srcs = [":trusted-lemma-plistlen-last-to-start"],
   deps = [
-      "//protocol-correctness/lib:plistlen-functions-files",
-      "//protocol-correctness/lib:last-to-start-files",
+      "//protocol-correctness/lib/functions:plistlen-functions-files",
+      "//protocol-correctness/lib/functions:last-to-start-files",
       ":trusted-lemma-plistlen-last-to-start",
   ],
   visibility = ["//visibility:public"],

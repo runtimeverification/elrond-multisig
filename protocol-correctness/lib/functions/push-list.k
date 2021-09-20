@@ -1,5 +1,5 @@
 require "protocol-correctness/lib/language/base-types.k"
-require "protocol-correctness/lib/prepend.k"
+require "protocol-correctness/lib/functions/prepend.k"
 
 module PUSH-LIST-SYNTAX
   imports BASE-TYPES-SYNTAX

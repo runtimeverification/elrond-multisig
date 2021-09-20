@@ -7,6 +7,7 @@ module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ end
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports PUSH-LIST-SYNTAX
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

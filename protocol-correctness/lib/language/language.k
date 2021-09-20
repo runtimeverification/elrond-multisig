@@ -1,5 +1,6 @@
 require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/language/base-types-reflection.k"
+require "protocol-correctness/lib/language/cast.k"
 require "protocol-correctness/lib/language/expression.k"
 require "protocol-correctness/lib/language/for.k"
 require "protocol-correctness/lib/language/if.k"
@@ -17,6 +18,7 @@ require "protocol-correctness/lib/language/type-reflection.k"
 module LANGUAGE
   imports BASE-TYPES
   imports BASE-TYPES-REFLECTION
+  imports CAST
   imports EXPRESSION
   imports FOR
   imports IF

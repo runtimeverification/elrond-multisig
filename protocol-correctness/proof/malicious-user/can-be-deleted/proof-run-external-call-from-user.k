@@ -33,6 +33,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
+  imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
 
   claim <T><TT>
           <k> runExternalCallFromUser(MaliciousAddress:Address)
@@ -89,7 +90,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool unusedIdsInMapKeys(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
         andBool unusedIdsInMapKeys(?NewActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
 
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
 
     //@ proof
     //@ trusted

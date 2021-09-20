@@ -5,9 +5,9 @@ module LEMMA-LAST-TO-START-KRESULT
   imports INSTRUMENTATION-CONCRETIZE
 
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/plistlen-functions.k"
-// require "protocol-correctness/lib/last-to-start.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/last-to-start.k"
 // 
 // module TRUSTED-LEMMA-LAST-TO-START-KRESULT
 //@ end

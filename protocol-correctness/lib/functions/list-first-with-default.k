@@ -13,7 +13,7 @@ module LIST-FIRST-WITH-DEFAULT
   imports LIST-FIRST-WITH-DEFAULT-SYNTAX
 
   rule #listFirstWithDefault([.:ExpressionCSV], E:Expression) => E
-  rule #listFirstWithDefault([E:Expression , Es:ExpressionCSV], _:Expression) => E
+  rule #listFirstWithDefault([E:Expression , _Es:ExpressionCSV], _:Expression) => E
 endmodule
 
 module LIST-FIRST-WITH-DEFAULT-REFLECTION

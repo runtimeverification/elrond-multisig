@@ -19,7 +19,7 @@ klibrary(
   name = "trusted-lemma-plistlen-files",
   srcs = [":trusted-lemma-plistlen"],
   deps = [
-      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib/functions:plistlen-functions-files",
       ":trusted-lemma-plistlen",
   ],
   visibility = ["//visibility:public"],

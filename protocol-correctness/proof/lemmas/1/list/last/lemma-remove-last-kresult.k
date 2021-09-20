@@ -3,8 +3,8 @@
 module LEMMA-REMOVE-LAST-KRESULT
   imports LEMMAS-0-EXECUTE-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/plistlen-functions.k"
-// require "protocol-correctness/lib/remove-last.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/remove-last.k"
 // 
 // module TRUSTED-LEMMA-REMOVE-LAST-KRESULT
 //@ end

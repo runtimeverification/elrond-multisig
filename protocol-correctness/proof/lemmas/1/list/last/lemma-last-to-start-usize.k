@@ -5,8 +5,8 @@ module LEMMA-LAST-TO-START-USIZE
   imports INSTRUMENTATION-CONCRETIZE
 
 //@ trusted
-// require "protocol-correctness/lib/last-to-start.k"
-// require "protocol-correctness/lib/list-elements-are-usize.k"
+// require "protocol-correctness/lib/functions/last-to-start.k"
+// require "protocol-correctness/lib/functions/list-elements-are-usize.k"
 // 
 // module TRUSTED-LEMMA-LAST-TO-START-USIZE
 //   imports LIST-ELEMENTS-ARE-USIZE-SYNTAX

@@ -4,8 +4,8 @@ module LEMMA-SQUARE-BRACKET-SQUARE-BRACKET-UNDEF
   imports INDUCTION-SYNTAX
   imports K-EQUAL
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/list-contains.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
 // 
 // module TRUSTED-LEMMA-SQUARE-BRACKET-SQUARE-BRACKET-UNDEF
 //@ end

@@ -4,8 +4,8 @@ module LEMMA-LIST-CONTAINS-LIST-FIND
   imports INDUCTION-SYNTAX
   imports K-EQUAL
 //@ trusted
-// require "protocol-correctness/lib/list-contains.k"
-// require "protocol-correctness/lib/list-find.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
+// require "protocol-correctness/lib/functions/list-find.k"
 // 
 // module TRUSTED-LEMMA-LIST-CONTAINS-LIST-FIND
 //@ end

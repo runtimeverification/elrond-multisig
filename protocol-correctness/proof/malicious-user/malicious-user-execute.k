@@ -1,4 +1,4 @@
-require "protocol-correctness/multisig/lib/only-this-signer-diffs.k"
+require "protocol-correctness/multisig/lib/functions/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
 require "protocol-correctness/proof/properties/properties-execute.k"

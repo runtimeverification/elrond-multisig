@@ -4,7 +4,7 @@ module LEMMA-ADD-ONE-IF-NOT-NEGATIVE
   imports LEMMAS-0-EXECUTE-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
 //@ trusted
-// require "protocol-correctness/lib/add-one-if-not-negative.k"
+// require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
 // 
 // module TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
 //@ end

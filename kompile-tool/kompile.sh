@@ -21,4 +21,5 @@ OUTPUT_DIR=`dirname $OUTPUT_DIR`
 shift
 
 KOMPILE=$PARENT_DIR/kompile_tool.runfiles/__main__/kompile-tool/k/bin/kompile
-$KOMPILE --backend haskell "${INCLUDES[@]}" --directory $OUTPUT_DIR "$@"
+$KOMPILE --backend haskell "${INCLUDES[@]}" --directory "$OUTPUT_DIR" "$@"
+#  --emit-json

@@ -7,8 +7,8 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
   imports INDUCTION-SYNTAX
 
 //@ trusted
-// require "protocol-correctness/lib/list-contains.k"
-// require "protocol-correctness/lib/list-swap-remove.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
+// require "protocol-correctness/lib/functions/list-swap-remove.k"
 // 
 // module TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
 //@ end

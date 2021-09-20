@@ -4,9 +4,9 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
   imports INDUCTION-SYNTAX
 
 //@ trusted
-// require "protocol-correctness/lib/list-find.k"
-// require "protocol-correctness/lib/list-swap-remove.k"
-// require "protocol-correctness/lib/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/list-find.k"
+// require "protocol-correctness/lib/functions/list-swap-remove.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
 // 
 // module TRUSTED-LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
 //@ end

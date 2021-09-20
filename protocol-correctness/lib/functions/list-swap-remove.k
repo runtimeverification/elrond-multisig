@@ -1,5 +1,5 @@
 require "protocol-correctness/lib/language/base-types.k"
-require "protocol-correctness/lib/last-to-start.k"
+require "protocol-correctness/lib/functions/last-to-start.k"
 
 module LIST-SWAP-REMOVE-SYNTAX
   imports BASE-TYPES-SYNTAX

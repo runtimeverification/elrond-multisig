@@ -19,9 +19,9 @@ klibrary(
   name = "trusted-lemma-plistlen-list-swap-remove-list-find-files",
   srcs = [":trusted-lemma-plistlen-list-swap-remove-list-find"],
   deps = [
-      "//protocol-correctness/lib:list-find-files",
-      "//protocol-correctness/lib:list-swap-remove-files",
-      "//protocol-correctness/lib:plistlen-functions-files",
+      "//protocol-correctness/lib/functions:list-find-files",
+      "//protocol-correctness/lib/functions:list-swap-remove-files",
+      "//protocol-correctness/lib/functions:plistlen-functions-files",
       ":trusted-lemma-plistlen-list-swap-remove-list-find",
   ],
   visibility = ["//visibility:public"],

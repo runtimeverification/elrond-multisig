@@ -3,9 +3,9 @@
 module LEMMA-LIST-CONTAINS-REMOVE-LAST-NOT-POUND-LAST
   imports INDUCTION-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/last-functions.k"
-// require "protocol-correctness/lib/list-contains.k"
-// require "protocol-correctness/lib/remove-last.k"
+// require "protocol-correctness/lib/functions/last-functions.k"
+// require "protocol-correctness/lib/functions/list-contains.k"
+// require "protocol-correctness/lib/functions/remove-last.k"
 // 
 // module TRUSTED-LEMMA-LIST-CONTAINS-REMOVE-LAST-NOT-POUND-LAST
 //@ end

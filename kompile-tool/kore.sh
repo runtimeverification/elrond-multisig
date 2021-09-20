@@ -50,11 +50,24 @@ PATH=$(realpath $KOMPILE_TOOL_DIR/k/bin):$PATH
 
 cd $(dirname $KOMPILE_DIR)
 
-$BACKEND_COMMAND \
-    --version \
-    --smt-timeout 4000 \
-    $DEFINITION \
-    --prove $SPEC \
-    --module $MODULE_NAME \
-    --spec-module $SPEC_MODULE_NAME \
-    --output $OUTPUT
+if [ -z "$KDEBUG" ]
+then
+  $BACKEND_COMMAND \
+      --version \
+      --smt-timeout 4000 \
+      $DEFINITION \
+      --prove $SPEC \
+      --module $MODULE_NAME \
+      --spec-module $SPEC_MODULE_NAME \
+      --output $OUTPUT
+else
+  $KDEBUG \
+      $BACKEND_COMMAND \
+      --version \
+      --smt-timeout 4000 \
+      $DEFINITION \
+      --prove $SPEC \
+      --module $MODULE_NAME \
+      --spec-module $SPEC_MODULE_NAME \
+      --output $OUTPUT
+fi

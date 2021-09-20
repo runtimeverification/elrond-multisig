@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/list-first-with-default.k"
+require "protocol-correctness/lib/functions/list-first-with-default.k"
 require "protocol-correctness/proof/instrumentation-map.k"
 require "protocol-correctness/pseudocode.k"
 require "protocol-correctness/proof/instrumentation/pushlist/pushlist-instrumentation.k"

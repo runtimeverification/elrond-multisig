@@ -8,6 +8,7 @@ module PROOF-PUSH-LIST-NOT-EMPTY
   imports K-EQUAL
   imports PUSHLIST-INSTRUMENTATION-SYNTAX
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
+  imports PUSH-LIST-SYNTAX
 
   claim lemmaPushListNotEmpty(L:ExpressionCSV, E:Expression) => .K
     requires true

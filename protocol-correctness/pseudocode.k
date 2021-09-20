@@ -1,169 +1,20 @@
+require "protocol-correctness/lib/functions/functions.k"
 require "protocol-correctness/lib/language/language.k"
 
-require "protocol-correctness/lib/last-functions.k"
-require "protocol-correctness/lib/last-to-start.k"
-require "protocol-correctness/lib/list-contains.k"
-require "protocol-correctness/lib/list-find.k"
-require "protocol-correctness/lib/list-swap-remove.k"
-require "protocol-correctness/lib/plistlen-functions.k"
-require "protocol-correctness/lib/prepend.k"
-require "protocol-correctness/lib/push-list.k"
-require "protocol-correctness/lib/remove-last.k"
+require "protocol-correctness/lib/functions/list-contains.k"
+require "protocol-correctness/lib/functions/list-find.k"
+require "protocol-correctness/lib/functions/list-swap-remove.k"
+require "protocol-correctness/lib/functions/push-list.k"
+
+require "protocol-correctness/multisig/lib/language/syntax.k"
+
+require "protocol-correctness/multisig/lib/functions/functions.k"
+require "protocol-correctness/multisig/lib/language/language.k"
 
 module PSEUDOCODE-SYNTAX
-  imports INT
-  imports LIST
-  imports STRING
-
+  imports MULTISIG-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports RUNNING-SYNTAX
-
-  syntax CodeMetadata ::= "CodeMetadata::DEFAULT"     [function]
-                      |   "CodeMetadata::UPGRADEABLE" [function]
-                      |   "CodeMetadata::PAYABLE"     [function]
-                      |   "CodeMetadata::READABLE"    [function]
-
-  syntax CodeMetadata ::= meta(Int)  // Assumes no operations on this.
-  syntax UserRole ::= "None" | "Proposer" | "BoardMember"
-  syntax Action ::= "Nothing"
-                |   AddBoardMember(Address)
-                |   AddProposer(Address)
-                |   RemoveUser(Address)
-                |   ChangeQuorum(Usize)
-                |   SendEgld(to: Address, amount: BigUint, data: BoxedBytes)
-                |   SCDeploy(
-                        amount: BigUint,
-                        code: BoxedBytes,
-                        codeMetadata: CodeMetadata,
-                        arguments: ExpressionList)  // list of BoxedBytes
-                |   SCCall(
-                        to: Address,
-                        amount: BigUint,
-                        function: BoxedBytes,
-                        arguments: ExpressionList)  // list of BoxedBytes
-
-  syntax Variable ::= "action"        [token]
-                  |   "action_id"     [token]
-                  |   "address"       [token]
-                  |   "caller"        [token]
-                  |   "caller_address"[token]
-                  |   "caller_id"     [token]
-                  |   "caller_role"   [token]
-                  |   "code_metadata" [token]
-                  |   "data"          [token]
-                  |   "gas_left"      [token]
-                  |   "i"             [token]
-                  |   "new_address"   [token]
-                  |   "new_board_members" [token]
-                  |   "num_board_members" [token]
-                  |   "num_proposers" [token]
-                  |   "num_users"     [token]
-                  |   "old_role"      [token]
-                  |   "quorum"        [token]
-                  |   "result"        [token]
-                  |   "signer_ids"    [token]
-                  |   "signer_pos"    [token]
-                  |   "user_id"       [token]
-                  |   "user_role"     [token]
-                  |   "valid_signers_count" [token]
-
-  syntax Value  ::= UserRole
-                |   CodeMetadata
-  syntax Expression ::= Action
-
-  syntax FunctionTag  ::= "proposeAction"             // (action)
-                      |   "setQuorum"                 // (quorum)
-                      |   "setActionLastIndex"        // (index)
-                      |   "setActionData"             // (action_id, action)
-                      |   "setActionSignerIDs"        // (action_id, signer_list)
-                      |   "setNumBoardMembers"        // (usize)
-                      |   "setNumProposers"           // (usize)
-                      |   "setNumUsers"               // (usize)
-                      |   "setUserId"                 // (address, user_id)
-                      |   "setUserAddress"            // (user_id, address)
-                      |   "setUserIdToRole"           // (user_id, role)
-                      |   "getActionData"             // (action_id)
-                      |   "getActionSignerIds"        // (action_id)
-                      |   "getActionValidSignerCount" // (action_id)
-                      |   "getCaller"                 // ()
-                      |   "getNumBoardMembers"        // ()
-                      |   "getNumProposers"           // ()
-                      |   "getNumUsers"               // ()
-                      |   "getOrCreateUser"           // (address)
-                      |   "getUserId"                 // (address)
-                      |   "getUserIdToRole"           // (user_id)
-                      |   "getActionLastIndex"        // ()
-                      |   "getQuorum"                 // ()
-                      |   "getGasLeft"                // ()
-                      |   "deployContract"            // (gas_left, amount, code, code_metadata, arguments)
-                      |   "userRoleCanPropose"        // (user_role)
-                      |   "userRoleCanSign"           // (user_role)
-                      |   "userRoleCanPerformAction"  // (user_role)
-                      |   "userRoleCanDiscardAction"  // (user_role)
-                      |   "listContains"              // ([list], Usize)
-                      |   "listFind"                  // ([list], Usize)
-                      |   "listLen"                   // ([list])
-                      |   "listSwapRemove"            // ([list])
-                      |   "isEmptyList"               // ([list])
-                      |   "pushList"                  // ([list], Usize)
-                      |   "isEmptyActionData"         // (action_id)
-                      |   "canSign"                   // (user_id)
-                      |   "performAction"             // (action)
-                      |   "performActionNoLogging"    // (action)
-                      |   "performActionFromId"       // (action_id)
-                      |   "quorumReached"             // (action_id)
-                      |   "clearAction"               // (action_id)
-                      |   "changeUserRole"            // (user_id, user_role)
-                      |   "countCanSign"              // ([list])
-                      |   "sendTx"                    // (address, amount, data)
-                      |   "asyncCall"                 // (address, amount, [data])
-
-  syntax EndpointTag  ::= "init"                // (quorum, board)
-                      |   "proposeAddBoardMember"  // (user_id)
-                      |   "proposeAddProposer"  // (user_id)
-                      |   "proposeRemoveUser"  // (user_id)
-                      |   "proposeChangeQuorum"  // (quorum)
-                      |   "proposeSendEgld"  // (address, amount, args)
-                      |   "proposeSCDeploy"  // (amount, code, upgradeable, payable, readable, args)
-                      |   "proposeSCCall"  // (to_address, amount, function, args)
-                      |   "sign"  // (action_id)
-                      |   "unsign"  // (action_id)
-                      |   "performActionEndpoint"  // (action_id)
-                      |   "discardAction"   // (action_id)
-
-endmodule
-
-module PSEUDOCODE-KRESULT
-  imports PSEUDOCODE-SYNTAX
-  syntax Bool ::= isKResultAction(Action)  [function, functional]
-
-  rule isKResultAction(Nothing) => true
-  rule isKResultAction(AddBoardMember(A:Address)) => isKResult(A)
-  rule isKResultAction(AddProposer(A:Address)) => isKResult(A)
-  rule isKResultAction(RemoveUser(A:Address)) => isKResult(A)
-  rule isKResultAction(ChangeQuorum(U:Usize)) => isKResult(U)
-  rule  isKResultAction(SendEgld(To:Address, Amount:BigUint, Data:BoxedBytes))
-        => isKResult(To) andBool isKResult(Amount) andBool isKResult(Data)
-  rule  isKResultAction(SCDeploy(
-                        Amount:BigUint,
-                        Code:BoxedBytes,
-                        CodeMetadata:CodeMetadata,
-                        Arguments:ExpressionList))
-        => isKResult(Amount)
-            andBool isKResult(Code)
-            andBool isKResult(CodeMetadata)
-            andBool isKResult(Arguments)
-  rule isKResultAction(SCCall(
-                        To:Address,
-                        Amount:BigUint,
-                        Function:BoxedBytes,
-                        Arguments:ExpressionList))
-        => isKResult(To)
-            andBool isKResult(Amount)
-            andBool isKResult(Function)
-            andBool isKResult(Arguments)
-
-  rule isKResultExpression(A:Action) => isKResultAction(A)
 endmodule
 
 module PSEUDOCODE
@@ -172,36 +23,13 @@ module PSEUDOCODE
   imports PSEUDOCODE-EXPRESSION
   imports PSEUDOCODE-FUNCTION-CALL
   imports PSEUDOCODE-FUNCTIONS
-  imports PSEUDOCODE-KRESULT
   imports PSEUDOCODE-SYNTAX
-endmodule
 
-module PSEUDOCODE-TYPE-REFLECTION
-  imports FLOW-SYNTAX
-  imports PSEUDOCODE-SYNTAX
-  imports TYPE-REFLECTION-SYNTAX
+  imports LANGUAGE
+  imports FUNCTIONS
 
-  syntax ReflectionType ::= "rUserRole"
-                        |   "rAction"
-                        |   "rCodeMetadata"
-
-  rule cast(U:UserRole, rUserRole) => U  [label(castUserRole)]
-  rule (.K => stuck) ~> cast(V:KItem, rUserRole)
-    ensures notBool isUserRole(V)
-    [owise, label(castUserRoleStuck)]
-
-  rule cast(A:Action, rAction) => A  [label(castAction)]
-  rule (.K => stuck) ~> cast(V:KItem, rAction)
-    ensures notBool isAction(V)
-    [owise, label(castActionStuck)]
-
-  rule defaultValue(rUserRole) => None
-  rule defaultValue(rAction) => Nothing
-  rule defaultValue(rCodeMetadata) => CodeMetadata::DEFAULT
-
-  rule valueOfType(V:KItem, rUserRole) => isUserRole(V)
-  rule valueOfType(V:KItem, rAction) => isAction(V)
-  rule valueOfType(V:KItem, rCodeMetadata) => isCodeMetadata(V)
+  imports MULTISIG-LANGUAGE
+  imports MULTISIG-FUNCTIONS
 endmodule
 
 module PSEUDOCODE-EXPRESSION
@@ -227,29 +55,11 @@ module PSEUDOCODE-FUNCTIONS-SYNTAX
 
   imports PSEUDOCODE-SYNTAX
 
-  imports ADD-ONE-IF-NOT-NEGATIVE-SYNTAX
-  imports LAST-FUNCTIONS-SYNTAX
-  imports LAST-TO-START-SYNTAX
-  imports LIST-CONTAINS-SYNTAX
-  imports LIST-FIND-SYNTAX
-  imports LIST-SWAP-REMOVE-SYNTAX
-  imports PLISTLEN-FUNCTIONS-SYNTAX
-  imports PREPEND-SYNTAX
-  imports PUSH-LIST-SYNTAX
-  imports REMOVE-LAST-SYNTAX
-
   syntax KResult
 
   syntax FunctionTag ::= "proposeActionSCDeploy"
 
   syntax KItem ::= "plusOne"
-
-  syntax ExpressionCSV ::= reverseExpressionCsv(ExpressionCSV, ExpressionCSV)  [function, functional]
-
-  syntax Int ::= metadataToInt(CodeMetadata)  [function, functional]
-
-  syntax CodeMetadata ::= codeMetadataFunction(upgradeable:Bool, payable:Bool, readable:Bool)
-      [function, functional]
 
 endmodule
 
@@ -739,16 +549,6 @@ module PSEUDOCODE-FUNCTIONS
             Arguments:ExpressionList))
         => evaluate(void)
     requires isKResult(Arguments)
-
-  rule metadataToInt(meta(Value:Int)) => Value
-
-  rule codeMetadataFunction(Upgradeable:Bool, Payable:Bool, Readable:Bool)
-      => meta(
-               metadataToInt(CodeMetadata::DEFAULT)
-          |Int #if Upgradeable #then metadataToInt(CodeMetadata::UPGRADEABLE) #else 0 #fi
-          |Int #if Payable #then metadataToInt(CodeMetadata::PAYABLE) #else 0 #fi
-          |Int #if Readable #then metadataToInt(CodeMetadata::READABLE) #else 0 #fi
-        )
 
 endmodule
 

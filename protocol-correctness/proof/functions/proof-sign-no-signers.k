@@ -7,6 +7,7 @@ module PROOF-SIGN-NO-SIGNERS
 //@ end
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports CAST-SYNTAX
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

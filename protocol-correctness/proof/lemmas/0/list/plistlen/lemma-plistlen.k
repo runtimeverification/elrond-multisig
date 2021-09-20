@@ -3,7 +3,7 @@
 module LEMMA-PLISTLEN
   imports LEMMAS-0-EXECUTE-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/plistlen-functions.k"
+// require "protocol-correctness/lib/functions/plistlen-functions.k"
 // //
 // module TRUSTED-LEMMA-PLISTLEN
 //@ end
