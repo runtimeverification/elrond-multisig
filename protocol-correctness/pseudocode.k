@@ -94,10 +94,10 @@ module PSEUDOCODE-FUNCTIONS
   imports MAP
 
   imports MAP-UTILS
-  imports PSEUDOCODE-COMMON
+  // imports PSEUDOCODE-COMMON
   imports PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
-  imports PSEUDOCODE-SYNTAX
+  // imports PSEUDOCODE-SYNTAX
 
   imports EXPRESSION-SYNTAX
   imports FLOW-SYNTAX
@@ -375,14 +375,6 @@ module PSEUDOCODE-FUNCTIONS
         => [#listSwapRemove(L, I)]
     // TODO: Do things work with this requires?
     requires I >=Int 0
-
-  rule #Ceil(removeLast(@Es:ExpressionCSV))
-      =>  {pListLen([@Es]) >Int 0 #Equals true}
-          #And #Ceil(@Es)
-    [anywhere, simplification]
-
-  rule reverseExpressionCsv(., L2:ExpressionCSV) => L2
-  rule reverseExpressionCsv((E:Expression , Es:ExpressionCSV), L2:ExpressionCSV) => reverseExpressionCsv(Es, (E , L2))
 
   rule call(performActionFromId(ActionId:Usize))
         => runPseudoCode(
