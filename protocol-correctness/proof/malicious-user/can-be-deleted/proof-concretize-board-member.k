@@ -58,8 +58,8 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
 
         // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
-        // andBool valuesAreOfType(UserIdToRole, rUserRole)
-        // andBool valuesAreKResult(UserIdToRole)
+        // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+        // andBool mapValuesAreKResult(UserIdToRole)
     ensures true
         //andBool ?UserIdToAddress1 ==K UserIdToAddress
         andBool UserIdToAddress ==K (MaliciousId |-> MaliciousAddress UserId |-> ?UserAddress:Address ?UserIdToAddress:Map)
@@ -122,8 +122,8 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
 
         // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
-        // andBool valuesAreOfType(UserIdToRole, rUserRole)
-        // andBool valuesAreKResult(UserIdToRole)
+        // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+        // andBool mapValuesAreKResult(UserIdToRole)
     ensures true
         //andBool ?UserIdToAddress1 ==K UserIdToAddress
         andBool UserIdToAddress ==K (MaliciousId |-> MaliciousAddress UserId |-> MaliciousAddress:Address ?UserIdToAddress:Map)

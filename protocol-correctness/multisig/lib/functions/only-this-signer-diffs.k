@@ -1,6 +1,6 @@
 require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/functions/list-to-map-set.k"
-require "protocol-correctness/multisig/lib/functions/at-most-this-signer-list.k"
+require "protocol-correctness/multisig/lib/functions/pound-at-most-this-signer-list.k"
 
 module ONLY-THIS-SIGNER-DIFFS-SYNTAX
   imports BASE-TYPES-SYNTAX
@@ -19,7 +19,7 @@ module ONLY-THIS-SIGNER-DIFFS-SYNTAX
 endmodule
 
 module ONLY-THIS-SIGNER-DIFFS
-  imports AT-MOST-THIS-SIGNER-LIST-SYNTAX
+  imports POUND-AT-MOST-THIS-SIGNER-LIST-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports BOOL
   imports K-EQUAL
@@ -42,6 +42,9 @@ module ONLY-THIS-SIGNER-DIFFS
           )
       => sameListElementsExceptOne(A, Old, New)
         andBool onlyThisSignerDiffs(A, OldSigners, NewSigners, UserIdToRole)
+    ensures true
+        andBool notBool K in_keys(NewSigners)
+        andBool notBool K in_keys(OldSigners)
     [simplification]
   rule onlyThisSignerDiffs(
               A:Usize,
@@ -51,6 +54,7 @@ module ONLY-THIS-SIGNER-DIFFS
       => atMostThisSignerList(A, Old, UserIdToRole)
         andBool onlyThisSignerDiffs(A, OldSigners, NewSigners, UserIdToRole)
     requires notBool K in_keys(NewSigners)
+    ensures notBool K in_keys(OldSigners)
     [simplification]
   rule onlyThisSignerDiffs(
               A:Usize,
@@ -58,7 +62,8 @@ module ONLY-THIS-SIGNER-DIFFS
               (K |-> New:ExpressionList NewSigners:Map),
               UserIdToRole:Map)
       => New ==K [A, .] andBool onlyThisSignerDiffs(A, OldSigners, NewSigners, UserIdToRole)
-    requires notBool K in_keys(NewSigners)
+    requires notBool K in_keys(OldSigners)
+    ensures notBool K in_keys(NewSigners)
     [simplification]
 
   // TODO: Proof

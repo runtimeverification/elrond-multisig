@@ -10,6 +10,7 @@ module PROPERTIES-EXECUTE
   imports MAIN-PROOF-EXECUTE
   imports INVARIANT-EXECUTE
   imports MAP-EXECUTE
+  imports CONCRETIZE-VALUE-SYNTAX
 
   syntax KItem ::= allBoardMembersSignFor(actionId:Usize)
   syntax KItem ::= boardMembersSignFor(actionId:Usize, userRoles:Map)
@@ -157,8 +158,8 @@ module PROPERTIES-EXECUTE
 
   // rule newUserIdToRoleInvariant(K:KItem |-> V:KItem UserIdToRole:Map, UserIdToAddress:Map)
   //   => true
-  //     andBool valueOfType(V, rUserRole)  // valuesAreOfType(UserIdToRole, rUserRole)
-  //     andBool isKResult(V)  // valuesAreKResult(UserIdToRole)
+  //     andBool valueOfType(V, rUserRole)  // mapValuesAreOfType(UserIdToRole, rUserRole)
+  //     andBool isKResult(V)  // mapValuesAreKResult(UserIdToRole)
   //     andBool valueIsNotEmpty(V, rUserRole)  // valuesAreNotEmpty(UserIdToRole, rUserRole)
   //     andBool valueOfType(K, rUsize)  // keysAreOfType(UserIdToRole, rUsize)
   //     andBool isKResult(K)  // keysAreKResult(UserIdToRole)
@@ -174,8 +175,8 @@ module PROPERTIES-EXECUTE
 
   // rule userIdToAddressInvariant(K:KItem |-> V:KItem UserIdToAddress:Map, AddressToUserId:Map)
   //   => true
-  //     andBool valueOfType(V, rAddress)  // valuesAreOfType(UserIdToAddress, rAddress)
-  //     andBool isKResult(V)  // valuesAreKResult(UserIdToAddress)
+  //     andBool valueOfType(V, rAddress)  // mapValuesAreOfType(UserIdToAddress, rAddress)
+  //     andBool isKResult(V)  // mapValuesAreKResult(UserIdToAddress)
   //     andBool valueIsNotEmpty(V, rAddress)  // valuesAreNotEmpty(UserIdToAddress, rAddress)
   //     andBool V in_keys(AddressToUserId) andBool AddressToUserId[V] ==K K  // mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
 

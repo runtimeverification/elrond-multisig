@@ -4,7 +4,10 @@ require "protocol-correctness/lib/language/language.k"
 require "protocol-correctness/lib/functions/list-contains.k"
 require "protocol-correctness/lib/functions/list-find.k"
 require "protocol-correctness/lib/functions/list-swap-remove.k"
+require "protocol-correctness/lib/functions/plistlen-functions.k"
 require "protocol-correctness/lib/functions/push-list.k"
+require "protocol-correctness/lib/functions/remove-last.k"
+require "protocol-correctness/lib/functions/reverse-expression-csv.k"
 
 require "protocol-correctness/multisig/lib/language/syntax.k"
 
@@ -95,23 +98,20 @@ module PSEUDOCODE-FUNCTIONS
   imports PSEUDOCODE-CONFIGURATION
   imports PSEUDOCODE-FUNCTIONS-SYNTAX
   imports PSEUDOCODE-SYNTAX
-  imports PSEUDOCODE-TYPE-REFLECTION
 
   imports EXPRESSION-SYNTAX
   imports FLOW-SYNTAX
   imports FUNCTION-CALL-SYNTAX
   imports MAP-UTILS-SYNTAX
+  imports MULTISIG-TYPE-REFLECTION-SYNTAX
 
-  imports ADD-ONE-IF-NOT-NEGATIVE
-  imports LAST-FUNCTIONS
-  imports LAST-TO-START
-  imports LIST-CONTAINS
-  imports LIST-FIND
-  imports LIST-SWAP-REMOVE
-  imports PLISTLEN-FUNCTIONS
-  imports PREPEND
-  imports PUSH-LIST
-  imports REMOVE-LAST
+  imports LIST-CONTAINS-SYNTAX
+  imports LIST-FIND-SYNTAX
+  imports LIST-SWAP-REMOVE-SYNTAX
+  imports PLISTLEN-FUNCTIONS-SYNTAX
+  imports PUSH-LIST-SYNTAX
+  imports REMOVE-LAST-SYNTAX
+  imports REVERSE-EXPRESSION-CSV-SYNTAX
 
   rule call(init(Quorum:Usize, Board:ExpressionList)) =>
       runPseudoCode(

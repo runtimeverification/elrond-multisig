@@ -197,6 +197,7 @@ klibrary(
   name = "instrumentation-unsign-files",
   srcs = ["instrumentation-unsign.k"],
   deps = [
+      "//protocol-correctness/lib/functions:concretize-expression-list-files",
       ":instrumentation-map-files",
   ],
   visibility = ["//visibility:public"],
@@ -206,6 +207,7 @@ klibrary(
   name = "invariant-files",
   srcs = ["invariant.k"],
   deps = [
+      "//protocol-correctness/lib/functions:map-values-are-kresult-files",
       ":execution-proof-helpers-files",
   ],
   visibility = ["//visibility:public"],

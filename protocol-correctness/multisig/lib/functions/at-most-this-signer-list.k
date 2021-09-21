@@ -2,7 +2,7 @@ require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/multisig/lib/functions/can-sign-function.k"
 require "protocol-correctness/multisig/lib/language/cast.k"
 
-module AT-MOST-THIS-SIGNER-LIST-SYNTAX
+module POUND-AT-MOST-THIS-SIGNER-LIST-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports BOOL
   imports MAP
@@ -10,7 +10,7 @@ module AT-MOST-THIS-SIGNER-LIST-SYNTAX
   syntax Bool ::= atMostThisSignerList(signerId:Usize, signatures:ExpressionList, userRoles:Map)  [function]
 endmodule
 
-module AT-MOST-THIS-SIGNER-LIST-ADDITIONAL-SYNTAX
+module POUND-AT-MOST-THIS-SIGNER-LIST-ADDITIONAL-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports BOOL
   imports MAP
@@ -18,9 +18,9 @@ module AT-MOST-THIS-SIGNER-LIST-ADDITIONAL-SYNTAX
   syntax Bool ::= #atMostThisSignerList(signerId:Usize, signatures:ExpressionList, userRoles:Map)  [function, functional]
 endmodule
 
-module AT-MOST-THIS-SIGNER-LIST
-  imports AT-MOST-THIS-SIGNER-LIST-SYNTAX
-  imports AT-MOST-THIS-SIGNER-LIST-ADDITIONAL-SYNTAX
+module POUND-AT-MOST-THIS-SIGNER-LIST
+  imports POUND-AT-MOST-THIS-SIGNER-LIST-SYNTAX
+  imports POUND-AT-MOST-THIS-SIGNER-LIST-ADDITIONAL-SYNTAX
   imports CAN-SIGN-FUNCTION-SYNTAX
   imports K-EQUAL
   imports MAP

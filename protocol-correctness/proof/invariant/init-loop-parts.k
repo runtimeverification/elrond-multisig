@@ -221,8 +221,8 @@ module INIT-LOOP-PARTS
       // andBool allValuesBecomeKeys(UserIdToAddress, AddressToUserId)
 
       andBool addressToUserIdInvariant(AddressToUserId)
-      // andBool valuesAreOfType(AddressToUserId, rUsize)
-      // andBool valuesAreKResult(AddressToUserId)
+      // andBool mapValuesAreOfType(AddressToUserId, rUsize)
+      // andBool mapValuesAreKResult(AddressToUserId)
       // andBool valuesAreNotEmpty(AddressToUserId, rUsize)
       // andBool valuesAreDistinct(AddressToUserId)
       andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
@@ -233,8 +233,8 @@ module INIT-LOOP-PARTS
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
 
       andBool userIdToRoleInvariant(UserIdToRole)
-      // andBool valuesAreOfType(UserIdToRole, rUserRole)
-      // andBool valuesAreKResult(UserIdToRole)
+      // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      // andBool mapValuesAreKResult(UserIdToRole)
       // andBool valuesAreNotEmpty(UserIdToRole, rUserRole)
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
 

@@ -5,6 +5,8 @@ module PROOF-PROPOSE-ACTION-ERROR-NO-USER
 //@ end
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   claim <T><TT>
           <k> call(proposeAction(_Action:Action)) ~> K:K
@@ -49,12 +51,12 @@ module PROOF-PROPOSE-ACTION-ERROR-NO-USER
     requires true
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      andBool valuesAreKResult(AddressToUserId)
-      andBool valuesAreOfType(AddressToUserId, rUsize)
+      andBool mapValuesAreKResult(AddressToUserId)
+      andBool mapValuesAreOfType(AddressToUserId, rUsize)
       andBool valuesAreNotEmpty(AddressToUserId, rUsize)
 
-      andBool valuesAreOfType(UserIdToRole, rUserRole)
-      andBool valuesAreKResult(UserIdToRole)
+      andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      andBool mapValuesAreKResult(UserIdToRole)
 
       andBool notBool CallerAddress in_keys(AddressToUserId)
     ensures true

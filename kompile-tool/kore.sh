@@ -34,12 +34,16 @@ REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
 KORE_EXEC="$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-exec) --breadth $BREADTH"
 KORE_REPL="$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-repl) --repl-script $REPL_SCRIPT"
 
+DEBUG_COMMAND="time"
 BACKEND_COMMAND=$KORE_EXEC
 if [ $# -eq 0 ]; then
   BACKEND_COMMAND=$KORE_EXEC
 else
   if [ "$1" == "--debug" ]; then
     BACKEND_COMMAND=$KORE_REPL
+    if [ -n "$KDEBUG" ]; then
+      DEBUG_COMMAND="$KDEBUG"
+    fi
   else
     echo "Unknown argument: '$1'"
     exit 1
@@ -50,24 +54,12 @@ PATH=$(realpath $KOMPILE_TOOL_DIR/k/bin):$PATH
 
 cd $(dirname $KOMPILE_DIR)
 
-if [ -z "$KDEBUG" ]
-then
-  $BACKEND_COMMAND \
-      --version \
-      --smt-timeout 4000 \
-      $DEFINITION \
-      --prove $SPEC \
-      --module $MODULE_NAME \
-      --spec-module $SPEC_MODULE_NAME \
-      --output $OUTPUT
-else
-  $KDEBUG \
-      $BACKEND_COMMAND \
-      --version \
-      --smt-timeout 4000 \
-      $DEFINITION \
-      --prove $SPEC \
-      --module $MODULE_NAME \
-      --spec-module $SPEC_MODULE_NAME \
-      --output $OUTPUT
-fi
+$DEBUG_COMMAND \
+    $BACKEND_COMMAND \
+    --version \
+    --smt-timeout 4000 \
+    $DEFINITION \
+    --prove $SPEC \
+    --module $MODULE_NAME \
+    --spec-module $SPEC_MODULE_NAME \
+    --output $OUTPUT

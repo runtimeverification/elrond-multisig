@@ -38,6 +38,8 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
 //   imports PROPERTIES-EXECUTE
 //   imports PSEUDOCODE
 //@ end
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   claim <T><TT>
           <k> pickBoardMemberOrProposer(UserIdToRole)
@@ -90,8 +92,8 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
           ActionSigners,
           expand(expand(expanded)))
       // TODO: Move everything below to the invariant.
-      andBool valuesAreOfType(UserIdToAddress, rAddress)
-      andBool valuesAreKResult(UserIdToAddress)
+      andBool mapValuesAreOfType(UserIdToAddress, rAddress)
+      andBool mapValuesAreKResult(UserIdToAddress)
 
       // andBool newUserIdToRoleInvariant(UserIdToRole, UserIdToAddress)
       // andBool userIdToAddressInvariant(UserIdToAddress, AddressToUserId)

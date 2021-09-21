@@ -1,6 +1,7 @@
 require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
 require "protocol-correctness/lib/functions/all-keys-become-keys.k"
 require "protocol-correctness/lib/functions/bool-to-int.k"
+require "protocol-correctness/lib/functions/concretize-value.k"
 require "protocol-correctness/lib/functions/forall-v-greater-or-equal-than-u-v-not-in-m.k"
 require "protocol-correctness/lib/functions/last-functions.k"
 require "protocol-correctness/lib/functions/last-to-start.k"
@@ -12,6 +13,8 @@ require "protocol-correctness/lib/functions/list-first-with-default.k"
 require "protocol-correctness/lib/functions/list-no-common-item.k"
 require "protocol-correctness/lib/functions/list-swap-remove.k"
 require "protocol-correctness/lib/functions/list-to-map-set.k"
+require "protocol-correctness/lib/functions/map-values-are-kresult.k"
+require "protocol-correctness/lib/functions/map-values-are-of-type.k"
 require "protocol-correctness/lib/functions/plistlen-functions.k"
 require "protocol-correctness/lib/functions/prepend.k"
 require "protocol-correctness/lib/functions/push-list.k"
@@ -25,6 +28,7 @@ module FUNCTIONS
   imports ADD-ONE-IF-NOT-NEGATIVE
   imports ALL-KEYS-BECOME-KEYS
   imports BOOL-TO-INT
+  imports CONCRETIZE-VALUE
   imports FORALL-V-GREATER-OR-EQUAL-THAN-U-V-NOT-IN-M
   imports LAST-FUNCTIONS
   imports LAST-TO-START
@@ -36,6 +40,8 @@ module FUNCTIONS
   imports LIST-NO-COMMON-ITEM
   imports LIST-SWAP-REMOVE
   imports LIST-TO-MAP-SET
+  imports MAP-VALUES-ARE-KRESULT
+  imports MAP-VALUES-ARE-OF-TYPE
   imports PLISTLEN-FUNCTIONS
   imports PREPEND
   imports PUSH-LIST

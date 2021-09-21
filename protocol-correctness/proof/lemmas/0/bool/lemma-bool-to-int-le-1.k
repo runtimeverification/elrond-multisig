@@ -1,7 +1,7 @@
 // breadth = 2
 //@ proof
 module LEMMA-BOOL-TO-INT-LE-1
-  imports INSTRUMENTATION-CONCRETIZE
+  imports CONCRETIZE-VALUE-SYNTAX
   imports K-EQUAL
 //@ trusted
 // require "protocol-correctness/lib/functions/bool-to-int.k"

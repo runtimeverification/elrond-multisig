@@ -11,5 +11,6 @@ module RUNNING-SYNTAX
   syntax KItem ::= evaluateEc(ExpressionCSV)
   syntax KItem ::= evaluateAc(ArgumentCSV)
 
+  // TODO: Move to a better place.
   syntax KItem ::= "removeValue"
 endmodule

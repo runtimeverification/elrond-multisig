@@ -1,6 +1,8 @@
 require "protocol-correctness/lib/language/base-types.k"
 require "protocol-correctness/lib/language/flow.k"
 require "protocol-correctness/lib/language/maybe.k"
+require "protocol-correctness/lib/language/reflection.k"
+require "protocol-correctness/lib/language/running-syntax.k"
 
 module TYPE-REFLECTION-SYNTAX
     syntax ReflectionType ::= "rUsize"
@@ -11,6 +13,7 @@ module TYPE-REFLECTION-SYNTAX
                           | "rBigUint"
 
     syntax KItem ::= cast(KItem, ReflectionType)  [strict(1)]
+    syntax KItem ::= castNoValue(KItem, ReflectionType)
 
     syntax KItem ::= defaultValue(ReflectionType)  [function, functional]
     syntax Bool ::= isDefaultValue(KItem, ReflectionType)  [function, functional]
@@ -27,7 +30,11 @@ module TYPE-REFLECTION
   imports FLOW-SYNTAX
   imports K-EQUAL-SYNTAX
   imports MAYBE-SYNTAX
+  imports TYPE-REFLECTION-REFLECTION
   imports TYPE-REFLECTION-SYNTAX
+  imports RUNNING-SYNTAX
+
+  rule castNoValue(K:KItem, T:ReflectionType) => cast(K, T) ~> removeValue
 
   rule cast(value(K:KItem) => K, _:ReflectionType)  [label(castValue)]
 
@@ -63,4 +70,21 @@ module TYPE-REFLECTION
   rule valueOfType(V:KItem, rAddress) => isAddress(V)
   rule valueOfType(V:KItem, rBoxedBytes) => isBoxedBytes(V)
   rule valueOfType(V:KItem, rBigUint) => isBigUint(V)
+endmodule
+
+module TYPE-REFLECTION-REFLECTION
+  imports TYPE-REFLECTION-SYNTAX
+  imports REFLECTION-SYNTAX
+
+  rule reflectionApply(
+          $castNoValue, reflectionArgument(K:KItem), reflectionArgument(R:ReflectionType))
+      => castNoValue(K, R)
+
+  rule reflectionApply0($rUsize) => rUsize
+  rule reflectionApply0($rExpressionList) => rExpressionList
+  rule reflectionApply0($rBool) => rBool
+  rule reflectionApply0($rAddress) => rAddress
+  rule reflectionApply0($rBoxedBytes) => rBoxedBytes
+  rule reflectionApply0($rBigUint) => rBigUint
+
 endmodule

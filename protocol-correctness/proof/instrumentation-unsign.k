@@ -1,8 +1,10 @@
+require "protocol-correctness/lib/functions/concretize-expression-list.k"
 require "protocol-correctness/proof/instrumentation-map.k"
 
 module INSTRUMENTATION-UNSIGN
   // TODO: Do I need this?
   imports INSTRUMENTATION-MAP
+  imports CONCRETIZE-EXPRESSION-LIST-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
 
   syntax KItem ::= splitUnsign(actionId:Usize)

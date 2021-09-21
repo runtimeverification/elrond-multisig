@@ -14,6 +14,8 @@ module PROOF-PROPOSE-SC-DEPLOY-BOARDMEMBER
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
   imports CODE-METADATA-FUNCTION-SYNTAX
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   //@ proof
   imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
@@ -77,12 +79,12 @@ module PROOF-PROPOSE-SC-DEPLOY-BOARDMEMBER
     requires true
       andBool isKResult(Args)
 
-      andBool valuesAreKResult(AddressToUserId)
-      andBool valuesAreOfType(AddressToUserId, rUsize)
+      andBool mapValuesAreKResult(AddressToUserId)
+      andBool mapValuesAreOfType(AddressToUserId, rUsize)
       andBool valuesAreNotEmpty(AddressToUserId, rUsize)
 
-      andBool valuesAreOfType(UserIdToRole, rUserRole)
-      andBool valuesAreKResult(UserIdToRole)
+      andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      andBool mapValuesAreKResult(UserIdToRole)
 
       andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
       andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))

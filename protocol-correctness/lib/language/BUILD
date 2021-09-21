@@ -260,6 +260,8 @@ klibrary(
       ":base-types-files",
       ":flow-files",
       ":maybe-files",
+      ":reflection-files",
+      ":running-syntax-files",
   ],
   visibility = ["//visibility:public"],
 )

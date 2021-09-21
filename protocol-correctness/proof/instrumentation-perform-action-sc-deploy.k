@@ -6,6 +6,7 @@ module INSTRUMENTATION-PERFORM-ACTION-SC-DEPLOY
   imports INSTRUMENTATION-MAP
 
   imports INSTRUMENTATION-PERFORM-SPLIT-ACTION
+  imports CONCRETIZE-VALUE-SYNTAX
 
   rule  <k> (splitting-action => concretizeValue(Arguments))
             ~> call(performAction(SCDeploy(

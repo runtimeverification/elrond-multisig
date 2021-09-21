@@ -1,5 +1,7 @@
 //@ proof
 
+require "run-external-call-from-user/trusted-recfu-discard-action-error.k"  //@ Bazel remove
+require "run-external-call-from-user/trusted-recfu-discard-action-void.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-add-board-member.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-add-proposer.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-change-quorum.k"  //@ Bazel remove
@@ -14,6 +16,8 @@ require "run-external-call-from-user/trusted-recfu-unsign-error.k"  //@ Bazel re
 require "run-external-call-from-user/trusted-recfu-unsign-void.k"  //@ Bazel remove
 
 module PROOF-RUN-EXTERNAL-CALL-FROM-USER
+  imports TRUSTED-RECFU-DISCARD-ACTION-ERROR
+  imports TRUSTED-RECFU-DISCARD-ACTION-VOID
   imports TRUSTED-RECFU-PROPOSE-ADD-BOARD-MEMBER
   imports TRUSTED-RECFU-PROPOSE-ADD-PROPOSER
   imports TRUSTED-RECFU-PROPOSE-CHANGE-QUORUM

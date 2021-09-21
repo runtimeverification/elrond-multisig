@@ -131,6 +131,7 @@ module MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
 endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS
+  imports CONCRETIZE-VALUE-SYNTAX
   imports PSEUDOCODE-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
@@ -238,8 +239,18 @@ module MALICIOUS-USER-EXTERNAL-CALLS
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run performActionEndpoint(?_ActionId:Usize);)
     [label(runPerformAction)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run discardAction(?_ActionId:Usize);)
+  rule  <k> runExternalCallFromUser(A:Address)
+            =>  concretizeValue(?ActionId)
+                ~>  branchK(?ActionId in_keys(ActionSigners),
+                      makeConcreteValue(?ActionId, rExpressionList, ActionSigners),
+                      .K
+                    )
+                ~>  runExternalCall(from A run discardAction(?ActionId:Usize);)
+            ...
+        </k>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
     [label(runDiscardAction)]
 endmodule
 

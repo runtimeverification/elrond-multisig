@@ -9,11 +9,14 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
   imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
   imports TRUSTED-MAP-SEMANTICS
   imports TRUSTED-CONCRETIZE-BOARD-MEMBER
+  
 //@ trusted
 // module TRUSTED-PROPOSE-DELETE-MALICIOUS
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports PSEUDOCODE-CONFIGURATION
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   claim <T><TT>
           <k> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress:Address)
@@ -60,8 +63,8 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
 
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
-        andBool valuesAreOfType(UserIdToRole, rUserRole)
-        andBool valuesAreKResult(UserIdToRole)
+        andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+        andBool mapValuesAreKResult(UserIdToRole)
         // andBool maliciousDeleteInvariant(
         //     MaliciousAddress,
         //     NumUsers,

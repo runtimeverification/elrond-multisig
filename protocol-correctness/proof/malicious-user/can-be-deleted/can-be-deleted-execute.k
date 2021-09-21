@@ -32,6 +32,7 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
 endmodule
 
 module MALICIOUS-USER-DELETE-ACTIONS
+  imports CONCRETIZE-VALUE-SYNTAX
   imports MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
 
   rule  <k> allBoardMembersSignForInterspersed(ActionId:Usize, K:K)

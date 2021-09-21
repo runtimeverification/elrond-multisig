@@ -43,6 +43,26 @@ klibrary(
 )
 
 klibrary(
+  name = "concretize-expression-list-files",
+  srcs = ["concretize-expression-list.k"],
+  deps = [
+      ":concretize-value-files",
+      "//protocol-correctness/lib/language:base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "concretize-value-files",
+  srcs = ["concretize-value.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "forall-v-greater-or-equal-than-u-v-not-in-m-files",
   srcs = ["forall-v-greater-or-equal-than-u-v-not-in-m.k"],
   deps = [
@@ -59,6 +79,7 @@ klibrary(
       ":add-one-if-not-negative-files",
       ":all-keys-become-keys-files",
       ":bool-to-int-files",
+      ":concretize-value-files",
       ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
       ":last-functions-files",
       ":last-to-start-files",
@@ -70,6 +91,8 @@ klibrary(
       ":list-no-common-item-files",
       ":list-swap-remove-files",
       ":list-to-map-set-files",
+      ":map-values-are-kresult-files",
+      ":map-values-are-of-type-files",
       ":plistlen-functions-files",
       ":prepend-files",
       ":push-list-files",
@@ -177,6 +200,23 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
       "//protocol-correctness/lib/language:reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-are-kresult-files",
+  srcs = ["map-values-are-kresult.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-are-of-type-files",
+  srcs = ["map-values-are-of-type.k"],
+  deps = [
+      "//protocol-correctness/lib/language:type-reflection-files",
   ],
   visibility = ["//visibility:public"],
 )

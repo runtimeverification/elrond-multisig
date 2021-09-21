@@ -1,7 +1,10 @@
+require "protocol-correctness/lib/functions/map-values-are-kresult.k"
 require "protocol-correctness/proof/execution-proof-helpers.k"
 
 module INVARIANT-HELPERS
   imports EXECUTION-PROOF-HELPERS
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   syntax Bool ::= addressToUserIdInvariant(addressToUserId:Map)
     [function, functional]
@@ -10,8 +13,8 @@ module INVARIANT-HELPERS
 
   rule addressToUserIdInvariant(_:KItem |-> V:KItem AddressToUserId:Map)
     => true
-      andBool valueOfType(V, rUsize)  // valuesAreOfType(AddressToUserId, rUsize)
-      andBool isKResult(V)  // valuesAreKResult(AddressToUserId)
+      andBool valueOfType(V, rUsize)  // mapValuesAreOfType(AddressToUserId, rUsize)
+      andBool isKResult(V)  // mapValuesAreKResult(AddressToUserId)
       andBool valueIsNotEmpty(V, rUsize)  // valuesAreNotEmpty(AddressToUserId, rUsize)
       andBool valueNotInMapValues(V, AddressToUserId)  // valuesAreDistinct(AddressToUserId)
 
@@ -25,8 +28,8 @@ module INVARIANT-HELPERS
 
   rule userIdToAddressInvariant(K:KItem |-> V:KItem UserIdToAddress:Map)
     => true
-      andBool valueOfType(V, rAddress)  // valuesAreOfType(UserIdToAddress, rAddress)
-      andBool isKResult(V)  // valuesAreKResult(UserIdToAddress)
+      andBool valueOfType(V, rAddress)  // mapValuesAreOfType(UserIdToAddress, rAddress)
+      andBool isKResult(V)  // mapValuesAreKResult(UserIdToAddress)
       // Address is not nullable.
       // andBool valueIsNotEmpty(V, rAddress)  // valuesAreNotEmpty(UserIdToAddress, rAddress)
       // TODO: Delete:
@@ -43,8 +46,8 @@ module INVARIANT-HELPERS
 
   rule userIdToRoleInvariant(K:KItem |-> V:KItem UserIdToRole:Map)
     => true
-      andBool valueOfType(V, rUserRole)  // valuesAreOfType(UserIdToRole, rUserRole)
-      andBool isKResult(V)  // valuesAreKResult(UserIdToRole)
+      andBool valueOfType(V, rUserRole)  // mapValuesAreOfType(UserIdToRole, rUserRole)
+      andBool isKResult(V)  // mapValuesAreKResult(UserIdToRole)
       andBool valueIsNotEmpty(V, rUserRole)  // valuesAreNotEmpty(UserIdToRole, rUserRole)
 
       andBool valueOfType(K, rUsize)  // keysAreOfType(UserIdToRole, rUsize)
@@ -59,8 +62,8 @@ module INVARIANT-HELPERS
   rule actionDataInvariant(.Map) => true
   rule actionDataInvariant(_:KItem |-> V:KItem ActionData:Map)
     => true
-      andBool valueOfType(V, rAction) // valuesAreOfType(ActionData, rAction)
-      andBool isKResult(V)  // valuesAreKResult(ActionData)
+      andBool valueOfType(V, rAction) // mapValuesAreOfType(ActionData, rAction)
+      andBool isKResult(V)  // mapValuesAreKResult(ActionData)
       andBool valueIsNotEmpty(V, rAction)  // valuesAreNotEmpty(ActionData, rAction)
 
       andBool actionDataInvariant(ActionData)
@@ -73,25 +76,26 @@ module INVARIANT-HELPERS
   rule actionSignersInvariant(_:KItem |-> V:KItem ActionSigners:Map)
     => true
       andBool isExpressionList(V) andBool listElementsAreUsize(V) // valuesAreExpressionListOfUsize(ActionSigners)
-      andBool isKResult(V)  // valuesAreKResult(ActionSigners)
+      andBool isKResult(V)  // mapValuesAreKResult(ActionSigners)
       andBool valueIsNotEmpty(V, rExpressionList)  // valuesAreNotEmpty(ActionSigners, rExpressionList)
       andBool listElementsAreDistinctSafe(V)
 
       andBool actionSignersInvariant(ActionSigners)
     [simplification]
 
-  rule valuesAreOfType(M:Map, rUsize) => true
+  rule mapValuesAreOfType(M:Map, rUsize) => true
     requires addressToUserIdInvariant(M)
-  rule valuesAreOfType(M:Map, rUserRole) => true
+  rule mapValuesAreOfType(M:Map, rUserRole) => true
     requires userIdToRoleInvariant(M)
-  rule valuesAreOfType(M:Map, rAction) => true
+  rule mapValuesAreOfType(M:Map, rAction) => true
     requires actionDataInvariant(M)
-  rule valuesAreKResult(M:Map) => true
+  rule mapValuesAreKResult(M:Map) => true
     requires false
       orBool addressToUserIdInvariant(M)
       orBool userIdToRoleInvariant(M)
       orBool actionSignersInvariant(M)
       orBool actionDataInvariant(M)
+    [simplification]
   rule valuesAreNotEmpty(M:Map, rUsize) => true
     requires false
       orBool addressToUserIdInvariant(M)
@@ -339,8 +343,8 @@ module INVARIANT
       andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
 
       andBool addressToUserIdInvariant(AddressToUserId)
-      // andBool valuesAreOfType(AddressToUserId, rUsize)
-      // andBool valuesAreKResult(AddressToUserId)
+      // andBool mapValuesAreOfType(AddressToUserId, rUsize)
+      // andBool mapValuesAreKResult(AddressToUserId)
       // andBool valuesAreNotEmpty(AddressToUserId, rUsize)
       // andBool valuesAreDistinct(AddressToUserId)
       andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
@@ -351,8 +355,8 @@ module INVARIANT
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
 
       andBool userIdToRoleInvariant(UserIdToRole)
-      // andBool valuesAreOfType(UserIdToRole, rUserRole)
-      // andBool valuesAreKResult(UserIdToRole)
+      // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      // andBool mapValuesAreKResult(UserIdToRole)
       // andBool valuesAreNotEmpty(UserIdToRole, rUserRole)
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
       andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
@@ -364,12 +368,12 @@ module INVARIANT
 
       andBool actionSignersInvariant(ActionSigners)
       // andBool valuesAreExpressionListOfUsize(ActionSigners)
-      // andBool valuesAreKResult(ActionSigners)
+      // andBool mapValuesAreKResult(ActionSigners)
       // andBool valuesAreExpressionListOfDistinctElements(ActionSigners)
 
       andBool actionDataInvariant(ActionData)
-      // andBool valuesAreOfType(ActionData, rAction)
-      // andBool valuesAreKResult(ActionData)
+      // andBool mapValuesAreOfType(ActionData, rAction)
+      // andBool mapValuesAreKResult(ActionData)
 
       andBool NumUsers >=Int 0 // TODO: Strict >?
       andBool NumBoardMembers >=Int 0

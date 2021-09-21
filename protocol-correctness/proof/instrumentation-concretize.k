@@ -4,41 +4,7 @@ module INSTRUMENTATION-CONCRETIZE
   imports MAP
 
   imports PSEUDOCODE
-
-  syntax KItem ::= concretizeValue(KItem)
-
-  rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)  [label(concretizeValueCsv)]
-
-  rule concretizeValue(u(V:Int)) => concretizeValue(V)  [label(concretizeValueUsize)]
-
-  rule concretizeValue(address(V:Int)) => concretizeValue(V)  [label(concretizeValueAddress)]
-
-  rule concretizeValue(big(V:Int)) => concretizeValue(V)  [label(concretizeValueBig)]
-
-  rule concretizeValue(meta(V:Int)) => concretizeValue(V)  [label(concretizeValueMeta)]
-
-  rule concretizeValue(bytes(V:String)) => concretizeValue(V)  [label(concretizeValueBytes)]
-
-  rule concretizeValue(BoardMember) => .K  [label(concretizeValueBoardMember)]
-  rule concretizeValue(Proposer) => .K  [label(concretizeValueProposer)]
-  rule concretizeValue(None) => .K  [label(concretizeValueNone)]
-
-  rule concretizeValue(true) => .K  [label(concretizeValueTrue)]
-  rule concretizeValue(false) => .K  [label(concretizeValueFalse)]
-
-  rule concretizeValue(_) => .K [priority(200), label(concretizeValueDefault)]
-
-  syntax KItem ::= concretizeExpressionList(ExpressionList, Int)
-  rule concretizeExpressionList([.:ExpressionCSV], X:Int) => .K
-    requires X >Int 0
-  rule concretizeExpressionList([_:Expression , L:ExpressionCSV], X:Int)
-      => concretizeExpressionList([L], X -Int 1)
-    requires X >Int 0
-    [label(concretizeListElement)]
-  rule concretizeExpressionList([_:ExpressionCSV], X:Int)
-      => .K
-    requires X <=Int 0
-    [label(concretizeListEnd)]
+  imports CONCRETIZE-VALUE-SYNTAX
 
   syntax Expression ::= expressionListGetOrDefault(ExpressionList, Int, Expression)  [function, functional]
   rule expressionListGetOrDefault([.], _:Int, Default:Expression) => Default

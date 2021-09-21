@@ -4,6 +4,7 @@ require "protocol-correctness/proof/instrumentation-concretize.k"
 module INSTRUMENTATION-PERFORM-SPLIT-ACTION
   imports PSEUDOCODE
   imports INSTRUMENTATION-CONCRETIZE
+  imports CONCRETIZE-VALUE-SYNTAX
 
   syntax KItem ::= "splitting-action"
   rule  <k> pushContext ~> (.K => splitAction(A) ~> splitting-action) ~> call(performAction(A:Action))

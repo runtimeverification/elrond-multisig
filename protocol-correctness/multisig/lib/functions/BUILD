@@ -48,6 +48,16 @@ klibrary(
 )
 
 klibrary(
+  name = "concretize-value-files",
+  srcs = ["concretize-value.k"],
+  deps = [
+      "//protocol-correctness/lib/functions:concretize-value-files",
+      "//protocol-correctness/multisig/lib/language:syntax-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "count-can-sign-function-files",
   srcs = ["count-can-sign-function.k"],
   deps = [
@@ -62,12 +72,13 @@ klibrary(
   name = "functions-files",
   srcs = ["functions.k"],
   deps = [
-      ":at-most-this-signer-list-files",
       ":can-sign-function-files",
       ":code-metadata-function-files",
+      ":concretize-value-files",
       ":count-can-sign-function-files",
       ":metadata-to-int-files",
       ":only-this-signer-diffs-files",
+      ":pound-at-most-this-signer-list-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -87,7 +98,18 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
       "//protocol-correctness/lib/functions:list-to-map-set-files",
-      ":at-most-this-signer-list-files",
+      ":pound-at-most-this-signer-list-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "pound-at-most-this-signer-list-files",
+  srcs = ["pound-at-most-this-signer-list.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      ":can-sign-function-files",
+      "//protocol-correctness/multisig/lib/language:cast-files",
   ],
   visibility = ["//visibility:public"],
 )

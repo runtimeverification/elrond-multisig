@@ -11,6 +11,8 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-USER
 //@ end
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   //@ proof
   imports TRUSTED-PROPOSE-ACTION-ERROR-NO-USER
@@ -69,12 +71,12 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-USER
       andBool isKResult(Args)
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      andBool valuesAreKResult(AddressToUserId)
-      andBool valuesAreOfType(AddressToUserId, rUsize)
+      andBool mapValuesAreKResult(AddressToUserId)
+      andBool mapValuesAreOfType(AddressToUserId, rUsize)
       andBool valuesAreNotEmpty(AddressToUserId, rUsize)
 
-      andBool valuesAreOfType(UserIdToRole, rUserRole)
-      andBool valuesAreKResult(UserIdToRole)
+      andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      andBool mapValuesAreKResult(UserIdToRole)
 
       andBool notBool CallerAddress in_keys(AddressToUserId)
     ensures true

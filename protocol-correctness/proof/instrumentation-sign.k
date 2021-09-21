@@ -8,9 +8,9 @@ module INSTRUMENTATION-SIGN
   imports INSTRUMENTATION-MAP
 
   imports PSEUDOCODE
+  imports CONCRETIZE-VALUE-SYNTAX
   imports PUSHLIST-INSTRUMENTATION-SYNTAX
   imports LIST-FIRST-WITH-DEFAULT-SYNTAX
-  imports LIST-FIRST-WITH-DEFAULT
 
   syntax KItem ::= splitSign(Usize)
   syntax KItem ::= splitSign2(Usize)

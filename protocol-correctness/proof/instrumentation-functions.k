@@ -4,6 +4,7 @@ require "protocol-correctness/pseudocode.k"
 module INSTRUMENTATION-FUNCTIONS
   imports INSTRUMENTATION-PROOF
   imports PSEUDOCODE
+  imports CONCRETIZE-VALUE-SYNTAX
 
   syntax KItem ::= "split-propose-action"
   syntax KItem ::= "split-propose-action1"

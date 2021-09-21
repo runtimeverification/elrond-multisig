@@ -8,7 +8,6 @@ require "protocol-correctness/lib/language/cast.k"
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/map/map-execute.k"
 require "protocol-correctness/pseudocode.k"
-require "protocol-correctness/lib/list-to-map-set.k"
 
 module EXECUTION-PROOF-HELPERS-SYNTAX
   imports LIST-ELEMENTS-ARE-USIZE-SYNTAX
@@ -102,22 +101,6 @@ module EXECUTION-PROOF-HELPERS
       =>  isExpressionList(V)
           andBool listElementsAreUsize(V)
           andBool valuesAreExpressionListOfUsize(M)
-    [simplification]
-
-  syntax Bool ::= valuesAreKResult(Map)  [function, functional]
-  rule valuesAreKResult(.Map) => true
-  rule valuesAreKResult((_ |-> V M:Map) #as _:Map)
-      => isKResult(V) andBool valuesAreKResult(M)
-  rule valuesAreKResult((_ |-> V M:Map) #as _:Map)
-      => isKResult(V) andBool valuesAreKResult(M)
-    [simplification]
-
-  syntax Bool ::= valuesAreOfType(Map, ReflectionType)  [function, functional]
-  rule valuesAreOfType(.Map, _:ReflectionType) => true
-  rule valuesAreOfType((_ |-> V M:Map) #as _:Map, T:ReflectionType)
-      => valueOfType(V, T) andBool valuesAreOfType(M, T)
-  rule valuesAreOfType((_ |-> V M:Map) #as _:Map, T:ReflectionType)
-      => valueOfType(V, T) andBool valuesAreOfType(M, T)
     [simplification]
 
   syntax Bool ::= keysAreKResult(Map)  [function, functional]

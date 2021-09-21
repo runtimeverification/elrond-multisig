@@ -63,6 +63,7 @@ klibrary(
   srcs = ["type-reflection.k"],
   deps = [
       "//protocol-correctness/lib/language:flow-files",
+      "//protocol-correctness/lib/language:reflection-files",
       "//protocol-correctness/lib/language:type-reflection-files",
       ":syntax-files",
   ],

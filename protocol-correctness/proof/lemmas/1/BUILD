@@ -32,6 +32,7 @@ klibrary(
       "//protocol-correctness/proof/lemmas/0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-a-files",
       "//protocol-correctness/proof/lemmas/0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-b-files",
       "//protocol-correctness/proof/lemmas/0/map/square-bracket:trusted-lemma-square-bracket-square-bracket-undef-files",
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-lemma-at-most-this-signer-0-count-can-sign-function-files",
   ],
   visibility = ["//visibility:public"],
 )

@@ -7,8 +7,9 @@ module PROOF-PROPOSE-ACTION-PROPOSER
 //@ end
 
   imports EXECUTION-PROOF-HELPERS
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   claim <T><TT>
           <k> call(proposeAction(Action:Action)) ~> K:K
@@ -54,12 +55,12 @@ module PROOF-PROPOSE-ACTION-PROPOSER
       andBool isKResult(Action)
       andBool valueIsNotEmpty(Action, rAction)
 
-      andBool valuesAreKResult(AddressToUserId)
-      andBool valuesAreOfType(AddressToUserId, rUsize)
+      andBool mapValuesAreKResult(AddressToUserId)
+      andBool mapValuesAreOfType(AddressToUserId, rUsize)
       andBool valuesAreNotEmpty(AddressToUserId, rUsize)
 
-      andBool valuesAreOfType(UserIdToRole, rUserRole)
-      andBool valuesAreKResult(UserIdToRole)
+      andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      andBool mapValuesAreKResult(UserIdToRole)
 
       andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
       andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))

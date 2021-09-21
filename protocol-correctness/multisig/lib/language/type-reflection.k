@@ -1,4 +1,5 @@
 require "protocol-correctness/lib/language/flow.k"
+require "protocol-correctness/lib/language/reflection.k"
 require "protocol-correctness/lib/language/type-reflection.k"
 require "protocol-correctness/multisig/lib/language/syntax.k"
 
@@ -10,6 +11,7 @@ endmodule
 
 module MULTISIG-TYPE-REFLECTION
   imports MULTISIG-TYPE-REFLECTION-SYNTAX
+  imports MULTISIG-TYPE-REFLECTION-REFLECTION
 
   imports FLOW-SYNTAX
   imports MULTISIG-SYNTAX
@@ -34,3 +36,11 @@ module MULTISIG-TYPE-REFLECTION
   rule valueOfType(V:KItem, rCodeMetadata) => isCodeMetadata(V)
 endmodule
 
+module MULTISIG-TYPE-REFLECTION-REFLECTION
+  imports MULTISIG-TYPE-REFLECTION-SYNTAX
+  imports REFLECTION-SYNTAX
+
+  rule reflectionApply0($rUserRole) => rUserRole
+  rule reflectionApply0($rAction) => rAction
+  rule reflectionApply0($rCodeMetadata) => rCodeMetadata
+endmodule

@@ -20,7 +20,7 @@ module LAST-FUNCTIONS
   imports LAST-FUNCTIONS-SYNTAX
   imports LAST-FUNCTIONS-REFLECTION
 
-  imports PLISTLEN-FUNCTIONS
+  imports PLISTLEN-FUNCTIONS-SYNTAX
 
   rule last(Es:ExpressionCSV) => #last0(Es)
     requires pListLen([Es]) >Int 0

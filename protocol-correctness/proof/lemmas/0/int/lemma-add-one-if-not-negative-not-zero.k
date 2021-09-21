@@ -1,8 +1,8 @@
 // breadth = 2
 //@ proof
 module LEMMA-ADD-ONE-IF-NOT-NEGATIVE-NOT-ZERO
+  imports CONCRETIZE-VALUE-SYNTAX
   imports LEMMAS-0-EXECUTE-SYNTAX
-  imports INSTRUMENTATION-CONCRETIZE
 //@ trusted
 // require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
 // 
