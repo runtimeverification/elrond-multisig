@@ -1,3 +1,4 @@
+// timeout = eternal
 // breadth = 21
 //@ proof
 
