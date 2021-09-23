@@ -71,14 +71,14 @@ module PROOF-RECFU-PROPOSE-SC-DEPLOY
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionSignersInvariant(OldActionSigners)
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
 
 
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
     ensures true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
 
         andBool actionSignersInvariant(?NewActionSigners)

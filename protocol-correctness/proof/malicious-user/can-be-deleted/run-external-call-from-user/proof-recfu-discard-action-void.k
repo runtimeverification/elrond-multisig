@@ -1,4 +1,4 @@
-// timeout = long
+// timeout = eternal
 // breadth = 14
 //@ proof
 
@@ -68,7 +68,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
         andBool actionSignersInvariant(OldActionSigners)
         andBool
             ( notBool ActionId in_keys(OldActionSigners)
@@ -85,7 +85,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
             )
 
     ensures true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
 
         andBool actionDataInvariant(?NewActionData)

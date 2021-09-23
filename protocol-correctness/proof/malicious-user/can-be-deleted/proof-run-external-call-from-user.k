@@ -1,7 +1,9 @@
+// breadth = 21
 //@ proof
 
 require "run-external-call-from-user/trusted-recfu-discard-action-error.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-discard-action-void.k"  //@ Bazel remove
+require "run-external-call-from-user/trusted-recfu-perform-action-error.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-add-board-member.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-add-proposer.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-change-quorum.k"  //@ Bazel remove
@@ -18,6 +20,7 @@ require "run-external-call-from-user/trusted-recfu-unsign-void.k"  //@ Bazel rem
 module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports TRUSTED-RECFU-DISCARD-ACTION-ERROR
   imports TRUSTED-RECFU-DISCARD-ACTION-VOID
+  imports TRUSTED-RECFU-PERFORM-ACTION-ERROR
   imports TRUSTED-RECFU-PROPOSE-ADD-BOARD-MEMBER
   imports TRUSTED-RECFU-PROPOSE-ADD-PROPOSER
   imports TRUSTED-RECFU-PROPOSE-CHANGE-QUORUM
@@ -73,7 +76,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
@@ -87,7 +90,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool Quorum >Int 1
 
     ensures true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
         andBool actionSignersInvariant(?NewActionSigners)
 

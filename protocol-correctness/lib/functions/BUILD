@@ -80,6 +80,7 @@ klibrary(
       ":all-keys-become-keys-files",
       ":bool-to-int-files",
       ":concretize-value-files",
+      ":concretize-expression-list-files",
       ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
       ":last-functions-files",
       ":last-to-start-files",

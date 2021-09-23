@@ -64,15 +64,19 @@ module PROOF-RECFU-UNSIGN-VOID
         andBool ActionId in_keys ( ActionData )
         andBool MaliciousRole ==K BoardMember
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
         andBool actionDataInvariant(ActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
 
+        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
     ensures true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(?NewActionSigners)
+
+        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

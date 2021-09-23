@@ -109,16 +109,26 @@ module MALICIOUS-USER-INVARIANT
         andBool onlyThisSigner(CurrentAddressToUserId, MaliciousAddress, ActionSigners)
         andBool Quorum >=Int 2
 
-  syntax Bool ::= listQuorumCantBeFilledBy(quorum:Int, id:Usize, signers:ExpressionList)  [function, functional]
-  rule listQuorumCantBeFilledBy(Quorum:Int, UserId:Usize, Signers:ExpressionList)
-      => pListLen(Signers) +Int #if #listContainsSafe(Signers, UserId) #then 0 #else 1 #fi <Int Quorum
+  syntax Bool ::= listQuorumCantBeFilledBy(
+                      quorum:Int, id:Usize, signers:ExpressionList, userIdToRole:Map
+                  )  [function, functional]
+  rule listQuorumCantBeFilledBy(
+          Quorum:Int, UserId:Usize, Signers:ExpressionList, UserIdToRole:Map
+      )
+      =>  countCanSignFunction(Signers, UserIdToRole)
+            +Int #if #listContainsSafe(Signers, UserId) #then 0 #else 1 #fi
+          <Int Quorum
 
-  syntax Bool ::= noQuorumCanBeFilledBy(quorum:Int, id:Usize, signers:Map)  [function, functional]
-  rule noQuorumCanBeFilledBy(_Quorum:Int, _UserId:Usize, .Map) => true
-  rule noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, _:KItem |-> L:ExpressionList M:Map)
+  syntax Bool ::= noQuorumCanBeFilledBy(quorum:Int, id:Usize, signers:Map, userIdToRole:Map)  [function, functional]
+  rule noQuorumCanBeFilledBy(_Quorum:Int, _UserId:Usize, .Map, _UserIdToRole:Map) => true
+  rule noQuorumCanBeFilledBy(
+          Quorum:Int,
+          UserId:Usize,
+          _:KItem |-> L:ExpressionList M:Map,
+          UserIdToRole:Map)
       => true
-        andBool listQuorumCantBeFilledBy(Quorum, UserId:Usize, L)
-        andBool noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, M:Map)
+        andBool listQuorumCantBeFilledBy(Quorum, UserId:Usize, L, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, M:Map, UserIdToRole)
     [simplification]
 endmodule
 

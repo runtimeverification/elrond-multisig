@@ -59,7 +59,7 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
         andBool MaliciousRole ==K BoardMember
         andBool ActionIdx in_keys(OldActionSigners)
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool actionDataInvariant(ActionData)
@@ -68,10 +68,14 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
 
+        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
     ensures true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(?NewActionSigners)
+
+        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

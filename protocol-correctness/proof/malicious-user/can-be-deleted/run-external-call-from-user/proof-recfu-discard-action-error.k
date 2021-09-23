@@ -63,7 +63,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionDataInvariant(ActionData)
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSigners)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSigners, UserIdToRole)
         andBool actionSignersInvariant(ActionSigners)
 
         andBool

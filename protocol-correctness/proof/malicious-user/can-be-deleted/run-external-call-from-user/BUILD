@@ -29,13 +29,30 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-discard-action-no-valid-signers-no-action",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "long",
+  timeout = "eternal",
   breadth = "14",
 )
 
 ktrusted(
   name = "trusted-recfu-discard-action-void",
   srcs = ["proof-recfu-discard-action-void.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-recfu-perform-action-error",
+  srcs = ["proof-recfu-perform-action-error.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-perform-action-endpoint-no-quorum",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "6",
+)
+
+ktrusted(
+  name = "trusted-recfu-perform-action-error",
+  srcs = ["proof-recfu-perform-action-error.k"],
   visibility = ["//visibility:public"],
 )
 
@@ -189,7 +206,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-sign-no-signers",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 ktrusted(
@@ -247,22 +264,6 @@ kprove_test(
 ktrusted(
   name = "trusted-recfu-unsign-void",
   srcs = ["proof-recfu-unsign-void.k"],
-  visibility = ["//visibility:public"],
-)
-
-kprove_test(
-  name = "proof-tmp",
-  srcs = ["proof-tmp.k"],
-  trusted = [
-      ":trusted-recfu-discard-action-error",
-      ":trusted-recfu-discard-action-void",
-  ],
-  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-)
-
-ktrusted(
-  name = "trusted-tmp",
-  srcs = ["proof-tmp.k"],
   visibility = ["//visibility:public"],
 )
 

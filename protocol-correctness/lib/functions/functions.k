@@ -2,6 +2,7 @@ require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
 require "protocol-correctness/lib/functions/all-keys-become-keys.k"
 require "protocol-correctness/lib/functions/bool-to-int.k"
 require "protocol-correctness/lib/functions/concretize-value.k"
+require "protocol-correctness/lib/functions/concretize-expression-list.k"
 require "protocol-correctness/lib/functions/forall-v-greater-or-equal-than-u-v-not-in-m.k"
 require "protocol-correctness/lib/functions/last-functions.k"
 require "protocol-correctness/lib/functions/last-to-start.k"
@@ -29,6 +30,7 @@ module FUNCTIONS
   imports ALL-KEYS-BECOME-KEYS
   imports BOOL-TO-INT
   imports CONCRETIZE-VALUE
+  imports CONCRETIZE-EXPRESSION-LIST
   imports FORALL-V-GREATER-OR-EQUAL-THAN-U-V-NOT-IN-M
   imports LAST-FUNCTIONS
   imports LAST-TO-START
