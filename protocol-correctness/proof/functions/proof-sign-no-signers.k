@@ -5,9 +5,9 @@ module PROOF-SIGN-NO-SIGNERS
 //@ trusted
 // module TRUSTED-SIGN-NO-SIGNERS
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
   imports CAST-SYNTAX
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K
@@ -53,7 +53,7 @@ module PROOF-SIGN-NO-SIGNERS
       andBool notBool u(0) in_keys(UserIdToRole)
       andBool actionDataInvariant(ActionData)
       andBool userIdToRoleInvariant(UserIdToRole)
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
+      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
 
       andBool ActionId in_keys(ActionData)
       andBool notBool ActionId in_keys(ActionSigners)

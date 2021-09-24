@@ -2,14 +2,15 @@ require "trusted-unsign-no-user.k"  //@ Bazel remove
 
 //@ proof
 module PROOF-UNSIGN-NO-USER-MARKER
-  imports EXECUTION-PROOF-HELPERS
-  imports INSTRUMENTATION-PROOF
+    imports INSTRUMENTATION-PROOF
   imports INVARIANT
   imports TRUSTED-UNSIGN-NO-USER
 //@ trusted
 // module TRUSTED-UNSIGN-NO-USER-MARKER
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> unsign-new.k ~> call(unsign(ActionId:Usize)) ~> K:K

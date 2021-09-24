@@ -5,8 +5,7 @@ module PROOF-SIGN-CALLER-PROPOSER
 //@ trusted
 // module TRUSTED-SIGN-CALLER-PROPOSER
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

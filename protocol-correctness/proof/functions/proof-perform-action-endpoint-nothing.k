@@ -9,8 +9,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-NOTHING
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-NOTHING
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 
   claim <T><TT>
           <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

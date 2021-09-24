@@ -14,6 +14,7 @@ module PROOF-RECFU-PROPOSE-SC-DEPLOY
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
 
   claim <T><TT>
@@ -74,8 +75,8 @@ module PROOF-RECFU-PROPOSE-SC-DEPLOY
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
 
 
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
@@ -83,7 +84,7 @@ module PROOF-RECFU-PROPOSE-SC-DEPLOY
 
         andBool actionSignersInvariant(?NewActionSigners)
 
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 2, keysMap(?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 2, keysMap(?NewActionSigners), usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

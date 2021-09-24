@@ -1,8 +1,6 @@
 // timeout = eternal
 // breadth = 6
 //@ proof
-// require "../functions/trusted-perform-action-endpoint-remove-user-BoardMember-marker.k"  //@ Bazel remove
-// require "../functions/trusted-perform-action-endpoint-remove-user-BoardMember-too-few-marker.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-remove-user-Proposer-marker.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-remove-user-Proposer-nobody-left-marker.k"  //@ Bazel remove
 
@@ -18,6 +16,8 @@ module PROOF-PERFORM-PARTS-REMOVE-USER-NEQ-1
 //   imports INVARIANT-FUNCTIONS
 //   imports INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
 //@ end
+
+  imports MAP-EXECUTE-SYNTAX
 
   claim <T><TT>
           <k>

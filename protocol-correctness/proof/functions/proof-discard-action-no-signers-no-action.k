@@ -7,7 +7,6 @@ require "trusted-count-can-sign.k"  //@ Bazel remove
 
 //@ proof
 module PROOF-DISCARD-ACTION-NO-SIGNERS-NO-ACTION
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
   imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted

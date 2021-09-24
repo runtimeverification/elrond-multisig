@@ -15,6 +15,9 @@ module PROOF-INIT
 
   imports INVARIANT-EXECUTE
   imports PSEUDOCODE
+  imports CAN-ADD-LIST-ELEMENTS-AT-INDEX-SYNTAX
+  imports CAN-ADD-VALUE-FOR-LIST-ELEMENTS-AT-INDEX-SYNTAX
+  imports LIST-ELEMENTS-ARE-OF-TYPE-SYNTAX
 
   claim <T><TT>
           <k> runExternalCalls(
@@ -41,11 +44,11 @@ module PROOF-INIT
               ?ActionSigners:Map,
               ?PerformedActions:List)
         </TT></T>
-    requires    listElementsAreAddresses(Addresses)
+    requires    listElementsAreOfType(Addresses, rAddress)
 
         andBool isKResult(Addresses)
-        andBool noReusedIndexAddress(u(1), .Map, Addresses)
-        andBool noReusedIndexRole(u(1), .Map, Addresses)
+        andBool canAddListElementsAtIndex(u(1), .Map, Addresses)
+        andBool canAddValueForListElementsAtIndex(u(1), .Map, Addresses, BoardMember)
 
     ensures invariant(
         no-data,

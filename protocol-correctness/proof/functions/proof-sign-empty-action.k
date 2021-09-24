@@ -3,8 +3,7 @@ module PROOF-SIGN-EMPTY-ACTION
 //@ trusted
 // module TRUSTED-SIGN-EMPTY-ACTION
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 
   claim <T><TT>
           <k> call(sign(ActionId:Usize)) ~> K:K

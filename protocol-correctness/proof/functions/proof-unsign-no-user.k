@@ -1,12 +1,13 @@
 // timeout = moderate
 //@ proof
 module PROOF-UNSIGN-NO-USER
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 //@ trusted
 // module TRUSTED-UNSIGN-NO-USER
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> call(unsign(ActionId:Usize)) ~> K:K

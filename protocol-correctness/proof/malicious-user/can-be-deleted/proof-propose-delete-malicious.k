@@ -9,14 +9,16 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
   imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
   imports TRUSTED-MAP-SEMANTICS
   imports TRUSTED-CONCRETIZE-BOARD-MEMBER
-  
 //@ trusted
 // module TRUSTED-PROPOSE-DELETE-MALICIOUS
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
-  imports PSEUDOCODE-CONFIGURATION
+  imports MAP-EXECUTE-SYNTAX
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
   imports MAP-VALUES-ARE-KRESULT-SYNTAX
   imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
+  imports MAPS-ARE-REVERSE-SYNTAX
+  imports PSEUDOCODE-CONFIGURATION
 
   claim <T><TT>
           <k> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress:Address)
@@ -58,11 +60,10 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
         andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
         andBool userIdToAddressInvariant(UserIdToAddress)
         andBool addressToUserIdInvariant(AddressToUserId)
-        andBool mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
-        andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
+        andBool mapsAreReverse(UserIdToAddress, AddressToUserId)
 
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
         andBool mapValuesAreOfType(UserIdToRole, rUserRole)
         andBool mapValuesAreKResult(UserIdToRole)
         // andBool maliciousDeleteInvariant(

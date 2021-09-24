@@ -7,13 +7,14 @@ require "trusted-count-can-sign.k"  //@ Bazel remove
 
 //@ proof
 module PROOF-DISCARD-ACTION-HAS-SIGNERS
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
   imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-HAS-SIGNERS
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
 
   claim <T><TT>
           <k> call(discardAction(ActionId:Usize)) ~> K:K

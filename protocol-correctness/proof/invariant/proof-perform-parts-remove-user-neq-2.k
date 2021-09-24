@@ -15,6 +15,8 @@ module PROOF-PERFORM-PARTS-REMOVE-USER-NEQ-2
 //   imports INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
 //@ end
 
+  imports MAP-EXECUTE-SYNTAX
+
   claim <T><TT>
           <k> branchK
                 ( ( mapCount(UserIdToRole, MEP.IsValue(BoardMember))

@@ -6,10 +6,12 @@ module PROOF-PROPOSE-ACTION-PROPOSER
 // module TRUSTED-PROPOSE-ACTION-PROPOSER
 //@ end
 
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
   imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-NOT-EMPTY-SYNTAX
   imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> call(proposeAction(Action:Action)) ~> K:K
@@ -57,13 +59,13 @@ module PROOF-PROPOSE-ACTION-PROPOSER
 
       andBool mapValuesAreKResult(AddressToUserId)
       andBool mapValuesAreOfType(AddressToUserId, rUsize)
-      andBool valuesAreNotEmpty(AddressToUserId, rUsize)
+      andBool mapValuesAreNotEmpty(AddressToUserId, rUsize)
 
       andBool mapValuesAreOfType(UserIdToRole, rUserRole)
       andBool mapValuesAreKResult(UserIdToRole)
 
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
 
       andBool CallerAddress in_keys(AddressToUserId)
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)

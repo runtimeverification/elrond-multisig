@@ -1,11 +1,23 @@
+require "protocol-correctness/lib/functions/can-add-list-elements-at-index.k"
+require "protocol-correctness/lib/functions/can-add-value-for-list-elements-at-index.k"
+require "protocol-correctness/lib/functions/list-elements-are-of-type.k"
+require "protocol-correctness/lib/functions/map-keys-are-below-limit.k"
+require "protocol-correctness/lib/functions/maps-are-reverse.k"
 require "protocol-correctness/pseudocode.k"
 require "protocol-correctness/proof/execution-proof-helpers.k"
 require "protocol-correctness/proof/invariant.k"
+require "protocol-correctness/proof/map/map-execute.k"
 
 module INIT-LOOP-PARTS
   imports PSEUDOCODE
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT-HELPERS
+  imports CAN-ADD-LIST-ELEMENTS-AT-INDEX-SYNTAX
+  imports CAN-ADD-VALUE-FOR-LIST-ELEMENTS-AT-INDEX-SYNTAX
+  imports LIST-ELEMENTS-ARE-OF-TYPE-SYNTAX
+  imports MAP-EXECUTE-SYNTAX
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
+  imports MAP-VALUES-ARE-BELOW-LIMIT-SYNTAX
+  imports MAPS-ARE-REVERSE-SYNTAX
 
   syntax TTCell ::= initLoopLhs(
             /*prevIndex:*/Usize,
@@ -160,9 +172,10 @@ module INIT-LOOP-PARTS
             andBool PrevIndex >=Int 0
             andBool isKResult(Addresses)
 
-            andBool noReusedIndexAddress(add(u(PrevIndex), u(2)), UserIdToAddress0, Addresses)
-            andBool noReusedIndexRole(add(u(PrevIndex), u(2)), UserIdToRole0, Addresses)
-            andBool listElementsAreAddresses(Addresses)
+            andBool canAddListElementsAtIndex(add(u(PrevIndex), u(2)), UserIdToAddress0, Addresses)
+            andBool canAddValueForListElementsAtIndex(
+                        add(u(PrevIndex), u(2)), UserIdToRole0, Addresses, BoardMember)
+            andBool listElementsAreOfType(Addresses, rAddress)
 
             andBool initLoopInvariant(
                         add(u(PrevIndex), u(1)),
@@ -214,29 +227,28 @@ module INIT-LOOP-PARTS
       andBool notBool u(0) in_keys(UserIdToAddress)
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      andBool mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
-      andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
+      andBool mapsAreReverse(UserIdToAddress, AddressToUserId)
 
-      // andBool allValuesBecomeKeys(AddressToUserId, UserIdToAddress)
-      // andBool allValuesBecomeKeys(UserIdToAddress, AddressToUserId)
+      // andBool mapValuesBecomeKeys(AddressToUserId, UserIdToAddress)
+      // andBool mapValuesBecomeKeys(UserIdToAddress, AddressToUserId)
 
       andBool addressToUserIdInvariant(AddressToUserId)
       // andBool mapValuesAreOfType(AddressToUserId, rUsize)
       // andBool mapValuesAreKResult(AddressToUserId)
-      // andBool valuesAreNotEmpty(AddressToUserId, rUsize)
-      // andBool valuesAreDistinct(AddressToUserId)
-      andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
-      andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
+      // andBool mapValuesAreNotEmpty(AddressToUserId, rUsize)
+      // andBool mapValuesAreDistinct(AddressToUserId)
+      andBool mapValuesAreBelowLimit(NumUsers +Int 1, AddressToUserId, Handling)
+      // andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
 
       andBool userIdToAddressInvariant(UserIdToAddress)
 
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
+      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
 
       andBool userIdToRoleInvariant(UserIdToRole)
       // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
       // andBool mapValuesAreKResult(UserIdToRole)
-      // andBool valuesAreNotEmpty(UserIdToRole, rUserRole)
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
+      // andBool mapValuesAreNotEmpty(UserIdToRole, rUserRole)
+      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
 
       andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
 

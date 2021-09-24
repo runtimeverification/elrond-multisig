@@ -68,7 +68,6 @@ module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
   //         action=sc-deploy? sc-deploy.k
   //         action=send-egld? send-egld.k
 
-  imports EXECUTION-PROOF-HELPERS
   imports INSTRUMENTATION-PERFORM-SPLIT-ACTION
   imports INSTRUMENTATION-PROOF
   imports PSEUDOCODE

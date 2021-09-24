@@ -1,6 +1,29 @@
 require "protocol-correctness/proof/base.k"
 
 module MAP-EXECUTE-SYNTAX
+  imports INT
+  imports MAP
+
+  syntax MapElementProperty ::= "MEP.AlwaysFalse"
+                              | "MEP.AlwaysTrue"
+                              | "MEP.AnyProperty"
+                              | "MEP.IsValue" "(" KItem ")"
+
+  syntax Int ::= mapCount(Map, MapElementProperty)  [function, functional, smtlib(mapCount)]
+  syntax Bool ::= applyMapElementProperty(
+          MapElementProperty,
+          key:KItem,
+          value:KItem
+      )  [function, functional]
+
+  syntax KItem ::= mapSelected(key:KItem, value:KItem, Map)
+  syntax KItem ::= "mapNotFound"
+
+  syntax KItem ::= mapSelectProperty(Map, MapElementProperty)
+  syntax KItem ::= #mapSelectProperty(
+                      toProcess:Map, MapElementProperty, processed:Map)
+
+  syntax KItem ::= lazyMapSelectProperty(Map, MapElementProperty)
 endmodule
 
 module MAP-EXECUTE
@@ -9,16 +32,8 @@ module MAP-EXECUTE
   imports INT
   imports K-EQUAL-SYNTAX
   imports MAP
+  imports MAP-EXECUTE-SYNTAX
 
-  syntax MapElementProperty ::= "MEP.AlwaysFalse"
-                              | "MEP.AlwaysTrue"
-                              | "MEP.AnyProperty"
-                              | "MEP.IsValue" "(" KItem ")"
-  syntax Bool ::= applyMapElementProperty(
-          MapElementProperty,
-          key:KItem,
-          value:KItem
-      )  [function, functional]
   syntax Bool ::= uninterpretedElementProperty(key:KItem, value:KItem)
       [function, functional, no-evaluators]
 
@@ -45,8 +60,6 @@ module MAP-EXECUTE
   rule countMapElementProperty(_, _, _) >=Int 0 => true  [simplification, smt-lemma]
   rule countMapElementProperty(_, _, _) <=Int 1 => true  [simplification, smt-lemma]
 
-  syntax Int ::= mapCount(Map, MapElementProperty)  [function, functional, smtlib(mapCount)]
-
   // TODO: Use this everywhere
   rule mapCount(.Map, _:MapElementProperty) => 0
   rule mapCount(K:KItem |-> V:KItem M:Map, Property:MapElementProperty)
@@ -61,7 +74,6 @@ module MAP-EXECUTE
 
   syntax SelectPropertyIntermediateResult ::= found(key:KItem, value:KItem, Map)
                                             | notFoundYet(inner:Map, MapElementProperty, checked:Map)
-  syntax KItem ::= lazyMapSelectProperty(Map, MapElementProperty)
   syntax KItem ::= #lazyMapSelectProperty(result:SelectPropertyIntermediateResult)
   syntax KItem ::= mapSelectPropertyAddBack(Map)
   syntax KItem ::= "mapSelectPropertyEnd"
@@ -110,15 +122,9 @@ module MAP-EXECUTE
   rule iterateConcat(M, N) => M N
     [simplification(50)]
 
-  syntax KItem ::= mapSelectProperty(Map, MapElementProperty)
-  syntax KItem ::= #mapSelectProperty(
-                      toProcess:Map, MapElementProperty, processed:Map)
   syntax KItem ::= #mapSelectedProperty(
                       key:KItem, value:KItem,
                       toProcess:Map, MapElementProperty, processed:Map)
-
-  syntax KItem ::= mapSelected(key:KItem, value:KItem, Map)
-  syntax KItem ::= "mapNotFound"
 
   rule mapSelectProperty(M:Map, Property:MapElementProperty)
       => #mapSelectProperty(M, Property, .Map)

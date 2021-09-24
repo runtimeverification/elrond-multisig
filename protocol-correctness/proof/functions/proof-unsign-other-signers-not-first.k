@@ -1,12 +1,13 @@
 // timeout = long
 //@ proof
 module PROOF-UNSIGN-OTHER-SIGNERS-NOT-FIRST
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 //@ trusted
 // module TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> call(unsign(ActionId:Usize)) ~> K:K

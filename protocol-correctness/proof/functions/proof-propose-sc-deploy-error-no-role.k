@@ -10,9 +10,9 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-ROLE
 //@ trusted
 // module TRUSTED-PROPOSE-SC-DEPLOY-ERROR-NO-ROLE
 //@ end
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
   imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-NOT-EMPTY-SYNTAX
   imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
   //@ proof
@@ -74,7 +74,7 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-ROLE
 
       andBool mapValuesAreKResult(AddressToUserId)
       andBool mapValuesAreOfType(AddressToUserId, rUsize)
-      andBool valuesAreNotEmpty(AddressToUserId, rUsize)
+      andBool mapValuesAreNotEmpty(AddressToUserId, rUsize)
 
       andBool mapValuesAreOfType(UserIdToRole, rUserRole)
       andBool mapValuesAreKResult(UserIdToRole)

@@ -10,7 +10,9 @@ module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> pushContext ~> preCall
@@ -65,7 +67,7 @@ module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
         andBool actionSignersInvariant(OldActionSigners)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
+        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
 
         andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 

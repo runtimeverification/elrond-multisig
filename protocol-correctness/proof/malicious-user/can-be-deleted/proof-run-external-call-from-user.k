@@ -40,7 +40,9 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> runExternalCallFromUser(MaliciousAddress:Address)
@@ -83,8 +85,8 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
 
-        andBool unusedIdsInMapKeys(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
-        andBool unusedIdsInMapKeys(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimit(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
+        andBool mapKeysAreBelowLimit(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
@@ -94,8 +96,8 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool actionDataInvariant(?NewActionData)
         andBool actionSignersInvariant(?NewActionSigners)
 
-        andBool unusedIdsInMapKeys(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
-        andBool unusedIdsInMapKeys(?NewActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimit(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
+        andBool mapKeysAreBelowLimit(?NewActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
 
         andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
 

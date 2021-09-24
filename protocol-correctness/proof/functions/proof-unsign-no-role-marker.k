@@ -1,13 +1,14 @@
 // timeout = moderate
 //@ proof
 module PROOF-UNSIGN-NO-ROLE-MARKER
-  imports EXECUTION-PROOF-HELPERS
-  imports INSTRUMENTATION-PROOF
+    imports INSTRUMENTATION-PROOF
   imports INVARIANT
 //@ trusted
 // module TRUSTED-UNSIGN-NO-ROLE-MARKER
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> unsign-no-role.k ~> call(unsign(ActionId:Usize)) ~> K:K

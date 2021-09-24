@@ -6,7 +6,6 @@ require "protocol-correctness/pseudocode.k"
 module INSTRUMENTATION-DISCARD-ACTION
   imports INSTRUMENTATION-MAP
   imports INSTRUMENTATION-PROOF
-  imports EXECUTION-PROOF-HELPERS
   imports PSEUDOCODE
 
   syntax KItem ::= splitDiscardAction(actionId:Usize)

@@ -8,8 +8,8 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-NEW
 // module TRUSTED-PERFORM-ACTION-REMOVE-USER-NEW
 //@ end
 
-  imports EXECUTION-PROOF-HELPERS
-  imports PSEUDOCODE
+    imports PSEUDOCODE
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
 
   claim
       <T> <TT>
@@ -79,8 +79,8 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-NEW
       andBool NumUsers >=Int 0
       // TODO: Perhaps replace with unusedIdsInMapValues(AddressToUserId) +
       // something to map values to keys.
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
+      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
       andBool NumBoardMembers +Int NumProposers >Int 0
       andBool Quorum <=Int NumBoardMembers
 

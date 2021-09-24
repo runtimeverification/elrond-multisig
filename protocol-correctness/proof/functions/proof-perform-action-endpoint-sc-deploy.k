@@ -9,8 +9,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-SC-DEPLOY
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-SC-DEPLOY
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 
   claim <T><TT>
           <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

@@ -5,8 +5,7 @@ module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ trusted
 // module TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
   imports PUSH-LIST-SYNTAX
 
   claim <T><TT>

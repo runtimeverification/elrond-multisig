@@ -153,6 +153,7 @@ module MALICIOUS-USER-DELETE-INVARIANT
 
   imports INVARIANT
   imports MALICIOUS-USER-INVARIANT-FUNCTIONS
+  imports MAP-EXECUTE-SYNTAX
 
   rule  maliciousDeleteInvariant(
             MaliciousAddress:Address,

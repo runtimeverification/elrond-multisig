@@ -43,6 +43,28 @@ klibrary(
 )
 
 klibrary(
+  name = "can-add-list-elements-at-index-files",
+  srcs = ["can-add-list-elements-at-index.k"],
+  deps = [
+      ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:expression-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "can-add-value-for-list-elements-at-index-files",
+  srcs = ["can-add-value-for-list-elements-at-index.k"],
+  deps = [
+      ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:expression-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "concretize-expression-list-files",
   srcs = ["concretize-expression-list.k"],
   deps = [
@@ -79,26 +101,51 @@ klibrary(
       ":add-one-if-not-negative-files",
       ":all-keys-become-keys-files",
       ":bool-to-int-files",
+      ":can-add-list-elements-at-index-files",
+      ":can-add-value-for-list-elements-at-index-files",
       ":concretize-value-files",
       ":concretize-expression-list-files",
       ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
+      ":keys-map-files",
       ":last-functions-files",
       ":last-to-start-files",
       ":list-contains-files",
       ":list-elements-are-distinct-files",
+      ":list-elements-are-of-type-files",
       ":list-elements-are-usize-files",
       ":list-find-files",
       ":list-first-with-default-files",
       ":list-no-common-item-files",
       ":list-swap-remove-files",
       ":list-to-map-set-files",
+      ":map-included-files",
+      ":map-keys-are-below-limit-files",
+      ":map-keys-are-kresult-files",
+      ":map-keys-are-of-type-files",
+      ":map-values-are-distinct-files",
+      ":map-values-are-expression-list-of-usize-files",
       ":map-values-are-kresult-files",
+      ":map-values-are-not-empty-files",
       ":map-values-are-of-type-files",
+      ":map-values-become-keys-files",
+      ":maps-are-reverse-files",
+      ":no-map-key-in-list-files",
+      ":map-values-are-below-limit-files",
       ":plistlen-functions-files",
       ":prepend-files",
       ":push-list-files",
       ":remove-last-files",
       ":reverse-expression-csv-files",
+      ":value-is-not-empty-files",
+      ":value-not-in-map-values-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "keys-map-files",
+  srcs = ["keys-map.k"],
+  deps = [
   ],
   visibility = ["//visibility:public"],
 )
@@ -141,6 +188,15 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
       ":list-contains-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "list-elements-are-of-type-files",
+  srcs = ["list-elements-are-of-type.k"],
+  deps = [
+      "//protocol-correctness/lib/language:type-reflection-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -206,9 +262,85 @@ klibrary(
 )
 
 klibrary(
+  name = "map-included-files",
+  srcs = ["map-included.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-keys-are-below-limit-files",
+  srcs = ["map-keys-are-below-limit.k"],
+  deps = [
+      "//protocol-correctness/lib/language:cast-files",
+      "//protocol-correctness/lib/proof/unsorted:formula-expansion-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-keys-are-kresult-files",
+  srcs = ["map-keys-are-kresult.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-keys-are-of-type-files",
+  srcs = ["map-keys-are-of-type.k"],
+  deps = [
+      "//protocol-correctness/lib/language:type-reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-are-below-limit-files",
+  srcs = ["map-values-are-below-limit.k"],
+  deps = [
+      "//protocol-correctness/lib/language:cast-files",
+      "//protocol-correctness/lib/proof/unsorted:formula-expansion-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-are-distinct-files",
+  srcs = ["map-values-are-distinct.k"],
+  deps = [
+      ":value-not-in-map-values-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-are-expression-list-of-usize-files",
+  srcs = ["map-values-are-expression-list-of-usize.k"],
+  deps = [
+      ":list-elements-are-usize-files",
+      "//protocol-correctness/lib/language:base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "map-values-are-kresult-files",
   srcs = ["map-values-are-kresult.k"],
   deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-are-not-empty-files",
+  srcs = ["map-values-are-not-empty.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      ":value-is-not-empty-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -218,6 +350,32 @@ klibrary(
   srcs = ["map-values-are-of-type.k"],
   deps = [
       "//protocol-correctness/lib/language:type-reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-values-become-keys-files",
+  srcs = ["map-values-become-keys.k"],
+  deps = [
+      ":keys-map-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "maps-are-reverse-files",
+  srcs = ["maps-are-reverse.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "no-map-key-in-list-files",
+  srcs = ["no-map-key-in-list.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -266,6 +424,23 @@ klibrary(
   srcs = ["reverse-expression-csv.k"],
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "value-is-not-empty-files",
+  srcs = ["value-is-not-empty.k"],
+  deps = [
+      "//protocol-correctness/lib/language:type-reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "value-not-in-map-values-files",
+  srcs = ["value-not-in-map-values.k"],
+  deps = [
   ],
   visibility = ["//visibility:public"],
 )

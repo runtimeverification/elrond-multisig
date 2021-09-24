@@ -24,9 +24,15 @@ klibrary(
   name = "init-loop-parts-files",
   srcs = ["init-loop-parts.k"],
   deps = [
+      "//protocol-correctness/lib/functions:can-add-list-elements-at-index-files",
+      "//protocol-correctness/lib/functions:can-add-value-for-list-elements-at-index-files",
+      "//protocol-correctness/lib/functions:list-elements-are-of-type-files",
+      "//protocol-correctness/lib/functions:map-keys-are-below-limit-files",
+      "//protocol-correctness/lib/functions:maps-are-reverse-files",
       "//protocol-correctness:pseudocode-files",
       "//protocol-correctness/proof:execution-proof-helpers-files",
       "//protocol-correctness/proof:invariant-files",
+      "//protocol-correctness/proof/map:map-execute-files",
   ],
   visibility = ["//visibility:public"],
 )

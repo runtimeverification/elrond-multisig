@@ -7,13 +7,14 @@ require "trusted-count-can-sign.k"  //@ Bazel remove
 
 //@ proof
 module PROOF-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
   imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
 
   // TODO: I think that this is an invalid case that should be discarded
   // by the main invariant.

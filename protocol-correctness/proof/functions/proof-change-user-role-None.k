@@ -5,7 +5,6 @@ module PROOF-CHANGE-USER-ROLE-NONE
 //@ trusted
 // module TRUSTED-CHANGE-USER-ROLE-NONE
 //@ end
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
 
   claim <T><TT>

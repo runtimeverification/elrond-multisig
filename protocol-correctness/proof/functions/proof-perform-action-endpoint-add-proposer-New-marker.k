@@ -8,9 +8,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-NEW-MARKER
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-NEW-MARKER
 //@ end
 
-  imports EXECUTION-PROOF-HELPERS
   imports INSTRUMENTATION-PROOF
   imports INVARIANT
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
 
   claim <T><TT>
           <k> add-proposer-New.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
@@ -63,8 +63,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-NEW-MARKER
         andBool NumUsers >=Int 0
         // TODO: Perhaps replace with unusedIdsInMapValues(AddressToUserId) +
         // someting to map values to keys.
-        andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
-        andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+        andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
+        andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
         andBool Quorum <=Int NumBoardMembers
 
         andBool notBool UserAddress in_keys(AddressToUserId)

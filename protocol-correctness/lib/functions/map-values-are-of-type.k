@@ -11,7 +11,7 @@ endmodule
 
 module MAP-VALUES-ARE-OF-TYPE
   imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
-  
+
   rule mapValuesAreOfType(.Map, _:ReflectionType) => true
   rule mapValuesAreOfType((_ |-> V M:Map) #as _:Map, T:ReflectionType)
       => valueOfType(V, T) andBool mapValuesAreOfType(M, T)

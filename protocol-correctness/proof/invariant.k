@@ -1,10 +1,28 @@
+require "protocol-correctness/lib/functions/list-elements-are-distinct.k"
+require "protocol-correctness/lib/functions/list-elements-are-usize.k"
+require "protocol-correctness/lib/functions/map-keys-are-below-limit.k"
+require "protocol-correctness/lib/functions/map-values-are-expression-list-of-usize.k"
 require "protocol-correctness/lib/functions/map-values-are-kresult.k"
+require "protocol-correctness/lib/functions/map-values-are-not-empty.k"
+require "protocol-correctness/lib/functions/map-values-are-of-type.k"
+require "protocol-correctness/lib/functions/maps-are-reverse.k"
+require "protocol-correctness/lib/functions/value-is-not-empty.k"
+require "protocol-correctness/lib/functions/value-not-in-map-values.k"
+require "protocol-correctness/multisig/lib/language/type-reflection.k"
 require "protocol-correctness/proof/execution-proof-helpers.k"
+require "protocol-correctness/proof/map/map-execute.k"
 
 module INVARIANT-HELPERS
-  imports EXECUTION-PROOF-HELPERS
+  imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
+  imports LIST-ELEMENTS-ARE-USIZE-SYNTAX
+  imports MAP-VALUES-ARE-DISTINCT-SYNTAX
+  imports MAP-VALUES-ARE-EXPRESSION-LIST-OF-USIZE-SYNTAX
   imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-NOT-EMPTY-SYNTAX
   imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
+  imports MULTISIG-TYPE-REFLECTION-SYNTAX
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
+  imports VALUE-NOT-IN-MAP-VALUES-SYNTAX
 
   syntax Bool ::= addressToUserIdInvariant(addressToUserId:Map)
     [function, functional]
@@ -15,8 +33,8 @@ module INVARIANT-HELPERS
     => true
       andBool valueOfType(V, rUsize)  // mapValuesAreOfType(AddressToUserId, rUsize)
       andBool isKResult(V)  // mapValuesAreKResult(AddressToUserId)
-      andBool valueIsNotEmpty(V, rUsize)  // valuesAreNotEmpty(AddressToUserId, rUsize)
-      andBool valueNotInMapValues(V, AddressToUserId)  // valuesAreDistinct(AddressToUserId)
+      andBool valueIsNotEmpty(V, rUsize)  // mapValuesAreNotEmpty(AddressToUserId, rUsize)
+      andBool valueNotInMapValues(V, AddressToUserId)  // mapValuesAreDistinct(AddressToUserId)
 
       andBool addressToUserIdInvariant(AddressToUserId)
     [simplification]
@@ -31,7 +49,7 @@ module INVARIANT-HELPERS
       andBool valueOfType(V, rAddress)  // mapValuesAreOfType(UserIdToAddress, rAddress)
       andBool isKResult(V)  // mapValuesAreKResult(UserIdToAddress)
       // Address is not nullable.
-      // andBool valueIsNotEmpty(V, rAddress)  // valuesAreNotEmpty(UserIdToAddress, rAddress)
+      // andBool valueIsNotEmpty(V, rAddress)  // mapValuesAreNotEmpty(UserIdToAddress, rAddress)
       // TODO: Delete:
       // andBool V in_keys(AddressToUserId) andBool AddressToUserId[V] ==K K  // mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
 
@@ -48,10 +66,10 @@ module INVARIANT-HELPERS
     => true
       andBool valueOfType(V, rUserRole)  // mapValuesAreOfType(UserIdToRole, rUserRole)
       andBool isKResult(V)  // mapValuesAreKResult(UserIdToRole)
-      andBool valueIsNotEmpty(V, rUserRole)  // valuesAreNotEmpty(UserIdToRole, rUserRole)
+      andBool valueIsNotEmpty(V, rUserRole)  // mapValuesAreNotEmpty(UserIdToRole, rUserRole)
 
-      andBool valueOfType(K, rUsize)  // keysAreOfType(UserIdToRole, rUsize)
-      andBool isKResult(K)  // keysAreKResult(UserIdToRole)
+      andBool valueOfType(K, rUsize)  // mapKeysAreOfType(UserIdToRole, rUsize)
+      andBool isKResult(K)  // mapKeysAreKResult(UserIdToRole)
 
       andBool userIdToRoleInvariant(UserIdToRole)
     [simplification]
@@ -64,7 +82,7 @@ module INVARIANT-HELPERS
     => true
       andBool valueOfType(V, rAction) // mapValuesAreOfType(ActionData, rAction)
       andBool isKResult(V)  // mapValuesAreKResult(ActionData)
-      andBool valueIsNotEmpty(V, rAction)  // valuesAreNotEmpty(ActionData, rAction)
+      andBool valueIsNotEmpty(V, rAction)  // mapValuesAreNotEmpty(ActionData, rAction)
 
       andBool actionDataInvariant(ActionData)
     [simplification]
@@ -75,9 +93,9 @@ module INVARIANT-HELPERS
   rule actionSignersInvariant(.Map) => true
   rule actionSignersInvariant(_:KItem |-> V:KItem ActionSigners:Map)
     => true
-      andBool isExpressionList(V) andBool listElementsAreUsize(V) // valuesAreExpressionListOfUsize(ActionSigners)
+      andBool isExpressionList(V) andBool listElementsAreUsize(V) // mapValuesAreExpressionListOfUsize(ActionSigners)
       andBool isKResult(V)  // mapValuesAreKResult(ActionSigners)
-      andBool valueIsNotEmpty(V, rExpressionList)  // valuesAreNotEmpty(ActionSigners, rExpressionList)
+      andBool valueIsNotEmpty(V, rExpressionList)  // mapValuesAreNotEmpty(ActionSigners, rExpressionList)
       andBool listElementsAreDistinctSafe(V)
 
       andBool actionSignersInvariant(ActionSigners)
@@ -96,18 +114,22 @@ module INVARIANT-HELPERS
       orBool actionSignersInvariant(M)
       orBool actionDataInvariant(M)
     [simplification]
-  rule valuesAreNotEmpty(M:Map, rUsize) => true
+  rule mapValuesAreNotEmpty(M:Map, rUsize) => true
     requires false
       orBool addressToUserIdInvariant(M)
-  rule valuesAreNotEmpty(M:Map, rUserRole) => true
+    [simplification]
+  rule mapValuesAreNotEmpty(M:Map, rUserRole) => true
     requires false
       orBool userIdToRoleInvariant(M)
-  rule valuesAreExpressionListOfUsize(M:Map) => true
+    [simplification]
+  rule mapValuesAreExpressionListOfUsize(M:Map) => true
     requires false
       orBool actionSignersInvariant(M)
-  rule valuesAreDistinct(M:Map) => true
+    [simplification]
+  rule mapValuesAreDistinct(M:Map) => true
     requires false
       orBool addressToUserIdInvariant(M)
+    [simplification]
     
   rule isKResult(M[_K1:KItem] orDefault K2:KItem) => true
     requires actionSignersInvariant(M) andBool isKResult(K2)
@@ -116,9 +138,12 @@ module INVARIANT-HELPERS
 endmodule
 
 module INVARIANT
-  imports EXECUTION-PROOF-HELPERS
   imports PSEUDOCODE
   imports INVARIANT-HELPERS
+  imports MAP-EXECUTE-SYNTAX
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
+  imports MAP-VALUES-ARE-BELOW-LIMIT-SYNTAX
+  imports MAPS-ARE-REVERSE-SYNTAX
 
   syntax StateCell ::= invariantState(
       /*numUsers:*/Usize,
@@ -336,38 +361,37 @@ module INVARIANT
       andBool notBool u(0) in_keys(UserIdToAddress)
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      // andBool allValuesBecomeKeys(AddressToUserId, UserIdToAddress)
-      // andBool allValuesBecomeKeys(UserIdToAddress, AddressToUserId)
+      // andBool mapValuesBecomeKeys(AddressToUserId, UserIdToAddress)
+      // andBool mapValuesBecomeKeys(UserIdToAddress, AddressToUserId)
 
-      andBool mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
-      andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
+      andBool mapsAreReverse(UserIdToAddress, AddressToUserId)
 
       andBool addressToUserIdInvariant(AddressToUserId)
       // andBool mapValuesAreOfType(AddressToUserId, rUsize)
       // andBool mapValuesAreKResult(AddressToUserId)
-      // andBool valuesAreNotEmpty(AddressToUserId, rUsize)
-      // andBool valuesAreDistinct(AddressToUserId)
-      andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
-      andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
+      // andBool mapValuesAreNotEmpty(AddressToUserId, rUsize)
+      // andBool mapValuesAreDistinct(AddressToUserId)
+      // andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
+      andBool mapValuesAreBelowLimit(NumUsers +Int 1, AddressToUserId, Handling)
 
       andBool userIdToAddressInvariant(UserIdToAddress)
 
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
+      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
 
       andBool userIdToRoleInvariant(UserIdToRole)
       // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
       // andBool mapValuesAreKResult(UserIdToRole)
-      // andBool valuesAreNotEmpty(UserIdToRole, rUserRole)
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
+      // andBool mapValuesAreNotEmpty(UserIdToRole, rUserRole)
+      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
       andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
 
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), Handling)
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), Handling)
+      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), Handling)
+      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), Handling)
       andBool maxMapKey(u(ActionLastIndex), keysMap(ActionData))
       andBool maxMapKey(u(ActionLastIndex), keysMap(ActionSigners))
 
       andBool actionSignersInvariant(ActionSigners)
-      // andBool valuesAreExpressionListOfUsize(ActionSigners)
+      // andBool mapValuesAreExpressionListOfUsize(ActionSigners)
       // andBool mapValuesAreKResult(ActionSigners)
       // andBool valuesAreExpressionListOfDistinctElements(ActionSigners)
 

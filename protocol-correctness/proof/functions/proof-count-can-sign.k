@@ -2,12 +2,13 @@
 // breadth = 6
 //@ proof
 module PROOF-COUNT-CAN-SIGN
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
 //@ trusted
 // module TRUSTED-COUNT-CAN-SIGN
   // imports MAIN-PROOF-EXECUTE
 //@ end
+
+  imports LIST-ELEMENTS-ARE-DISTINCT-SYNTAX
 
   claim <T> <TT>
           <k>

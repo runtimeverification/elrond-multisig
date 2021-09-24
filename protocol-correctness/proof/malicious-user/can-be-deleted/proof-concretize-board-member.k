@@ -11,6 +11,7 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-DELETE-ACTIONS
+  imports MAP-VALUES-BECOME-KEYS-SYNTAX
 
   claim <T><TT>
           <k> withPickedUserMakeConcretePrefix(AddressToUserId, UserIdToAddress, MaliciousAddress, UserId)
@@ -53,11 +54,11 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
         andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
         andBool userIdToAddressInvariant(UserIdToAddress)
         andBool addressToUserIdInvariant(AddressToUserId)
-        andBool allValuesBecomeKeys(UserIdToAddress, AddressToUserId)
+        andBool mapValuesBecomeKeys(UserIdToAddress, AddressToUserId)
         // andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
 
-        // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+        // andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        // andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
         // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
         // andBool mapValuesAreKResult(UserIdToRole)
     ensures true
@@ -117,11 +118,11 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
         andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
         andBool userIdToAddressInvariant(UserIdToAddress)
         andBool addressToUserIdInvariant(AddressToUserId)
-        andBool allValuesBecomeKeys(UserIdToAddress, AddressToUserId)
+        andBool mapValuesBecomeKeys(UserIdToAddress, AddressToUserId)
         // andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
 
-        // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        // andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+        // andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        // andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
         // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
         // andBool mapValuesAreKResult(UserIdToRole)
     ensures true

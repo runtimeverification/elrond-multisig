@@ -9,8 +9,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-SEND-EGLD
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-SEND-EGLD
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 
   claim <T><TT>
           <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>

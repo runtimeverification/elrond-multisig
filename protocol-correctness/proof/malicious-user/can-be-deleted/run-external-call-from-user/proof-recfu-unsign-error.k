@@ -23,6 +23,7 @@ module PROOF-RECFU-UNSIGN-ERROR
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> pushContext ~> preCall

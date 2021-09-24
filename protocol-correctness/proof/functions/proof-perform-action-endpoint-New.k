@@ -6,8 +6,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-NEW
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-NEW
 //@ end
-  imports EXECUTION-PROOF-HELPERS
-  imports INVARIANT
+    imports INVARIANT
 
   claim <T><TT>
           <k> call(performActionEndpoint(_ActionId:Usize)) ~> K:K </k>

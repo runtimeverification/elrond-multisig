@@ -5,6 +5,7 @@ module FORALL-V-GREATER-OR-EQUAL-THAN-U-V-NOT-IN-M-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports BOOL
   imports MAP
+
   syntax Bool ::= "forall-v-greater-or-equal-than-u-v-not-in-m" "(" Usize "," Map "," ExpressionList ")"   [function, functional]
 endmodule
 

@@ -3,7 +3,6 @@ module PROOF-DISCARD-ACTION-NO-USER
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-NO-USER
 //@ end
-  imports EXECUTION-PROOF-HELPERS
   imports INVARIANT
 
   claim <T><TT>

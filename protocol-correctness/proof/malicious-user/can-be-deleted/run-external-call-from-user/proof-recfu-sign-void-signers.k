@@ -14,6 +14,7 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
+  imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
           <k> pushContext ~> preCall

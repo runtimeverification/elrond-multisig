@@ -19,17 +19,6 @@ klibrary(
 )
 
 klibrary(
-  name = "at-most-this-signer-list-files",
-  srcs = ["at-most-this-signer-list.k"],
-  deps = [
-      "//protocol-correctness/lib/language:base-types-files",
-      ":can-sign-function-files",
-      "//protocol-correctness/multisig/lib/language:cast-files",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
   name = "can-sign-function-files",
   srcs = ["can-sign-function.k"],
   deps = [

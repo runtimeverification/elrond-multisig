@@ -41,6 +41,11 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
   imports MAP-VALUES-ARE-KRESULT-SYNTAX
   imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
 
+  imports MAP-VALUES-ARE-KRESULT-SYNTAX
+  imports MAP-VALUES-ARE-NOT-EMPTY-SYNTAX
+  imports MAP-VALUES-ARE-OF-TYPE-SYNTAX
+  imports MAPS-ARE-REVERSE-SYNTAX
+
   claim <T><TT>
           <k> pickBoardMemberOrProposer(UserIdToRole)
               ~> withPickedUserCall(proposeChangeQuorum(u(0)))
@@ -99,7 +104,7 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
       // andBool userIdToAddressInvariant(UserIdToAddress, AddressToUserId)
       andBool mapsAreReverse(AddressToUserId, UserIdToAddress)
 
-      andBool valuesAreNotEmpty(ActionData, rAction)
+      andBool mapValuesAreNotEmpty(ActionData, rAction)
 
       // andBool mapCount(UserIdToRole, MEP.IsValue(BoardMember))
       //     +Int mapCount(UserIdToRole, MEP.IsValue(Proposer))

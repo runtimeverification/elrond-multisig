@@ -160,9 +160,9 @@ module PROPERTIES-EXECUTE
   //   => true
   //     andBool valueOfType(V, rUserRole)  // mapValuesAreOfType(UserIdToRole, rUserRole)
   //     andBool isKResult(V)  // mapValuesAreKResult(UserIdToRole)
-  //     andBool valueIsNotEmpty(V, rUserRole)  // valuesAreNotEmpty(UserIdToRole, rUserRole)
-  //     andBool valueOfType(K, rUsize)  // keysAreOfType(UserIdToRole, rUsize)
-  //     andBool isKResult(K)  // keysAreKResult(UserIdToRole)
+  //     andBool valueIsNotEmpty(V, rUserRole)  // mapValuesAreNotEmpty(UserIdToRole, rUserRole)
+  //     andBool valueOfType(K, rUsize)  // mapKeysAreOfType(UserIdToRole, rUsize)
+  //     andBool isKResult(K)  // mapKeysAreKResult(UserIdToRole)
   //     andBool K in_keys(UserIdToAddress)  // allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
 
   //     andBool newUserIdToRoleInvariant(UserIdToRole, UserIdToAddress)
@@ -177,7 +177,7 @@ module PROPERTIES-EXECUTE
   //   => true
   //     andBool valueOfType(V, rAddress)  // mapValuesAreOfType(UserIdToAddress, rAddress)
   //     andBool isKResult(V)  // mapValuesAreKResult(UserIdToAddress)
-  //     andBool valueIsNotEmpty(V, rAddress)  // valuesAreNotEmpty(UserIdToAddress, rAddress)
+  //     andBool valueIsNotEmpty(V, rAddress)  // mapValuesAreNotEmpty(UserIdToAddress, rAddress)
   //     andBool V in_keys(AddressToUserId) andBool AddressToUserId[V] ==K K  // mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
 
   //     andBool userIdToAddressInvariant(UserIdToAddress, AddressToUserId)

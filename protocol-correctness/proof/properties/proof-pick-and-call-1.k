@@ -13,6 +13,7 @@ module PROOF-PICK-AND-CALL-1
 // module TRUSTED-PICK-AND-CALL-1
 //@ end
 
+  imports MAP-EXECUTE-SYNTAX
   imports PROPERTIES-EXECUTE
 
   claim <T><TT>

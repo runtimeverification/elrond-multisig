@@ -2,8 +2,15 @@ require "protocol-correctness/lib/functions/all-keys-become-keys.k"
 require "protocol-correctness/lib/functions/list-elements-are-usize.k"
 require "protocol-correctness/lib/functions/list-elements-are-distinct.k"
 require "protocol-correctness/lib/functions/list-to-map-set.k"
+require "protocol-correctness/lib/functions/map-included.k"
+require "protocol-correctness/lib/functions/map-keys-are-below-limit.k"
+require "protocol-correctness/lib/functions/map-values-are-below-limit.k"
+require "protocol-correctness/lib/functions/map-values-become-keys.k"
+require "protocol-correctness/lib/functions/no-map-key-in-list.k"
 require "protocol-correctness/lib/functions/push-list.k"
+require "protocol-correctness/lib/functions/value-not-in-map-values.k"
 require "protocol-correctness/lib/language/cast.k"
+require "protocol-correctness/lib/proof/unsorted/formula-expansion.k"
 
 require "protocol-correctness/proof/base.k"
 require "protocol-correctness/proof/map/map-execute.k"
@@ -24,28 +31,24 @@ module EXECUTION-PROOF-HELPERS
 
   imports CAST-SYNTAX
   imports EXPLICIT-KITEM-INJECTION
+  imports FORMULA-EXPANSION-SYNTAX
   imports LAST-TO-START-SYNTAX
   imports LIST-CONTAINS-SYNTAX
   imports LIST-ELEMENTS-ARE-USIZE
   imports LIST-ELEMENTS-ARE-DISTINCT
   imports LIST-TO-MAP-SET-SYNTAX
+  imports MAP-INCLUDED-SYNTAX
+  imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
+  imports MAP-VALUES-BECOME-KEYS-ADDITIONAL-SYNTAX
+  imports MAP-VALUES-ARE-BELOW-LIMIT-ADDITIONAL-SYNTAX
+  imports NO-MAP-KEY-IN-LIST-SYNTAX
   imports PLISTLEN-FUNCTIONS-SYNTAX
   imports PUSH-LIST-SYNTAX
   imports REMOVE-LAST-ADDITIONAL-SYNTAX
   imports REMOVE-LAST-SYNTAX
+  imports VALUE-NOT-IN-MAP-VALUES-SYNTAX
 
   imports ALL-KEYS-BECOME-KEYS
-
-  // Expand and PropertyHandling form a stupid trick used to control symbolic
-  // function application.
-  // Any function that receives them as an argument should not depend on them,
-  // i.e it should have the same value for all possible PropertyHandling values.
-  // TODO: Prove lemmas about this.
-  syntax Expand ::= "expanded" | expand(Expand)
-  syntax PropertyHandling ::= "usesExpanded" | Expand
-  // TODO: Delete above or below.
-  syntax Int ::= expand(Int)  [function, functional, no-evaluators]
-  syntax Int ::= "usesExpanded"  [function, functional, no-evaluators]
 
   // Override the default behaviour.
   rule isDefaultValue(E:ExpressionList, rExpressionList)
@@ -60,25 +63,8 @@ module EXECUTION-PROOF-HELPERS
     requires listElementsAreDistinctUnsafe([E, L])
     [simplification]
 
-  syntax Bool ::= noReusedIndexAddress(Usize, Map, ExpressionList)  [function, functional]
-  rule noReusedIndexAddress(U:Usize, M:Map, [.]) => forall-v-greater-or-equal-than-u-v-not-in-m(U, M, [.])
-  rule noReusedIndexAddress(U:Usize, M:Map, [E:Expression , Es:ExpressionCSV] #as L)
-      =>  forall-v-greater-or-equal-than-u-v-not-in-m(U, M, L)
-          andBool noReusedIndexAddress(add(U, u(1)), (U |-> E) M, [Es])
-
-  syntax Bool ::= noReusedIndexRole(Usize, Map, ExpressionList)  [function, functional]
-  rule noReusedIndexRole(U:Usize, M:Map, [.]) => forall-v-greater-or-equal-than-u-v-not-in-m(U, M, [.])
-  rule noReusedIndexRole(U:Usize, M:Map, [_:Expression , Es:ExpressionCSV] #as L)
-      =>  forall-v-greater-or-equal-than-u-v-not-in-m(U, M, L)
-          andBool noReusedIndexRole(add(U, u(1)), (U |-> BoardMember) M, [Es])
-
   rule forall-v-greater-or-equal-than-u-v-not-in-m(_:Usize, .Map, _:ExpressionList)
       => true  [simplification]
-
-  syntax Bool ::= listElementsAreAddresses(ExpressionList)  [function, functional]
-  rule listElementsAreAddresses([.]) => true
-  rule listElementsAreAddresses([E:Expression , Es:ExpressionCSV])
-      => isAddress(E) andBool listElementsAreAddresses([Es])
 
   rule listElementsAreDistinctUnsafe([#pushList(L:ExpressionCSV, E:Expression)])
       => listElementsAreDistinctUnsafe([L])
@@ -91,148 +77,54 @@ module EXECUTION-PROOF-HELPERS
   rule listElementsAreDistinctUnsafe([lastToStart(L:ExpressionCSV) => L])
     [simplification]
 
-  syntax Bool ::= valuesAreExpressionListOfUsize(Map)  [function, functional]
-  rule valuesAreExpressionListOfUsize(.Map) => true
-  rule valuesAreExpressionListOfUsize((_ |-> V M:Map) #as _:Map)
-      =>  isExpressionList(V)
-          andBool listElementsAreUsize(V)
-          andBool valuesAreExpressionListOfUsize(M)
-  rule valuesAreExpressionListOfUsize((_ |-> V M:Map) #as _:Map)
-      =>  isExpressionList(V)
-          andBool listElementsAreUsize(V)
-          andBool valuesAreExpressionListOfUsize(M)
-    [simplification]
-
-  syntax Bool ::= keysAreKResult(Map)  [function, functional]
-  rule keysAreKResult(.Map) => true
-  rule keysAreKResult((K:KItem |-> _:KItem M:Map) #as _:Map)
-      => isKResult(K) andBool keysAreKResult(M)
-  rule keysAreKResult((K:KItem |-> _:KItem M:Map) #as _:Map)
-      => isKResult(K) andBool keysAreKResult(M)
-    [simplification]
-
-  syntax Bool ::= keysAreOfType(Map, ReflectionType)  [function, functional]
-  rule keysAreOfType(.Map, _:ReflectionType) => true
-  rule keysAreOfType((K:KItem |-> _:KItem M:Map) #as _:Map, T:ReflectionType)
-      => valueOfType(K, T) andBool keysAreOfType(M, T)
-  rule keysAreOfType((K:KItem |-> _:KItem M:Map) #as _:Map, T:ReflectionType)
-      => valueOfType(K, T) andBool keysAreOfType(M, T)
-    [simplification]
-
-  syntax Bool ::= valueIsNotEmpty(KItem, ReflectionType)  [function, functional]
-  rule valueIsNotEmpty(V:KItem, T:ReflectionType)
-      => notBool (V ==K defaultValue(T))
-
-  syntax Bool ::= valuesAreNotEmpty(Map, ReflectionType)  [function, functional]
-  rule valuesAreNotEmpty(.Map, _:ReflectionType) => true
-  rule valuesAreNotEmpty((_ |-> V M:Map) #as _:Map, T:ReflectionType)
-      => valuesAreNotEmpty(M, T) andBool valueIsNotEmpty(V, T)
-  rule valuesAreNotEmpty((_ |-> V M:Map) #as _:Map, T:ReflectionType)
-      => valuesAreNotEmpty(M, T) andBool valueIsNotEmpty(V, T)
-    [simplification]
-
-  syntax Bool ::= valuesAreDistinct(Map)  [function, functional]
-  rule valuesAreDistinct(.Map) => true
-  rule valuesAreDistinct((_:KItem |-> V:KItem M:Map) #as _:Map)
-      => valuesAreDistinct(M) andBool valueNotInMapValues(V, M)
-    [simplification]
-
-  syntax Bool ::= valueNotInMapValues(KItem, Map)  [function, functional]
-  rule valueNotInMapValues(_:KItem, .Map) => true
-  rule valueNotInMapValues(V1:KItem, (_:KItem |-> V2:KItem M:Map) #as _:Map)
-      => (notBool (V1 ==K V2)) andBool valueNotInMapValues(V1, M)
-    [simplification]
   rule valueNotInMapValues(u(X:Int +Int 4), M:Map) => true
-    requires #noReusedIndexValue(X +Int 3, M, expanded)
+    requires #mapValuesAreBelowLimit(X +Int 3, M, expanded)
     [simplification]
 
-  syntax Bool ::= noReusedIndexValue(Int, Map, PropertyHandling)  [function, functional]
-  syntax Bool ::= #noReusedIndexValue(Int, Map, PropertyHandling)  [function, functional]
-
-  rule noReusedIndexValue(_Index:Int, .Map, _:PropertyHandling) => true
-
-  rule noReusedIndexValue(Index:Int, (_:KItem |-> V:Usize M:Map) #as _:Map, Expand:PropertyHandling)
-      => Index >Int usizeToInt(V) andBool noReusedIndexValue(Index, M, Expand)
-    [simplification(20)]
-  rule noReusedIndexValue(Index:Int, M:Map, Handling:PropertyHandling)
+  rule mapValuesAreBelowLimit(Index:Int, M:Map, Handling:PropertyHandling)
       => true
         andBool valueNotInMapValues(u(Index), M)
-        andBool #noReusedIndexValue(Index, M, Handling)
+        andBool #mapValuesAreBelowLimit(Index, M, Handling)
     [simplification(50)]
 
-  rule #noReusedIndexValue(_Index:Int, .Map, expanded) => true
-  rule #noReusedIndexValue(Index:Int, (_:KItem |-> V:Usize M:Map) #as _:Map, Expand:PropertyHandling)
-      => Index >Int usizeToInt(V) andBool #noReusedIndexValue(Index, M, Expand)
-    [simplification(20)]
-  rule #noReusedIndexValue(Index:Int, M:Map, expand(Expand:Expand))
-      =>  noReusedIndexValue(Index +Int 1, M, Expand)
+  rule #mapValuesAreBelowLimit(Index:Int, M:Map, expand(Expand:Expand))
+      =>  mapValuesAreBelowLimit(Index +Int 1, M, Expand)
     [simplification(50)]
 
-  rule #noReusedIndexValue(X:Int, M:Map, usesExpanded)
+  rule #mapValuesAreBelowLimit(X:Int, M:Map, usesExpanded)
       => true
     requires false
-      orBool #noReusedIndexValue(X, M, expanded)
+      orBool #mapValuesAreBelowLimit(X, M, expanded)
       orBool (true
           andBool valueNotInMapValues(u(X), M)
-          andBool #noReusedIndexValue(X +Int 1, M, expanded)
+          andBool #mapValuesAreBelowLimit(X +Int 1, M, expanded)
       )
       orBool (true
           andBool valueNotInMapValues(u(X), M)
           andBool valueNotInMapValues(u(X +Int 1), M)
-          andBool #noReusedIndexValue(X +Int 2, M, expanded)
+          andBool #mapValuesAreBelowLimit(X +Int 2, M, expanded)
       )
     [simplification]
 
-  rule #noReusedIndexValue(X:Int +Int 4, M:Map, expanded)
+  rule #mapValuesAreBelowLimit(X:Int +Int 4, M:Map, expanded)
       => true
-    requires #noReusedIndexValue(X +Int 3, M, expanded)
+    requires #mapValuesAreBelowLimit(X +Int 3, M, expanded)
     [simplification]
-  rule #noReusedIndexValue(X:Int +Int 2, M:Map, expanded)
+  rule #mapValuesAreBelowLimit(X:Int +Int 2, M:Map, expanded)
       => true
     requires true
-      andBool #noReusedIndexValue(X +Int 3, M, expanded)
+      andBool #mapValuesAreBelowLimit(X +Int 3, M, expanded)
       andBool valueNotInMapValues(u(X +Int 2), M)
     [simplification]
 
-  syntax Bool ::= allValuesBecomeKeys(Map, Map)  [function, functional]
-  syntax Bool ::= #allValuesBecomeKeys(Map, Map)  [function, functional]
-
-  rule allValuesBecomeKeys(M:Map, N:Map) => #allValuesBecomeKeys(M, keysMap(N))
-
-  rule #allValuesBecomeKeys(.Map, _:Map) => true
-  // TODO: This does not work if the key is in the map. Fix it and everything else.
-  rule #allValuesBecomeKeys(K |-> V M:Map, N:Map)
-      => V in_keys(N) andBool #allValuesBecomeKeys(M, N)
-    ensures notBool K in_keys(M)
-    [simplification]
-  rule #allValuesBecomeKeys(M:Map, K |-> _ N:Map) => true
-    requires #allValuesBecomeKeys(M, N)
+  rule #mapValuesBecomeKeys(M:Map, K |-> _ N:Map) => true
+    requires #mapValuesBecomeKeys(M, N)
     ensures notBool K in_keys(N)
     [simplification]
 
-  rule #allValuesBecomeKeys(M:Map, keysMap(N:Map)) => true requires mapsAreReverseHalf(M, N)
+  rule #mapValuesBecomeKeys(M:Map, keysMap(N:Map)) => true requires mapsAreReverseHalf(M, N)
     [simplification]
 
-  syntax Bool ::= mapsAreReverse(Map, Map) [function, functional]
-  syntax Bool ::= mapsAreReverseHalf(Map, Map) [function, functional]
-
-  rule mapsAreReverse(M:Map, N:Map)
-      => mapsAreReverseHalf(M, N) andBool mapsAreReverseHalf(N, M)
-
-  rule mapsAreReverseHalf(.Map, _:Map) => true
-  rule mapsAreReverseHalf((K:KItem |-> V:KItem M:Map) #as _:Map, N:Map)
-      => V in_keys(N) andBool N[V] ==K K andBool mapsAreReverseHalf(M, N)
-    [simplification]
-  rule mapsAreReverseHalf(M:Map, (K:KItem |-> V:KItem N:Map) #as _:Map)
-      => M[V] orDefault K ==K K andBool mapsAreReverseHalf(M[V <- undef], N)
-    [simplification]
-
-  syntax Bool ::= mapIncluded(Map, Map) [function, functional]
-
-  rule mapIncluded(.Map, _:Map) => true
-  rule mapIncluded((K:KItem |-> V:KItem M:Map) #as _:Map, N:Map)
-      => K in_keys(N) andBool N[K] ==K V andBool mapIncluded(M, N)
-    [simplification]
   rule mapIncluded(M:Map, M:Map) => true
     [simplification]
   rule mapIncluded(M1:Map, _:KItem |-> _:KItem M2:Map) => true
@@ -249,89 +141,77 @@ module EXECUTION-PROOF-HELPERS
   rule (A:Int +Int I:Int) +Int B:Int => (A +Int B) +Int I [simplification, concrete(I), symbolic(A,B)]
   //rule (X:Int +Int Y:Int) +Int Z:Int => X +Int (Y +Int Z) [simplification, concrete(Y), concrete(Z)]
 
-  syntax Bool ::= unusedIdsInMapKeys(lastIndex:Int, Map, expand:PropertyHandling)  [function, functional]
-
-  rule unusedIdsInMapKeys(_:Int, .Map, _:PropertyHandling) => true
-  rule unusedIdsInMapKeys(LastIndex:Int, (U:Usize |-> _:KItem M:Map) #as _:Map, Handling:PropertyHandling)
-    => unusedIdsInMapKeys(LastIndex, M, Handling)
-      andBool LastIndex >Int usizeToInt(U)
-    [simplification(30)]
-  rule unusedIdsInMapKeys(LastIndex:Int, M:Map, expand(Expand:Expand))
+  rule mapKeysAreBelowLimit(LastIndex:Int, M:Map, expand(Expand:Expand))
     => notBool u(LastIndex) in_keys(M)  // TODO: Maybe check before wrapping
-      andBool unusedIdsInMapKeys(LastIndex +Int 1, M, Expand)
+      andBool mapKeysAreBelowLimit(LastIndex +Int 1, M, Expand)
     [simplification]
 
-  rule unusedIdsInMapKeys(LastIndex:Int +Int 4, M:Map, expanded)
+  rule mapKeysAreBelowLimit(LastIndex:Int +Int 4, M:Map, expanded)
     => true
-    requires unusedIdsInMapKeys(LastIndex +Int 3, M, expanded)
+    requires mapKeysAreBelowLimit(LastIndex +Int 3, M, expanded)
     [simplification]
-  rule unusedIdsInMapKeys(LastIndex:Int +Int 2, M:Map, expanded)
+  rule mapKeysAreBelowLimit(LastIndex:Int +Int 2, M:Map, expanded)
     => true
     requires true
       andBool notBool u(LastIndex +Int 2) in_keys(M)
-      andBool unusedIdsInMapKeys(LastIndex +Int 3, M, expanded)
+      andBool mapKeysAreBelowLimit(LastIndex +Int 3, M, expanded)
     [simplification]
 
-  rule unusedIdsInMapKeys(LastIndex:Int, M:Map, usesExpanded)
+  rule mapKeysAreBelowLimit(LastIndex:Int, M:Map, usesExpanded)
     => true
     requires false
-      orBool unusedIdsInMapKeys(LastIndex, M, expanded)
+      orBool mapKeysAreBelowLimit(LastIndex, M, expanded)
       orBool (true
         andBool notBool u(LastIndex) in_keys(M)
-        andBool unusedIdsInMapKeys(LastIndex +Int 1, M, expanded)
+        andBool mapKeysAreBelowLimit(LastIndex +Int 1, M, expanded)
       )
       orBool (true
         andBool notBool u(LastIndex) in_keys(M)
         andBool notBool u(LastIndex +Int 1) in_keys(M)
-        andBool unusedIdsInMapKeys(LastIndex +Int 2, M, expanded)
+        andBool mapKeysAreBelowLimit(LastIndex +Int 2, M, expanded)
       )
     [simplification]
 
-  rule unusedIdsInMapKeys(LastIndex:Int +Int 1, keysMap(M):Map, usesExpanded)
+  rule mapKeysAreBelowLimit(LastIndex:Int +Int 1, keysMap(M):Map, usesExpanded)
     => true
     requires true
         andBool notBool u(LastIndex +Int 1) in_keys(M)
-        andBool unusedIdsInMapKeys(LastIndex +Int 2, keysMap(M), expanded)
+        andBool mapKeysAreBelowLimit(LastIndex +Int 2, keysMap(M), expanded)
     [simplification]
 
   /*
-  rule unusedIdsInMapKeys(LastIndex:Int +Int 1, M:Map, usesExpanded)
+  rule mapKeysAreBelowLimit(LastIndex:Int +Int 1, M:Map, usesExpanded)
     => true
     requires notBool u(LastIndex +Int 1) in_keys(M)
-      andBool unusedIdsInMapKeys(LastIndex +Int 2, M, expanded)
+      andBool mapKeysAreBelowLimit(LastIndex +Int 2, M, expanded)
     [simplification]
   */
 
-  syntax Bool ::= unusedIdsInMapValues(lastIndex:Int, Map, handling:PropertyHandling)  [function, functional]
-  rule unusedIdsInMapValues(_:Int, .Map, _:PropertyHandling) => true
-  rule unusedIdsInMapValues(
-          LastIndex:Int,
-          (_:KItem |-> Value:Usize M:Map) #as _:Map,
-          Handling:PropertyHandling
-      )
-      => unusedIdsInMapValues(LastIndex, M, Handling)
-      andBool LastIndex >Int usizeToInt(Value)
-    [simplification(10)]
-  rule unusedIdsInMapValues(LastIndex:Int, M:Map, expand(_:Expand))
-      => unusedIdsInMapValues(LastIndex, M, expanded)
+  // syntax Bool ::= unusedIdsInMapValues(lastIndex:Int, Map, handling:PropertyHandling)  [function, functional]
+  // rule unusedIdsInMapValues(_:Int, .Map, _:PropertyHandling) => true
+  // rule unusedIdsInMapValues(
+  //         LastIndex:Int,
+  //         (_:KItem |-> Value:Usize M:Map) #as _:Map,
+  //         Handling:PropertyHandling
+  //     )
+  //     => unusedIdsInMapValues(LastIndex, M, Handling)
+  //     andBool LastIndex >Int usizeToInt(Value)
+  //   [simplification(10)]
+  // rule unusedIdsInMapValues(LastIndex:Int, M:Map, expand(_:Expand))
+  //     => unusedIdsInMapValues(LastIndex, M, expanded)
 
-  rule unusedIdsInMapValues(LastIndex:Int +Int 3, M:Map, _:PropertyHandling)
-      => true
-    requires unusedIdsInMapValues(LastIndex +Int 2, M, expanded)
-    [simplification]
+  // rule unusedIdsInMapValues(LastIndex:Int +Int 3, M:Map, _:PropertyHandling)
+  //     => true
+  //   requires unusedIdsInMapValues(LastIndex +Int 2, M, expanded)
+  //   [simplification]
 
-  rule unusedIdsInMapValues(LastIndex:Int, M:Map, usesExpanded)
-      => true
-    requires false
-      orBool unusedIdsInMapValues(LastIndex -Int 1, M, expanded)
-      orBool unusedIdsInMapValues(LastIndex, M, expanded)
-    [simplification]
+  // rule unusedIdsInMapValues(LastIndex:Int, M:Map, usesExpanded)
+  //     => true
+  //   requires false
+  //     orBool unusedIdsInMapValues(LastIndex -Int 1, M, expanded)
+  //     orBool unusedIdsInMapValues(LastIndex, M, expanded)
+  //   [simplification]
 
-  syntax Bool ::= noMapKeyInList(Map, ExpressionList)  [function, functional]
-  rule noMapKeyInList(.Map, _:ExpressionList) => true
-  rule noMapKeyInList(M:Map, [E:Expression, .]) => true
-    requires notBool E in_keys(M)
-    [simplification]
   rule noMapKeyInList((K:KItem |-> _:KItem M:Map) #as _:Map, L:ExpressionList)
     => true
       andBool notBool #listContainsSafe(L, K)
@@ -343,10 +223,6 @@ module EXECUTION-PROOF-HELPERS
       andBool notBool E in_keys(M)
     [simplification]
 
-  syntax Map ::= keysMap(Map)  [function, functional]
-  rule keysMap(.Map) => .Map
-  rule keysMap(K:KItem |-> _:KItem M:Map) => K |-> 0 keysMap(M)
-    [simplification]
   rule X:KItem in_keys(keysMap(M:Map)) => X in_keys(M)
     [simplification]
 

@@ -33,6 +33,12 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR
 //   imports PSEUDOCODE
 //@ end
 
+  imports MAP-EXECUTE-SYNTAX
+  imports MAP-INCLUDED-SYNTAX
+  imports MAP-VALUES-ARE-NOT-EMPTY-SYNTAX
+  imports MAPS-ARE-REVERSE-SYNTAX
+  imports NO-MAP-KEY-IN-LIST-SYNTAX
+
   claim <T><TT>
           <k> boardMembersSignFor(ActionIndex:Usize, PartialUserRoles:Map)
               ~> K:K
@@ -84,7 +90,7 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR
         // andBool userIdToAddressInvariant(UserIdToAddress, AddressToUserId)
         andBool mapsAreReverse(AddressToUserId, UserIdToAddress)
         andBool mapIncluded(PartialUserRoles, UserRoles)
-        andBool valuesAreNotEmpty(ActionData, rAction)
+        andBool mapValuesAreNotEmpty(ActionData, rAction)
         andBool noMapKeyInList(PartialUserRoles, Signatures)
     ensures invariant(
             no-data,

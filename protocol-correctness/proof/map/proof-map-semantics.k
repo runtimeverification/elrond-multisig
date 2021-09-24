@@ -6,7 +6,9 @@ module PROOF-MAP-SEMANTICS
 // module TRUSTED-MAP-SEMANTICS
 //@ end
 
-  imports MAP-EXECUTE
+  imports BOOL
+  imports K-EQUAL-SYNTAX
+  imports MAP-EXECUTE-SYNTAX
 
   claim mapSelectProperty(M:Map, Property:MapElementProperty)
       => mapSelected(?Key:KItem, ?Value:KItem, ?M:Map)
