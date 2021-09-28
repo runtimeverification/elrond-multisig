@@ -29,6 +29,7 @@ kprove_test(
   srcs = ["proof-can-be-deleted.k"],
   trusted = [
       ":trusted-propose-delete-malicious",
+      ":trusted-run-external-calls-from-user",
   ],
   semantics = "can-be-deleted-execute",
 )
@@ -96,12 +97,29 @@ kprove_test(
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-unsign-void",
   ],
   semantics = "can-be-deleted-execute",
+  timeout = "eternal",
   breadth = "21",
 )
 
 ktrusted(
   name = "trusted-run-external-call-from-user",
   srcs = ["proof-run-external-call-from-user.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-calls-from-user",
+  srcs = ["proof-run-external-calls-from-user.k"],
+  trusted = [
+      ":trusted-run-external-call-from-user",
+  ],
+  semantics = "can-be-deleted-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-calls-from-user",
+  srcs = ["proof-run-external-calls-from-user.k"],
   visibility = ["//visibility:public"],
 )
 

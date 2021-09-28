@@ -13,4 +13,5 @@ module RUNNING-SYNTAX
 
   // TODO: Move to a better place.
   syntax KItem ::= "removeValue"
+  syntax KItem ::= "nop"
 endmodule

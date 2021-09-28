@@ -39,6 +39,8 @@ module RUNNING-EXTERNAL
             => endpointToInstruction(Call) ~> clearExternalCallEnv
         ...</k>
         <caller-address> uninitialized => A </caller-address>
+
+  rule nop => .K
 endmodule
 
 module RUNNING-INSTRUCTIONS

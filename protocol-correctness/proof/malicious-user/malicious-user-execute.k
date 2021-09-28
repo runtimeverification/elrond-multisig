@@ -150,10 +150,10 @@ module MALICIOUS-USER-EXTERNAL-CALLS
   syntax KResult
 
   rule runExternalCallsFromUser(_:Address, Steps:Int) => .K
-    requires Steps <=Int 0
+    requires Steps <=Int 0  [label(runExternalCallsFUStepsLE0)]
   rule runExternalCallsFromUser(A:Address, Steps:Int)
       => runExternalCallFromUser(A) ~> runExternalCallsFromUser(A, Steps -Int 1)
-    requires Steps >Int 0
+    requires Steps >Int 0  [label(runExternalCallsFUStepsGT0)]
 
   rule  runExternalCallFromUser(A:Address)
         => runExternalCall(from A run proposeAddBoardMember(?_UserAddress:Address);)

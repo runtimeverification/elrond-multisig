@@ -181,7 +181,7 @@ module MALICIOUS-USER-DELETE-INVARIANT
             ActionData,
             ActionSigners,
             Handling)
-        andBool onlyThisSigner(AddressToUserId, MaliciousAddress, ActionSigners)
+        // andBool onlyThisSigner(AddressToUserId, MaliciousAddress, ActionSigners)
         andBool Quorum >=Int 2
         andBool mapCount(UserIdToRole[AddressToUserId[MaliciousAddress] orDefault u(0) <- undef], MEP.IsValue(BoardMember)) >Int 0
 

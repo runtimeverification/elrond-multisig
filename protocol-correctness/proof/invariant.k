@@ -409,6 +409,71 @@ module INVARIANT
       andBool NumBoardMembers ==Int mapCount(UserIdToRole, MEP.IsValue(BoardMember))
       andBool NumProposers ==Int mapCount(UserIdToRole, MEP.IsValue(Proposer))
 
+  syntax Bool ::= baseInvariantDebug(
+      numUsers:Usize,
+      userIdToAddress:Map,
+      addressToUserId:Map,
+      numBoardMembers:Usize,
+      numProposers:Usize,
+      userIdToRole:Map,
+      quorum:Usize,
+      actionLastIndex:Usize,
+      actionData:Map,
+      actionSigners:Map,
+      handling:PropertyHandling)  [function, functional]
+
+  rule baseInvariantDebug(
+      u(NumUsers:Int),
+      UserIdToAddress:Map,
+      AddressToUserId:Map,
+      u(NumBoardMembers:Int),
+      u(NumProposers:Int),
+      UserIdToRole:Map,
+      u(Quorum:Int),
+      u(ActionLastIndex:Int),
+      ActionData:Map,
+      ActionSigners:Map,
+      Handling:PropertyHandling)
+    => true
+      andBool notBool u(0) in_keys(UserIdToAddress)
+      andBool notBool u(0) in_keys(UserIdToRole)
+
+      andBool mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
+      andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
+
+      andBool addressToUserIdInvariant(AddressToUserId)
+      andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
+      andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
+
+      andBool userIdToAddressInvariant(UserIdToAddress)
+
+      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
+
+      andBool userIdToRoleInvariant(UserIdToRole)
+      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
+      andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
+
+      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), Handling)
+      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), Handling)
+      andBool maxMapKey(u(ActionLastIndex), keysMap(ActionData))
+      andBool maxMapKey(u(ActionLastIndex), keysMap(ActionSigners))
+
+      andBool actionSignersInvariant(ActionSigners)
+
+      andBool actionDataInvariant(ActionData)
+
+      andBool NumUsers >=Int 0 // TODO: Strict >?
+      andBool NumBoardMembers >=Int 0
+      andBool NumProposers >=Int 0
+
+      andBool Quorum <=Int NumBoardMembers
+      andBool (NumBoardMembers +Int NumProposers >Int 0)
+
+      // Works
+      andBool NumBoardMembers ==Int mapCount(UserIdToRole, MEP.IsValue(BoardMember))
+      // andBool NumProposers ==Int mapCount(UserIdToRole, MEP.IsValue(Proposer))
+      // Fails
+
   // CustomInvariantData and customInvariant are defined differently for each
   // group of proofs.
   syntax CustomInvariantData

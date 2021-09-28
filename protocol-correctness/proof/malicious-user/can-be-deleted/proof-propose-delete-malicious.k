@@ -27,7 +27,7 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
           </k>
           invariantState(
               NumUsers:Usize,
-              UserIdToAddress:Map,
+              (MaliciousId |-> MaliciousAddress _UserIdToAddress:Map) #as UserIdToAddress:Map,
               (MaliciousAddress |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
@@ -66,33 +66,7 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
         andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
         andBool mapValuesAreOfType(UserIdToRole, rUserRole)
         andBool mapValuesAreKResult(UserIdToRole)
-        // andBool maliciousDeleteInvariant(
-        //     MaliciousAddress,
-        //     NumUsers,
-        //     UserIdToAddress,
-        //     AddressToUserId,
-        //     NumBoardMembers,
-        //     NumProposers,
-        //     UserIdToRole,
-        //     u(Quorum),
-        //     u(ActionLastIndex),
-        //     ActionData,
-        //     ActionSigners,
-        //     expand(expanded))
     ensures true
-        // andBool maliciousDeleteInvariant(
-        //     MaliciousAddress,
-        //     NumUsers,
-        //     UserIdToAddress,
-        //     AddressToUserId,
-        //     NumBoardMembers,
-        //     NumProposers,
-        //     UserIdToRole,
-        //     u(Quorum),
-        //     u(ActionLastIndex +Int 1),
-        //     u(ActionLastIndex +Int 1) |-> RemoveUser(MaliciousAddress) ActionData,
-        //     ActionSigners,
-        //     usesExpanded)
         andBool notBool ?SomeId ==K MaliciousId
     //@ proof
     //@ trusted

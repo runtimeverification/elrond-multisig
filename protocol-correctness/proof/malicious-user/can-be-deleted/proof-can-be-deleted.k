@@ -1,8 +1,10 @@
 //@ proof
 require "trusted-propose-delete-malicious.k"  //@ Bazel remove
+require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
 
 module PROOF-CAN-BE-DELETED
   imports TRUSTED-PROPOSE-DELETE-MALICIOUS
+  imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
 //@ trusted
 // module TRUSTED-CAN-BE-DELETED
 //@ end
@@ -11,7 +13,8 @@ module PROOF-CAN-BE-DELETED
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
 
   claim <T><TT>
-          <k> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress)
+          <k> nop
+              ~> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress)
               ~> withPickedUserCall(proposeRemoveUser(MaliciousAddress))
 
               ~> runExternalCallsFromUser(MaliciousAddress:Address, _Count1:Int)
@@ -28,11 +31,11 @@ module PROOF-CAN-BE-DELETED
           </k>
           invariantState(
               NumUsers:Usize,
-              UserIdToAddress:Map,
+              (UserId |-> MaliciousAddress _UserIdToAddress:Map) #as UserIdToAddress:Map,
               (MaliciousAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
-              NumBoardMembers:Usize,
-              NumProposers:Usize,
-              (UserId |-> _Role:UserRole UserIdToRoleFinal:Map) #as UserIdToRole:Map,
+              u(NumBoardMembers:Int),
+              u(NumProposers:Int),
+              (UserId |-> Role:UserRole UserIdToRoleFinal:Map) #as UserIdToRole:Map,
               u(Quorum:Int),
               ActionLastIndex:Usize,
               ActionData:Map,
@@ -46,8 +49,8 @@ module PROOF-CAN-BE-DELETED
               NumUsers,
               UserIdToAddress:Map,
               AddressToUserId:Map,
-              NumBoardMembers,
-              NumProposers,
+              ?NumBoardMembersFinal:Usize,
+              ?NumProposersFinal:Usize,
               UserIdToRole,
               u(Quorum),
               u(?ActionLastIndex:Int),
@@ -61,8 +64,8 @@ module PROOF-CAN-BE-DELETED
             NumUsers,
             UserIdToAddress,
             AddressToUserId,
-            NumBoardMembers,
-            NumProposers,
+            u(NumBoardMembers),
+            u(NumProposers),
             UserIdToRole,
             u(Quorum),
             ActionLastIndex,
@@ -70,13 +73,41 @@ module PROOF-CAN-BE-DELETED
             ActionSigners,
             expand(expanded))
     ensures true
+        andBool ?NumBoardMembersFinal
+                ==K
+                u(NumBoardMembers
+                  -Int #if Role ==K BoardMember #then 1 #else 0 #fi
+                )
+        andBool ?NumProposersFinal
+                ==K
+                u(NumProposers
+                  -Int #if Role ==K Proposer #then 1 #else 0 #fi
+                )
+        // andBool baseInvariantDebug(
+        //     NumUsers,
+        //     UserIdToAddress,
+        //     AddressToUserId,
+        //     NumBoardMembersFinal,
+        //     NumProposersFinal,
+        //     UserIdToRoleFinal,
+        //     u(Quorum),
+        //     u(?ActionLastIndex),
+        //     ?ActionData,
+        //     ?ActionSigners,
+        //     usesExpanded)
+        // // andBool Quorum >=Int 2
+        // // andBool mapCount(
+        // //     UserIdToRoleFinal[AddressToUserId[MaliciousAddress] orDefault u(0) <- undef],
+        // //     MEP.IsValue(BoardMember)
+        // //   ) >Int 0
+
         andBool maliciousDeleteInvariant(
             MaliciousAddress,
             NumUsers,
             UserIdToAddress,
             AddressToUserId,
-            NumBoardMembers,
-            NumProposers,
+            ?NumBoardMembersFinal,
+            ?NumProposersFinal,
             UserIdToRoleFinal,
             u(Quorum),
             u(?ActionLastIndex),
