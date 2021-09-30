@@ -15,10 +15,11 @@ kprove_test(
       ":trusted-propose-send-egld",
       ":trusted-sign",
       ":trusted-unsign",
+      "//protocol-correctness/proof/lemmas/0/map:trusted-map-keys-are-below-limit-ignore-property-handling",
   ],
   semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
   timeout = "eternal",
-  breadth = "20",
+  breadth = "31",
 )
 
 ktrusted(

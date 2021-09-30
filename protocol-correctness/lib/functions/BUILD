@@ -273,6 +273,7 @@ klibrary(
   name = "map-keys-are-below-limit-files",
   srcs = ["map-keys-are-below-limit.k"],
   deps = [
+      ":map-keys-are-of-type-files",
       "//protocol-correctness/lib/language:cast-files",
       "//protocol-correctness/lib/proof/unsorted:formula-expansion-files",
   ],

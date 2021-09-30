@@ -1,36 +1,19 @@
 // timeout = eternal
-// breadth = 11
+// breadth = 8
 //@ proof
 
-require "run-external-call-from-user/trusted-recfu-fragment-discard-action.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-fragment-sign.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-fragment-unsign.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-perform-action-error.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-add-board-member.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-add-proposer.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-change-quorum.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-remove-user.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-sc-call.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-sc-deploy.k"  //@ Bazel remove
-require "run-external-call-from-user/trusted-recfu-propose-send-egld.k"  //@ Bazel remove
+require "trusted-recfu-unsign-error.k"  //@ Bazel remove
+require "trusted-recfu-unsign-void.k"  //@ Bazel remove
 
-module PROOF-RUN-EXTERNAL-CALL-FROM-USER
-  imports TRUSTED-RECFU-FRAGMENT-DISCARD-ACTION
-  imports TRUSTED-RECFU-FRAGMENT-SIGN
-  imports TRUSTED-RECFU-FRAGMENT-UNSIGN
-  imports TRUSTED-RECFU-PERFORM-ACTION-ERROR
-  imports TRUSTED-RECFU-PROPOSE-ADD-BOARD-MEMBER
-  imports TRUSTED-RECFU-PROPOSE-ADD-PROPOSER
-  imports TRUSTED-RECFU-PROPOSE-CHANGE-QUORUM
-  imports TRUSTED-RECFU-PROPOSE-REMOVE-USER
-  imports TRUSTED-RECFU-PROPOSE-SC-CALL
-  imports TRUSTED-RECFU-PROPOSE-SC-DEPLOY
-  imports TRUSTED-RECFU-PROPOSE-SEND-EGLD
+module PROOF-RECFU-FRAGMENT-UNSIGN
+  imports TRUSTED-RECFU-UNSIGN-ERROR
+  imports TRUSTED-RECFU-UNSIGN-VOID
 
 //@ trusted
-// module TRUSTED-RUN-EXTERNAL-CALL-FROM-USER
+// module TRUSTED-RECFU-FRAGMENT-UNSIGN
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
   imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
@@ -38,7 +21,31 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address, ActionId:Usize)
+          <k>
+              branchK(
+                  true,
+                  makeConcreteValue(
+                      MaliciousAddress,
+                      rUsize,
+                      AddressToUserId:Map
+                  )
+                  ~> branchK(
+                      true,
+                      makeConcreteValue(
+                          MaliciousId,
+                          rUserRole,
+                          UserIdToRole:Map
+                      ),
+                      .K
+                  ),
+                  .K
+              )
+              ~> concretizeValue(ActionId)
+              ~> concretizeValue(ActionId in_keys (OldActionData:Map))
+              ~> concretizeValue(ActionId ==K DeleteActionId)
+              ~> runExternalCall(
+                  from MaliciousAddress:Address run unsign(ActionId:Usize);)
+              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
           invariantState(
@@ -51,7 +58,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              (ActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
+              (DeleteActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -67,11 +74,11 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               u(Quorum),
               u(?NewActionLastIndex:Int),
               ?NewActionData:Map,
-              ActionId |-> ?Signers:ExpressionList ?NewActionSigners:Map,
+              DeleteActionId |-> ?Signers:ExpressionList ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
@@ -88,7 +95,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool noQuorumCanBeFilledBy(
             Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(ActionId |-> ?Signers ?NewActionSigners)
+        andBool actionSignersInvariant(DeleteActionId |-> ?Signers ?NewActionSigners)
 
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
@@ -96,13 +103,13 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
                     usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
-                    keysMap(ActionId |-> ?Signers ?NewActionSigners),
+                    keysMap(DeleteActionId |-> ?Signers ?NewActionSigners),
                     usesExpanded)
 
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    ActionId |-> ?Signers ?NewActionSigners,
+                    DeleteActionId |-> ?Signers ?NewActionSigners,
                     UserIdToRole)
 
     //@ proof

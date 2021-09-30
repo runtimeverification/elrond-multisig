@@ -1,9 +1,12 @@
 require "protocol-correctness/lib/language/map-utils.k"
 require "protocol-correctness/lib/language/reflection.k"
+require "protocol-correctness/lib/proof/unsorted/formula-expansion.k"
 require "protocol-correctness/proof/instrumentation-proof.k"
 
 module NAMED-LEMMAS-SYNTAX
   imports BOOL
+  imports FORMULA-EXPANSION-SYNTAX
+  imports INT
   imports MAP
 
   syntax KItem ::= lemmaCommuteMapSquareBracketAssignmentSameValue(Map, key1:KItem, key2:KItem, value:KItem)
@@ -14,11 +17,14 @@ module NAMED-LEMMAS-SYNTAX
             m1:Map, k1:KItem, v1:KItem, m2:Map, k2:KItem, v2:KItem, Bool)
   syntax KItem ::= lemmaEqualityTransitivity(KItem, KItem, KItem)
   syntax KItem ::= lemmaImplies(Bool, Bool)
+  syntax KItem ::= lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+            limit:Int, Map, PropertyHandling, PropertyHandling)
 endmodule
 
 module NAMED-LEMMAS
   imports INSTRUMENTATION-PROOF
   imports CONCRETIZE-VALUE-SYNTAX
+  imports FORMULA-EXPANSION-SYNTAX
   imports MAP-UTILS-SYNTAX
   imports NAMED-LEMMAS-SYNTAX
   imports REFLECTION-SYNTAX
@@ -132,5 +138,17 @@ module NAMED-LEMMAS
           ( reflectionArgument(A:Bool)
           , reflectionArgument(B:Bool)))
     => lemmaImplies(A, B)
+
+  rule lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+            _Limit:Int, .Map, _:PropertyHandling, _:PropertyHandling)
+    => .K
+  rule lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+            Limit:Int, _K:KItem |-> _V:KItem M:Map, H1:PropertyHandling, H2:PropertyHandling)
+    => lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(Limit, M, H1, H2)
+  rule lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+            _Limit:Int, _:Map, _:PropertyHandling, _:PropertyHandling)
+    => .K
+    ensures false
+    [owise]
 
 endmodule

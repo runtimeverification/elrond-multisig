@@ -1,9 +1,12 @@
-// breadth = 1
+// timeout = moderate
+// breadth = 2
 //@ proof
 
 require "trusted-run-external-call-from-user.k"  //@ Bazel remove
+require "../../lemmas/0/map/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
 
 module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
+  imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
   imports TRUSTED-RUN-EXTERNAL-CALL-FROM-USER
 
 //@ trusted
@@ -15,7 +18,8 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
 
   claim <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, _Steps:Int)
+          <k> runExternalCallsFromUser(
+                  MaliciousAddress:Address, ActionId:Usize, _Steps:Int)
               ~> K:K
           </k>
           invariantState(
@@ -28,7 +32,7 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              OldActionSigners:Map,
+              (ActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -44,19 +48,19 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
               u(Quorum),
               u(?NewActionLastIndex),
               ?NewActionData,
-              ?NewActionSigners,
+              ActionId |-> ?NewSigners:ExpressionList ?NewActionSigners,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
 
-        andBool unusedIdsInMapKeys(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
-        andBool unusedIdsInMapKeys(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
@@ -64,12 +68,12 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(?NewActionSigners)
+        andBool actionSignersInvariant(ActionId |-> ?NewSigners ?NewActionSigners)
 
-        andBool unusedIdsInMapKeys(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
-        andBool unusedIdsInMapKeys(?NewActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
 
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ActionId |-> ?NewSigners ?NewActionSigners, UserIdToRole)
 
     //@ proof
     //@ trusted

@@ -9,6 +9,7 @@ module PROOF-RECFU-PERFORM-ACTION-ERROR
 //@ trusted
 // module TRUSTED-RECFU-PERFORM-ACTION-ERROR
 //@ end
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-INVARIANT
 
   claim <T><TT>
@@ -16,6 +17,7 @@ module PROOF-RECFU-PERFORM-ACTION-ERROR
               ~> call(performActionEndpoint(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
               ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
           invariantStateStack(
@@ -28,7 +30,7 @@ module PROOF-RECFU-PERFORM-ACTION-ERROR
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               ActionData:Map,
-              ActionSigners:Map,
+              (DeleteActionId |-> Signers:ExpressionList _ActionSigners:Map) #as ActionSigners:Map,
               address(MaliciousAddress:Int) #as CallerAddress:Address,
               Stack:Stack,
               PerformedActions:List)
@@ -52,12 +54,13 @@ module PROOF-RECFU-PERFORM-ACTION-ERROR
               PerformedActions:List):StateCell
         </TT></T>
     requires true
+        andBool notBool ActionId ==K DeleteActionId
         andBool Quorum >Int 1
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionSignersInvariant(ActionSigners)
         //andBool actionDataInvariant(ActionData)
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSigners, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSigners[DeleteActionId <- undef], UserIdToRole)
     ensures true
     //@ proof
     //@ trusted

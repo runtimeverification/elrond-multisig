@@ -80,8 +80,9 @@ kprove_test(
   name = "proof-run-external-call-from-user",
   srcs = ["proof-run-external-call-from-user.k"],
   trusted = [
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-discard-action-error",
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-discard-action-void",
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-fragment-discard-action",
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-fragment-sign",
+      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-fragment-unsign",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-perform-action-error",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-propose-add-board-member",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-propose-add-proposer",
@@ -90,15 +91,10 @@ kprove_test(
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-propose-sc-call",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-propose-sc-deploy",
       "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-propose-send-egld",
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-error",
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-void-no-signers",
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-sign-void-signers",
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-unsign-error",
-      "//protocol-correctness/proof/malicious-user/can-be-deleted/run-external-call-from-user:trusted-recfu-unsign-void",
   ],
   semantics = "can-be-deleted-execute",
   timeout = "eternal",
-  breadth = "21",
+  breadth = "11",
 )
 
 ktrusted(
@@ -112,9 +108,11 @@ kprove_test(
   srcs = ["proof-run-external-calls-from-user.k"],
   trusted = [
       ":trusted-run-external-call-from-user",
+      "//protocol-correctness/proof/lemmas/0/map:trusted-map-keys-are-below-limit-ignore-property-handling",
   ],
   semantics = "can-be-deleted-execute",
-  breadth = "1",
+  timeout = "moderate",
+  breadth = "2",
 )
 
 ktrusted(

@@ -17,16 +17,27 @@ module PROOF-CAN-BE-DELETED
               ~> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress)
               ~> withPickedUserCall(proposeRemoveUser(MaliciousAddress))
 
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, _Count1:Int)
+              ~> runExternalCallsFromUser(
+                    MaliciousAddress:Address,
+                    add(ActionLastIndex, u(1)),
+                    _Count1:Int
+                )
 
-              ~> allBoardMembersSignForInterspersed(add(ActionLastIndex, u(1)), runExternalCallsFromUser(MaliciousAddress:Address, _Count:Int))
+              ~> allBoardMembersSignForInterspersed(
+                    add(ActionLastIndex, u(1)),
+                    runExternalCallsFromUser(
+                        MaliciousAddress:Address,
+                        add(ActionLastIndex, u(1)),
+                        _Count:Int
+                    )
+                )
 
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, _Count2:Int)
+              ~> runExternalCallsFromUser(MaliciousAddress:Address, add(ActionLastIndex, u(1)), _Count2:Int)
 
               ~> pickBoardMemberOrProposer(UserIdToRole)
               ~> withPickedUserCall(performActionEndpoint(add(ActionLastIndex, u(1))))
 
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, _Count3:Int)
+              ~> runExternalCallsFromUser(MaliciousAddress:Address, add(ActionLastIndex, u(1)), _Count3:Int)
               ~> K:K
           </k>
           invariantState(
@@ -71,7 +82,7 @@ module PROOF-CAN-BE-DELETED
             ActionLastIndex,
             ActionData,
             ActionSigners,
-            expand(expanded))
+            expand(expand(expanded)))
     ensures true
         andBool ?NumBoardMembersFinal
                 ==K
@@ -83,37 +94,20 @@ module PROOF-CAN-BE-DELETED
                 u(NumProposers
                   -Int #if Role ==K Proposer #then 1 #else 0 #fi
                 )
-        // andBool baseInvariantDebug(
+
+        // andBool maliciousDeleteInvariant(
+        //     MaliciousAddress,
         //     NumUsers,
         //     UserIdToAddress,
         //     AddressToUserId,
-        //     NumBoardMembersFinal,
-        //     NumProposersFinal,
+        //     ?NumBoardMembersFinal,
+        //     ?NumProposersFinal,
         //     UserIdToRoleFinal,
         //     u(Quorum),
         //     u(?ActionLastIndex),
         //     ?ActionData,
         //     ?ActionSigners,
         //     usesExpanded)
-        // // andBool Quorum >=Int 2
-        // // andBool mapCount(
-        // //     UserIdToRoleFinal[AddressToUserId[MaliciousAddress] orDefault u(0) <- undef],
-        // //     MEP.IsValue(BoardMember)
-        // //   ) >Int 0
-
-        andBool maliciousDeleteInvariant(
-            MaliciousAddress,
-            NumUsers,
-            UserIdToAddress,
-            AddressToUserId,
-            ?NumBoardMembersFinal,
-            ?NumProposersFinal,
-            UserIdToRoleFinal,
-            u(Quorum),
-            u(?ActionLastIndex),
-            ?ActionData,
-            ?ActionSigners,
-            usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

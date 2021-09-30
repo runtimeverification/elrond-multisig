@@ -62,8 +62,8 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool mapsAreReverse(UserIdToAddress, AddressToUserId)
 
-        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
         andBool mapValuesAreOfType(UserIdToRole, rUserRole)
         andBool mapValuesAreKResult(UserIdToRole)
     ensures true

@@ -242,13 +242,13 @@ module INIT-LOOP-PARTS
 
       andBool userIdToAddressInvariant(UserIdToAddress)
 
-      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
+      andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
 
       andBool userIdToRoleInvariant(UserIdToRole)
       // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
       // andBool mapValuesAreKResult(UserIdToRole)
       // andBool mapValuesAreNotEmpty(UserIdToRole, rUserRole)
-      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
+      andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
 
       andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
 

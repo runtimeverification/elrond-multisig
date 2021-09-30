@@ -9,7 +9,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-discard-action-no-user",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "8",
 )
 
@@ -40,6 +40,61 @@ ktrusted(
 )
 
 kprove_test(
+  name = "proof-recfu-fragment-discard-action",
+  srcs = ["proof-recfu-fragment-discard-action.k"],
+  trusted = [
+      ":trusted-recfu-discard-action-error",
+      ":trusted-recfu-discard-action-void",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "eternal",
+  breadth = "7",
+)
+
+ktrusted(
+  name = "trusted-recfu-fragment-discard-action",
+  srcs = ["proof-recfu-fragment-discard-action.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-recfu-fragment-sign",
+  srcs = ["proof-recfu-fragment-sign.k"],
+  trusted = [
+      ":trusted-recfu-sign-error",
+      ":trusted-recfu-sign-void-no-signers",
+      ":trusted-recfu-sign-void-signers",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "eternal",
+  breadth = "9",
+)
+
+ktrusted(
+  name = "trusted-recfu-fragment-sign",
+  srcs = ["proof-recfu-fragment-sign.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-recfu-fragment-unsign",
+  srcs = ["proof-recfu-fragment-unsign.k"],
+  trusted = [
+      ":trusted-recfu-unsign-error",
+      ":trusted-recfu-unsign-void",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "eternal",
+  breadth = "8",
+)
+
+ktrusted(
+  name = "trusted-recfu-fragment-unsign",
+  srcs = ["proof-recfu-fragment-unsign.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-recfu-perform-action-error",
   srcs = ["proof-recfu-perform-action-error.k"],
   trusted = [
@@ -64,7 +119,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -82,7 +137,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -100,7 +155,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -118,7 +173,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -136,7 +191,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -154,7 +209,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-sc-deploy-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -172,7 +227,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 
@@ -239,6 +294,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-unsign-Proposer",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "moderate",
   breadth = "3",
 )
 

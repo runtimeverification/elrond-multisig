@@ -62,8 +62,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-NEW
         andBool NumUsers >=Int 0
         // TODO: Perhaps replace with unusedIdsInMapValues(AddressToUserId) +
         // something to map values to keys.
-        andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
-        andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
         andBool NumBoardMembers +Int NumProposers >Int 0
         andBool Quorum <=Int NumBoardMembers
         andBool notBool (UserAddress in_keys(AddressToUserId))

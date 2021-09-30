@@ -15,8 +15,6 @@ module MAP-KEYS-ARE-OF-TYPE
   rule mapKeysAreOfType(.Map, _:ReflectionType) => true
   rule mapKeysAreOfType((K:KItem |-> _:KItem M:Map) #as _:Map, T:ReflectionType)
       => valueOfType(K, T) andBool mapKeysAreOfType(M, T)
-  rule mapKeysAreOfType((K:KItem |-> _:KItem M:Map) #as _:Map, T:ReflectionType)
-      => valueOfType(K, T) andBool mapKeysAreOfType(M, T)
     [simplification]
 endmodule
 

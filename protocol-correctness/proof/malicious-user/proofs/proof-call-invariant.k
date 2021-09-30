@@ -1,5 +1,6 @@
 // timeout = eternal
-// breadth = 20
+// breadth = 31
+// Fails because it takes ~65 minutes to run. Should extract part of it.
 //@ proof
 require "trusted-discard-action.k"  //@ Bazel remove
 require "trusted-perform-action.k"  //@ Bazel remove
@@ -13,6 +14,8 @@ require "trusted-propose-send-egld.k"  //@ Bazel remove
 require "trusted-sign.k"  //@ Bazel remove
 require "trusted-unsign.k"  //@ Bazel remove
 
+require "../../lemmas/0/map/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+
 module PROOF-CALL-INVARIANT
     imports TRUSTED-DISCARD-ACTION
     imports TRUSTED-PERFORM-ACTION
@@ -25,6 +28,8 @@ module PROOF-CALL-INVARIANT
     imports TRUSTED-PROPOSE-SEND-EGLD
     imports TRUSTED-SIGN
     imports TRUSTED-UNSIGN
+
+    imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
 //@ trusted
 // module TRUSTED-CALL-INVARIANT
 //@ end
@@ -32,8 +37,10 @@ module PROOF-CALL-INVARIANT
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address)
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, Count:Int)
+          <k> runExternalCallFromUser(MaliciousAddress:Address, ActionId:Usize)
+              ~> actionDataKeysAreBelowLimitConvertExpanded
+              ~> actionSignersKeysAreBelowLimitConvertExpanded
+              ~> runExternalCallsFromUser(MaliciousAddress:Address, ActionId:Usize, Count:Int)
               ~> K:K
           </k>
           invariantState(
@@ -51,7 +58,7 @@ module PROOF-CALL-INVARIANT
         </TT></T>
       =>
         <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, Count:Int)
+          <k> runExternalCallsFromUser(MaliciousAddress:Address, ActionId:Usize, Count:Int)
               ~> K:K
           </k>
           invariantState(

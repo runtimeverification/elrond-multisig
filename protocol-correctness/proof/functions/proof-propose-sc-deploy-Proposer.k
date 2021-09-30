@@ -87,8 +87,8 @@ module PROOF-PROPOSE-SC-DEPLOY-PROPOSER
       andBool mapValuesAreOfType(UserIdToRole, rUserRole)
       andBool mapValuesAreKResult(UserIdToRole)
 
-      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-      andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+      andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+      andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
 
       andBool CallerAddress in_keys(AddressToUserId)
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)

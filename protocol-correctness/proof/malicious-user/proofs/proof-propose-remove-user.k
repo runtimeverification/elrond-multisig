@@ -18,7 +18,9 @@ module PROOF-PROPOSE-REMOVE-USER
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCall(from MaliciousAddress run proposeRemoveUser(_UserAddress:Address);) ~> K:K </k>
+          <k> runExternalCall(from MaliciousAddress run proposeRemoveUser(_UserAddress:Address);)
+              ~> K:K
+          </k>
           invariantState(
               NumUsers:Usize,
               UserIdToAddress:Map,

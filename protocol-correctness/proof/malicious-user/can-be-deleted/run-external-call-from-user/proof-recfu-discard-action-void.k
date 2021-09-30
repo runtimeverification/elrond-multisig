@@ -16,6 +16,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
 // module TRUSTED-RECFU-DISCARD-ACTION-VOID
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
@@ -24,6 +25,8 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
           <k> pushContext ~> preCall
               ~> call(discardAction(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
+              ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
           invariantStateStack(
@@ -36,14 +39,18 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               OldActionData:Map,
-              OldActionSigners:Map,
+              (DeleteActionId |-> Signers:ExpressionList _OldActionSigners:Map) #as OldActionSigners:Map,
               address(MaliciousAddress:Int) #as CallerAddress:Address,
               Stack:Stack,
               PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
-          <k> evaluate(void) ~> K </k>
+          <k> evaluate(void)
+              ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
+              ~> K
+          </k>
           invariantStateStack(
               NumUsers,
               UserIdToAddress,
@@ -54,7 +61,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
               u(Quorum),
               u(ActionLastIndex),
               ?NewActionData,
-              ?NewActionSigners,
+              DeleteActionId |-> Signers:ExpressionList ?NewActionSigners,
               address(MaliciousAddress),
               Stack:Stack,
               PerformedActions:List):StateCell
@@ -65,10 +72,10 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionDataInvariant(OldActionData)
 
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
         andBool actionSignersInvariant(OldActionSigners)
         andBool
             ( notBool ActionId in_keys(OldActionSigners)
@@ -86,13 +93,13 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, DeleteActionId |-> Signers:ExpressionList ?NewActionSigners, UserIdToRole)
 
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(?NewActionSigners)
+        andBool actionSignersInvariant(DeleteActionId |-> Signers:ExpressionList ?NewActionSigners)
 
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
-        andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(DeleteActionId |-> Signers:ExpressionList ?NewActionSigners), usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

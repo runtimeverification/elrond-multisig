@@ -1,4 +1,4 @@
-// timeout = moderate
+// timeout = long
 // breadth = 2
 //@ proof
 
@@ -12,6 +12,7 @@ module PROOF-RECFU-PROPOSE-SEND-EGLD
 // module TRUSTED-RECFU-PROPOSE-SEND-EGLD
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
   imports MAP-KEYS-ARE-BELOW-LIMIT-SYNTAX
@@ -21,6 +22,8 @@ module PROOF-RECFU-PROPOSE-SEND-EGLD
           <k> pushContext ~> preCall
               ~> call(proposeSendEgld(To:Address, Amount:BigUint, Data:BoxedBytes))
               ~> popContext ~> evaluateReturnValue
+              ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(ActionId:Usize)
               ~> K:K
           </k>
           invariantStateStack(
@@ -33,14 +36,18 @@ module PROOF-RECFU-PROPOSE-SEND-EGLD
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               ActionData:Map,
-              OldActionSigners:Map,
+              (ActionId |-> Signers:ExpressionList _OldActionSigners:Map) #as OldActionSigners:Map,
               address(MaliciousAddress:Int),
               Stack:Stack,
               PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
-          <k> evaluate(u(ActionLastIndex +Int 1)) ~> K </k>
+          <k> evaluate(u(ActionLastIndex +Int 1))
+              ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(ActionId:Usize)
+              ~> K
+          </k>
           invariantStateStack(
               NumUsers,
               UserIdToAddress,
@@ -51,7 +58,7 @@ module PROOF-RECFU-PROPOSE-SEND-EGLD
               u(Quorum),
               u(ActionLastIndex +Int 1),
               ActionData u(ActionLastIndex +Int 1) |-> SendEgld(To, Amount, Data),
-              ?NewActionSigners,
+              ActionId |-> Signers ?NewActionSigners,
               address(MaliciousAddress),
               Stack:Stack,
               PerformedActions:List):StateCell
@@ -64,19 +71,19 @@ module PROOF-RECFU-PROPOSE-SEND-EGLD
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionSignersInvariant(OldActionSigners)
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
 
 
-        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ?NewActionSigners, UserIdToRole)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ActionId |-> Signers ?NewActionSigners, UserIdToRole)
 
-        andBool actionSignersInvariant(?NewActionSigners)
+        andBool actionSignersInvariant(ActionId |-> Signers ?NewActionSigners)
 
-        andBool mapKeysAreBelowLimit(ActionLastIndex +Int 2, keysMap(?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 2, keysMap(ActionId |-> Signers ?NewActionSigners), usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

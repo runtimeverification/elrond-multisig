@@ -217,6 +217,7 @@ klibrary(
       "//protocol-correctness/lib/functions:list-elements-are-distinct-files",
       "//protocol-correctness/lib/functions:list-elements-are-usize-files",
       "//protocol-correctness/lib/functions:map-keys-are-below-limit-files",
+      "//protocol-correctness/lib/functions:map-keys-are-of-type-files",
       "//protocol-correctness/lib/functions:map-values-are-expression-list-of-usize-files",
       "//protocol-correctness/lib/functions:map-values-are-kresult-files",
       "//protocol-correctness/lib/functions:map-values-are-not-empty-files",
@@ -278,6 +279,7 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/language:map-utils-files",
       "//protocol-correctness/lib/language:reflection-files",
+      "//protocol-correctness/lib/proof/unsorted:formula-expansion-files",
       ":instrumentation-proof-files",
   ],
   visibility = ["//visibility:public"],

@@ -12,7 +12,7 @@ module PROOF-CANNOT-PERFORM
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, _Count:Int) ~> K:K </k>
+          <k> runExternalCallsFromUser(MaliciousAddress:Address, _ActionId:Usize,_Count:Int) ~> K:K </k>
           invariantState(
               NumUsers:Usize,
               UserIdToAddress:Map,

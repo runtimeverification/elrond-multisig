@@ -80,8 +80,8 @@ module PROOF-PERFORM-ACTION-ADD-PROPOSER-NEW
       andBool NumUsers >=Int 0
       // TODO: Perhaps replace with unusedIdsInMapValues(AddressToUserId) +
       // someting to map values to keys.
-      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
-      andBool mapKeysAreBelowLimit(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+      andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
+      andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
       andBool Quorum <=Int NumBoardMembers
 
       andBool notBool UserAddress in_keys(AddressToUserId)

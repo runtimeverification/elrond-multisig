@@ -141,49 +141,49 @@ module EXECUTION-PROOF-HELPERS
   rule (A:Int +Int I:Int) +Int B:Int => (A +Int B) +Int I [simplification, concrete(I), symbolic(A,B)]
   //rule (X:Int +Int Y:Int) +Int Z:Int => X +Int (Y +Int Z) [simplification, concrete(Y), concrete(Z)]
 
-  rule mapKeysAreBelowLimit(LastIndex:Int, M:Map, expand(Expand:Expand))
+  rule mapKeysAreBelowLimitUnsafe(LastIndex:Int, M:Map, expand(Expand:Expand))
     => notBool u(LastIndex) in_keys(M)  // TODO: Maybe check before wrapping
-      andBool mapKeysAreBelowLimit(LastIndex +Int 1, M, Expand)
+      andBool mapKeysAreBelowLimitUnsafe(LastIndex +Int 1, M, Expand)
     [simplification]
 
-  rule mapKeysAreBelowLimit(LastIndex:Int +Int 4, M:Map, expanded)
+  rule mapKeysAreBelowLimitUnsafe(LastIndex:Int +Int 4, M:Map, expanded)
     => true
-    requires mapKeysAreBelowLimit(LastIndex +Int 3, M, expanded)
+    requires mapKeysAreBelowLimitUnsafe(LastIndex +Int 3, M, expanded)
     [simplification]
-  rule mapKeysAreBelowLimit(LastIndex:Int +Int 2, M:Map, expanded)
+  rule mapKeysAreBelowLimitUnsafe(LastIndex:Int +Int 2, M:Map, expanded)
     => true
     requires true
       andBool notBool u(LastIndex +Int 2) in_keys(M)
-      andBool mapKeysAreBelowLimit(LastIndex +Int 3, M, expanded)
+      andBool mapKeysAreBelowLimitUnsafe(LastIndex +Int 3, M, expanded)
     [simplification]
 
-  rule mapKeysAreBelowLimit(LastIndex:Int, M:Map, usesExpanded)
+  rule mapKeysAreBelowLimitUnsafe(LastIndex:Int, M:Map, usesExpanded)
     => true
     requires false
-      orBool mapKeysAreBelowLimit(LastIndex, M, expanded)
+      orBool mapKeysAreBelowLimitUnsafe(LastIndex, M, expanded)
       orBool (true
         andBool notBool u(LastIndex) in_keys(M)
-        andBool mapKeysAreBelowLimit(LastIndex +Int 1, M, expanded)
+        andBool mapKeysAreBelowLimitUnsafe(LastIndex +Int 1, M, expanded)
       )
       orBool (true
         andBool notBool u(LastIndex) in_keys(M)
         andBool notBool u(LastIndex +Int 1) in_keys(M)
-        andBool mapKeysAreBelowLimit(LastIndex +Int 2, M, expanded)
+        andBool mapKeysAreBelowLimitUnsafe(LastIndex +Int 2, M, expanded)
       )
     [simplification]
 
-  rule mapKeysAreBelowLimit(LastIndex:Int +Int 1, keysMap(M):Map, usesExpanded)
+  rule mapKeysAreBelowLimitUnsafe(LastIndex:Int +Int 1, keysMap(M):Map, usesExpanded)
     => true
     requires true
         andBool notBool u(LastIndex +Int 1) in_keys(M)
-        andBool mapKeysAreBelowLimit(LastIndex +Int 2, keysMap(M), expanded)
+        andBool mapKeysAreBelowLimitUnsafe(LastIndex +Int 2, keysMap(M), expanded)
     [simplification]
 
   /*
-  rule mapKeysAreBelowLimit(LastIndex:Int +Int 1, M:Map, usesExpanded)
+  rule mapKeysAreBelowLimitUnsafe(LastIndex:Int +Int 1, M:Map, usesExpanded)
     => true
     requires notBool u(LastIndex +Int 1) in_keys(M)
-      andBool mapKeysAreBelowLimit(LastIndex +Int 2, M, expanded)
+      andBool mapKeysAreBelowLimitUnsafe(LastIndex +Int 2, M, expanded)
     [simplification]
   */
 
@@ -268,4 +268,8 @@ module EXECUTION-PROOF-HELPERS
   rule #listContainsUnsafe([#pushList(Es:ExpressionCSV, E1:Expression)], E2:Expression)
       => #listContainsUnsafe([E1, Es], E2)
     [simplification]
+
+  rule mapKeysAreOfType(keysMap(M:Map) => M, rUsize)
+    [simplification]
+
 endmodule

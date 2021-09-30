@@ -1,4 +1,4 @@
-// timeout = moderate
+// timeout = long
 // breadth = 8
 //@ proof
 
@@ -14,6 +14,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
 // module TRUSTED-RECFU-DISCARD-ACTION-ERROR
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
   imports ONLY-THIS-SIGNER-DIFFS-SYNTAX
@@ -22,6 +23,8 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
           <k> pushContext ~> preCall
               ~> call(discardAction(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
+              ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
           invariantStateStack(
@@ -34,14 +37,18 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               ActionData:Map,
-              ActionSigners:Map,
+              (DeleteActionId |-> Signers:ExpressionList _ActionSigners:Map) #as ActionSigners:Map,
               address(MaliciousAddress:Int) #as CallerAddress:Address,
               Stack:Stack,
               PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
-          <k> error ~> K </k>
+          <k> error
+              ~> clearExternalCallEnv
+              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
+              ~> K
+          </k>
           invariantStateStack(
               NumUsers,
               UserIdToAddress,
@@ -50,7 +57,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
               NumProposers,
               UserIdToRole,
               u(Quorum),
-              u(ActionLastIndex ),
+              u(ActionLastIndex),
               ActionData,
               ActionSigners,
               address(MaliciousAddress),
@@ -63,7 +70,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionDataInvariant(ActionData)
 
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSigners, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSigners[DeleteActionId <- undef], UserIdToRole)
         andBool actionSignersInvariant(ActionSigners)
 
         andBool

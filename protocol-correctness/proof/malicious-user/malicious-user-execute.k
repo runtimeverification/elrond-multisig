@@ -1,6 +1,9 @@
+require "protocol-correctness/multisig/lib/functions/count-can-sign-function.k"
+require "protocol-correctness/lib/functions/list-contains.k"
 require "protocol-correctness/multisig/lib/functions/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
+require "protocol-correctness/proof/named-lemmas.k"
 require "protocol-correctness/proof/properties/properties-execute.k"
 
 module MALICIOUS-USER-EXECUTE-SYNTAX
@@ -8,7 +11,9 @@ module MALICIOUS-USER-EXECUTE-SYNTAX
 endmodule
 
 module MALICIOUS-USER-INVARIANT-FUNCTIONS
+  imports COUNT-CAN-SIGN-FUNCTION-SYNTAX
   imports K-EQUAL-SYNTAX
+  imports LIST-CONTAINS-SYNTAX
   imports MAP
   imports PSEUDOCODE-SYNTAX
 
@@ -35,6 +40,28 @@ module MALICIOUS-USER-INVARIANT-FUNCTIONS
   syntax Bool ::= oneElementList(element:KItem, ExpressionList) [function, functional]
   rule oneElementList(E:Expression, L:ExpressionList) => L ==K [E, .]
   rule oneElementList(_, _) => false [owise]
+
+  syntax Bool ::= listQuorumCantBeFilledBy(
+                      quorum:Int, id:Usize, signers:ExpressionList, userIdToRole:Map
+                  )  [function, functional]
+  rule listQuorumCantBeFilledBy(
+          Quorum:Int, UserId:Usize, Signers:ExpressionList, UserIdToRole:Map
+      )
+      =>  countCanSignFunction(Signers, UserIdToRole)
+            +Int #if #listContainsSafe(Signers, UserId) #then 0 #else 1 #fi
+          <Int Quorum
+
+  syntax Bool ::= noQuorumCanBeFilledBy(quorum:Int, id:Usize, signers:Map, userIdToRole:Map)  [function, functional]
+  rule noQuorumCanBeFilledBy(_Quorum:Int, _UserId:Usize, .Map, _UserIdToRole:Map) => true
+  rule noQuorumCanBeFilledBy(
+          Quorum:Int,
+          UserId:Usize,
+          _:KItem |-> L:ExpressionList M:Map,
+          UserIdToRole:Map)
+      => true
+        andBool listQuorumCantBeFilledBy(Quorum, UserId:Usize, L, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, M:Map, UserIdToRole)
+    [simplification]
 endmodule
 
 module MALICIOUS-USER-INVARIANT
@@ -108,70 +135,66 @@ module MALICIOUS-USER-INVARIANT
             Handling)
         andBool onlyThisSigner(CurrentAddressToUserId, MaliciousAddress, ActionSigners)
         andBool Quorum >=Int 2
-
-  syntax Bool ::= listQuorumCantBeFilledBy(
-                      quorum:Int, id:Usize, signers:ExpressionList, userIdToRole:Map
-                  )  [function, functional]
-  rule listQuorumCantBeFilledBy(
-          Quorum:Int, UserId:Usize, Signers:ExpressionList, UserIdToRole:Map
-      )
-      =>  countCanSignFunction(Signers, UserIdToRole)
-            +Int #if #listContainsSafe(Signers, UserId) #then 0 #else 1 #fi
-          <Int Quorum
-
-  syntax Bool ::= noQuorumCanBeFilledBy(quorum:Int, id:Usize, signers:Map, userIdToRole:Map)  [function, functional]
-  rule noQuorumCanBeFilledBy(_Quorum:Int, _UserId:Usize, .Map, _UserIdToRole:Map) => true
-  rule noQuorumCanBeFilledBy(
-          Quorum:Int,
-          UserId:Usize,
-          _:KItem |-> L:ExpressionList M:Map,
-          UserIdToRole:Map)
-      => true
-        andBool listQuorumCantBeFilledBy(Quorum, UserId:Usize, L, UserIdToRole)
-        andBool noQuorumCanBeFilledBy(Quorum:Int, UserId:Usize, M:Map, UserIdToRole)
-    [simplification]
 endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports INT
 
-  syntax KItem ::= runExternalCallsFromUser(Address, steps:Int)
-  syntax KItem ::= runExternalCallFromUser(Address)
+  syntax KItem ::= runExternalCallsFromUser(Address, actionId:Usize, steps:Int)
+  syntax KItem ::= runExternalCallFromUser(Address, actionId:Usize)
+endmodule
+
+module MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
+  imports BASE-TYPES-SYNTAX
+
+  syntax KItem ::= "actionDataKeysAreBelowLimitConvertExpanded"
+  syntax KItem ::= "actionSignersKeysAreBelowLimitConvertExpanded"
+  syntax KItem ::= deleteMaliciousUserActionId(Usize)
 endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS
   imports CONCRETIZE-VALUE-SYNTAX
-  imports PSEUDOCODE-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
-  imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports INSTRUMENTATION-PROOF
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
+  imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
+  imports NAMED-LEMMAS-SYNTAX
+  imports PSEUDOCODE-SYNTAX
 
   syntax KResult
 
-  rule runExternalCallsFromUser(_:Address, Steps:Int) => .K
+  rule runExternalCallsFromUser(_:Address, _ActionId:Usize, Steps:Int) => .K
     requires Steps <=Int 0  [label(runExternalCallsFUStepsLE0)]
-  rule runExternalCallsFromUser(A:Address, Steps:Int)
-      => runExternalCallFromUser(A) ~> runExternalCallsFromUser(A, Steps -Int 1)
+  rule runExternalCallsFromUser(A:Address, ActionId:Usize, Steps:Int)
+      =>  runExternalCallFromUser(A, ActionId)
+          ~> actionDataKeysAreBelowLimitConvertExpanded
+          ~> actionSignersKeysAreBelowLimitConvertExpanded
+          ~> runExternalCallsFromUser(A, ActionId, Steps -Int 1)
     requires Steps >Int 0  [label(runExternalCallsFUStepsGT0)]
 
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run proposeAddBoardMember(?_UserAddress:Address);)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+        =>  runExternalCall(from A run proposeAddBoardMember(?_UserAddress:Address);)
+            ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeAddBoardMember)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run proposeAddProposer(?_UserAddress:Address);)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+        =>  runExternalCall(from A run proposeAddProposer(?_UserAddress:Address);)
+            ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeAddBoardProposer)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run proposeRemoveUser(?_UserAddress:Address);)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+        =>  runExternalCall(from A run proposeRemoveUser(?_UserAddress:Address);)
+            ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeRemoveUser)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run proposeChangeQuorum(?_Quorum:Usize);)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+        =>  runExternalCall(from A run proposeChangeQuorum(?_Quorum:Usize);)
+            ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeChangeQuorum)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run proposeSendEgld(
-            ?_To:Address, ?_Amount:BigUint, ?_Data:BoxedBytes);)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+        =>  runExternalCall(from A run proposeSendEgld(
+                ?_To:Address, ?_Amount:BigUint, ?_Data:BoxedBytes);)
+            ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeSendEgld)]
-  rule  runExternalCallFromUser(A:Address)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
         =>  concretizeValue(?Amount)
             ~> concretizeValue(?Code)
             ~> concretizeValue(?Args)
@@ -182,9 +205,10 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                   ?_Payable:Bool,
                   ?_Readable:Bool,
                   ?Args:ExpressionList);)
+            ~> deleteMaliciousUserActionId(ActionId)
     ensures isKResult(?Args)
     [label(runProposeSCDeploy)]
-  rule  runExternalCallFromUser(A:Address)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
         => concretizeValue(?To)
             ~> concretizeValue(?Amount)
             ~> concretizeValue(?Function)
@@ -194,9 +218,10 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                 ?Amount:BigUint,
                 ?Function:BoxedBytes,
                 ?Args:ExpressionList);)
+            ~> deleteMaliciousUserActionId(ActionId)
     ensures isKResult(?Args)
     [label(runProposeSCCall)]
-  rule  <k> runExternalCallFromUser(A:Address)
+  rule  <k> runExternalCallFromUser(A:Address, ActionId:Usize)
           => branchK(A in_keys(AddressToUserId),
                   makeConcreteValue(A, rUsize, AddressToUserId)
                     ~>  branchK(AddressToUserId[A] orDefault void in_keys(UserIdToRole),
@@ -207,7 +232,9 @@ module MALICIOUS-USER-EXTERNAL-CALLS
               )
             ~> concretizeValue(?ActionId)
             ~> concretizeValue(?ActionId in_keys(ActionData))
+            ~> concretizeValue(?ActionId ==K ActionId)
             ~> runExternalCall(from A run sign(?ActionId:Usize);)
+            ~> deleteMaliciousUserActionId(ActionId)
           ...
         </k>
         <address-to-user-id>
@@ -222,7 +249,7 @@ module MALICIOUS-USER-EXTERNAL-CALLS
     [label(runSign)]
   // rule  runExternalCallFromUser(A:Address)
   //         =>  runExternalCall(from A run unsign(?_ActionId:Usize);)
-  rule  <k> runExternalCallFromUser(A:Address)
+  rule  <k> runExternalCallFromUser(A:Address, ActionId:Usize)
           =>  branchK(A in_keys(AddressToUserId),
                   makeConcreteValue(A, rUsize, AddressToUserId)
                     ~>  branchK(AddressToUserId[A] orDefault void in_keys(UserIdToRole),
@@ -233,7 +260,9 @@ module MALICIOUS-USER-EXTERNAL-CALLS
               )
               ~> concretizeValue(?ActionId)
               ~> concretizeValue(?ActionId in_keys(ActionData))
+              ~> concretizeValue(?ActionId ==K ActionId)
               ~> runExternalCall(from A run unsign(?ActionId:Usize);)
+              ~> deleteMaliciousUserActionId(ActionId)
           ...
         </k>
         <address-to-user-id>
@@ -246,22 +275,59 @@ module MALICIOUS-USER-EXTERNAL-CALLS
           ActionData:Map
         </action-data>
     [label(runUnsign)]
-  rule  runExternalCallFromUser(A:Address)
-        => runExternalCall(from A run performActionEndpoint(?_ActionId:Usize);)
+  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+        =>  runExternalCall(from A run performActionEndpoint(?ActionId:Usize);)
+            ~> deleteMaliciousUserActionId(ActionId)
+    ensures notBool ?ActionId ==K ActionId
+
     [label(runPerformAction)]
-  rule  <k> runExternalCallFromUser(A:Address)
+  rule  <k> runExternalCallFromUser(A:Address, ActionId:Usize)
             =>  concretizeValue(?ActionId)
+                ~> concretizeValue(?ActionId ==K ActionId)
                 ~>  branchK(?ActionId in_keys(ActionSigners),
                       makeConcreteValue(?ActionId, rExpressionList, ActionSigners),
                       .K
                     )
                 ~>  runExternalCall(from A run discardAction(?ActionId:Usize);)
+                ~> deleteMaliciousUserActionId(ActionId)
             ...
         </k>
         <action-signers>
           ActionSigners:Map
         </action-signers>
     [label(runDiscardAction)]
+
+  rule  <k> actionDataKeysAreBelowLimitConvertExpanded
+            => lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+                ActionLastIndex +Int 1,
+                keysMap(ActionData),
+                usesExpanded,
+                expand(expanded))
+          ...
+        </k>
+        <action-last-index>
+          u(ActionLastIndex:Int)
+        </action-last-index>
+        <action-data>
+          ActionData:Map
+        </action-data>
+
+  rule  <k> actionSignersKeysAreBelowLimitConvertExpanded
+            => lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+                ActionLastIndex +Int 1,
+                keysMap(ActionSigners),
+                usesExpanded,
+                expand(expanded))
+          ...
+        </k>
+        <action-last-index>
+          u(ActionLastIndex:Int)
+        </action-last-index>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+
+  rule deleteMaliciousUserActionId(_:Usize) => .K
 endmodule
 
 module MALICIOUS-USER-EXECUTE
