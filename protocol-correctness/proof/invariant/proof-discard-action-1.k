@@ -1,5 +1,5 @@
 // timeout = eternal
-// breadth = 4
+// breadth = 8
 //@ proof
 require "../functions/trusted-discard-action-has-signers.k"  //@ Bazel remove
 require "../functions/trusted-discard-action-no-valid-signers.k"  //@ Bazel remove

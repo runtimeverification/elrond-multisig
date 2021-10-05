@@ -1,10 +1,12 @@
 // timeout = long
-// breadth = 2
+// breadth = 4
 //@ proof
-require "trusted-call-invariant.k"  //@ Bazel remove
+require "trusted-call-invariant-in-keys.k"  //@ Bazel remove
+require "trusted-call-invariant-not-in-keys.k"  //@ Bazel remove
 
 module PROOF-CANNOT-PERFORM
-  imports TRUSTED-CALL-INVARIANT
+  imports TRUSTED-CALL-INVARIANT-IN-KEYS
+  imports TRUSTED-CALL-INVARIANT-NOT-IN-KEYS
 //@ trusted
 // module TRUSTED-CANNOT-PERFORM
 //@ end
@@ -12,7 +14,11 @@ module PROOF-CANNOT-PERFORM
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, _ActionId:Usize,_Count:Int) ~> K:K </k>
+          <k> runExternalCallsFromUser(
+                  MaliciousAddress:Address, u(0) #as ActionId:Usize, _Count:Int
+              )
+              ~> K:K
+          </k>
           invariantState(
               NumUsers:Usize,
               UserIdToAddress:Map,

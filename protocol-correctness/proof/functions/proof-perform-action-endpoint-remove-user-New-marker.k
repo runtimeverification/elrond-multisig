@@ -64,6 +64,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-NEW-MARKER
         // something to map values to keys.
         andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+        andBool mapKeysAreOfType(UserIdToAddress, rUsize)
         andBool NumBoardMembers +Int NumProposers >Int 0
         andBool Quorum <=Int NumBoardMembers
         andBool notBool (UserAddress in_keys(AddressToUserId))

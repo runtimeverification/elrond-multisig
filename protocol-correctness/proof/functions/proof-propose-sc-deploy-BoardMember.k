@@ -90,6 +90,9 @@ module PROOF-PROPOSE-SC-DEPLOY-BOARDMEMBER
       andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
       andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
 
+      andBool mapKeysAreOfType(ActionData, rUsize)
+      andBool mapKeysAreOfType(ActionSigners, rUsize)
+
       andBool CallerAddress in_keys(AddressToUserId)
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)
       andBool UserIdToRole[AddressToUserId[CallerAddress]] ==K BoardMember

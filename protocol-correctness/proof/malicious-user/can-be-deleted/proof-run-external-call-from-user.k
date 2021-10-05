@@ -1,5 +1,5 @@
 // timeout = eternal
-// breadth = 11
+// breadth = 22
 //@ proof
 
 require "run-external-call-from-user/trusted-recfu-fragment-discard-action.k"  //@ Bazel remove
@@ -38,7 +38,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address, ActionId:Usize)
+          <k> runExternalCallFromUser(MaliciousAddress:Address, DeleteActionId:Usize)
               ~> K:K
           </k>
           invariantState(
@@ -47,11 +47,16 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               (MaliciousAddress |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              (ActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+                _OldActionSigners
+              ) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -67,11 +72,12 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               u(Quorum),
               u(?NewActionLastIndex:Int),
               ?NewActionData:Map,
-              ActionId |-> ?Signers:ExpressionList ?NewActionSigners:Map,
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
+                ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
@@ -83,12 +89,16 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
+        andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(
             Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(ActionId |-> ?Signers ?NewActionSigners)
+        andBool actionSignersInvariant(
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners
+                )
 
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
@@ -96,13 +106,17 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
                     usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
-                    keysMap(ActionId |-> ?Signers ?NewActionSigners),
+                    keysMap(
+                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                          ?NewActionSigners
+                    ),
                     usesExpanded)
 
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    ActionId |-> ?Signers ?NewActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners,
                     UserIdToRole)
 
     //@ proof

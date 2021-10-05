@@ -1,6 +1,21 @@
 load("//:proof.bzl", "klibrary", "kprove_test", "ktrusted")
 
 kprove_test(
+  name = "proof-only-this-signer-diffs-transitive",
+  srcs = ["proof-only-this-signer-diffs-transitive.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-only-this-signer-diffs-transitive",
+  srcs = ["proof-only-this-signer-diffs-transitive.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-at-most-this-signer-0-count-can-sign-function",
   srcs = ["lemma-at-most-this-signer-0-count-can-sign-function.k"],
   trusted = [

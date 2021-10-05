@@ -3,11 +3,13 @@
 //@ proof
 
 require "trusted-recfu-unsign-error.k"  //@ Bazel remove
-require "trusted-recfu-unsign-void.k"  //@ Bazel remove
+require "trusted-recfu-unsign-void-eq.k"  //@ Bazel remove
+require "trusted-recfu-unsign-void-neq.k"  //@ Bazel remove
 
 module PROOF-RECFU-FRAGMENT-UNSIGN
   imports TRUSTED-RECFU-UNSIGN-ERROR
-  imports TRUSTED-RECFU-UNSIGN-VOID
+  imports TRUSTED-RECFU-UNSIGN-VOID-EQ
+  imports TRUSTED-RECFU-UNSIGN-VOID-NEQ
 
 //@ trusted
 // module TRUSTED-RECFU-FRAGMENT-UNSIGN
@@ -54,11 +56,16 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
               (MaliciousAddress |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              (DeleteActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+                _OldActionSigners
+              ) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -72,9 +79,10 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
               NumProposers,
               UserIdToRole,
               u(Quorum),
-              u(?NewActionLastIndex:Int),
+              u(?NewActionLastIndex:Int),  // TODO: This does not change.
               ?NewActionData:Map,
-              DeleteActionId |-> ?Signers:ExpressionList ?NewActionSigners:Map,
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
+                ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
@@ -90,12 +98,16 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
+        andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(
             Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(DeleteActionId |-> ?Signers ?NewActionSigners)
+        andBool actionSignersInvariant(
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners
+                )
 
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
@@ -103,13 +115,17 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
                     usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
-                    keysMap(DeleteActionId |-> ?Signers ?NewActionSigners),
+                    keysMap(
+                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                          ?NewActionSigners
+                    ),
                     usesExpanded)
 
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    DeleteActionId |-> ?Signers ?NewActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners,
                     UserIdToRole)
 
     //@ proof

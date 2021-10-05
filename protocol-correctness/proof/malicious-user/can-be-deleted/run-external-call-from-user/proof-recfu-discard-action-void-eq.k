@@ -1,5 +1,5 @@
 // timeout = eternal
-// breadth = 14
+// breadth = 6
 //@ proof
 
 require "../../../functions/trusted-discard-action-no-signers.k"  //@ Bazel remove
@@ -7,15 +7,18 @@ require "../../../functions/trusted-discard-action-no-signers-no-action.k"  //@ 
 require "../../../functions/trusted-discard-action-no-valid-signers.k"  //@ Bazel remove
 require "../../../functions/trusted-discard-action-no-valid-signers-no-action.k"  //@ Bazel remove
 
-module PROOF-RECFU-DISCARD-ACTION-VOID
+// TODO: This should not be needed - the malicious user delete action can't be deleted.
+
+module PROOF-RECFU-DISCARD-ACTION-VOID-EQ
   imports TRUSTED-DISCARD-ACTION-NO-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-SIGNERS-NO-ACTION
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
 //@ trusted
-// module TRUSTED-RECFU-DISCARD-ACTION-VOID
+// module TRUSTED-RECFU-DISCARD-ACTION-VOID-EQ
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports CONCRETIZE-EXPRESSION-LIST-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT
@@ -26,6 +29,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
               ~> call(discardAction(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
               ~> clearExternalCallEnv
+              ~> concretizeExpressionList(Signers, 1)
               ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
@@ -35,22 +39,21 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
               (address(MaliciousAddress) |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               OldActionData:Map,
-              (DeleteActionId |-> Signers:ExpressionList _OldActionSigners:Map) #as OldActionSigners:Map,
+              (DeleteActionId |-> Signers:ExpressionList ActionSignersFinal:Map) #as OldActionSigners:Map,
               address(MaliciousAddress:Int) #as CallerAddress:Address,
               Stack:Stack,
               PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
-          <k> evaluate(void)
-              ~> clearExternalCallEnv
-              ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
-              ~> K
-          </k>
+          <k> K </k>
           invariantStateStack(
               NumUsers,
               UserIdToAddress,
@@ -61,12 +64,14 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
               u(Quorum),
               u(ActionLastIndex),
               ?NewActionData,
-              DeleteActionId |-> Signers:ExpressionList ?NewActionSigners,
-              address(MaliciousAddress),
+              ActionSignersFinal,
+              uninitialized,
               Stack:Stack,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
+        andBool DeleteActionId ==K ActionId
+
         andBool notBool u(0) in_keys(UserIdToRole)
 
         andBool userIdToRoleInvariant(UserIdToRole)
@@ -92,14 +97,14 @@ module PROOF-RECFU-DISCARD-ACTION-VOID
             )
 
     ensures true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, DeleteActionId |-> Signers:ExpressionList ?NewActionSigners, UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ActionSignersFinal, UserIdToRole)
+        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, DeleteActionId |-> Signers:ExpressionList ActionSignersFinal, UserIdToRole)
 
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(DeleteActionId |-> Signers:ExpressionList ?NewActionSigners)
+        andBool actionSignersInvariant(DeleteActionId |-> Signers:ExpressionList ActionSignersFinal)
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
-        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(DeleteActionId |-> Signers:ExpressionList ?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(DeleteActionId |-> Signers:ExpressionList ActionSignersFinal), usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

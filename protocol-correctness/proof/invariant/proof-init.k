@@ -1,5 +1,6 @@
 // timeout = eternal
-// breadth = 2
+// breadth = 6
+// TODO: Breadth used to be 2 - why did it change to 6?
 //@ proof
 require "trusted-init-loop-error.k"  //@ Bazel remove
 require "trusted-init-loop-no-error.k"  //@ Bazel remove

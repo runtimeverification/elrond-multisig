@@ -66,6 +66,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT-ADD-BOARD-MEMBER-NEW-MARKER
         andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
 
+        andBool mapKeysAreOfType(UserIdToAddress, rUsize)
+
         andBool notBool UserAddress in_keys(AddressToUserId)
 
         // perform-fragment

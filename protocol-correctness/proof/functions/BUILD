@@ -522,6 +522,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "moderate",
+  breadth = "2",
 )
 
 ktrusted(
@@ -769,6 +770,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "moderate",
+  breadth = "2",
 )
 
 ktrusted(
@@ -786,6 +788,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "moderate",
+  breadth = "2",
 )
 
 ktrusted(
@@ -1226,6 +1229,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "long",
+  breadth = "2",
 )
 
 ktrusted(
@@ -1243,6 +1247,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "moderate",
+  breadth = "2",
 )
 
 ktrusted(

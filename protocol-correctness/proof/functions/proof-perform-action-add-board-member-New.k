@@ -82,6 +82,9 @@ module PROOF-PERFORM-ACTION-ADD-BOARD-MEMBER-NEW
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
 
+      andBool mapKeysAreOfType(UserIdToAddress, rUsize)
+      andBool mapKeysAreOfType(UserIdToRole, rUsize)
+
       andBool notBool UserAddress in_keys(AddressToUserId)
     ensures true
     //@ proof

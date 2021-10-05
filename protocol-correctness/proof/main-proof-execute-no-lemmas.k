@@ -20,7 +20,7 @@ require "protocol-correctness/proof/instrumentation-sign.k"
 require "protocol-correctness/proof/instrumentation-unsign.k"
 require "protocol-correctness/proof/instrumentation/pushlist/pushlist-instrumentation.k"
 require "protocol-correctness/proof/invariant.k"
-require "protocol-correctness/proof/named-lemmas.k"
+require "protocol-correctness/proof/named-lemmas/named-lemmas.k"
 require "protocol-correctness/pseudocode.k"
 
 module MAIN-PROOF-EXECUTE-NO-LEMMAS-SYNTAX

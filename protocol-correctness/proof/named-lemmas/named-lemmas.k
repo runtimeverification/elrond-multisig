@@ -3,6 +3,8 @@ require "protocol-correctness/lib/language/reflection.k"
 require "protocol-correctness/lib/proof/unsorted/formula-expansion.k"
 require "protocol-correctness/proof/instrumentation-proof.k"
 
+require "protocol-correctness/proof/named-lemmas/named-lemma-only-this-signer-diffs-transitive.k"
+
 module NAMED-LEMMAS-SYNTAX
   imports BOOL
   imports FORMULA-EXPANSION-SYNTAX
@@ -28,6 +30,8 @@ module NAMED-LEMMAS
   imports MAP-UTILS-SYNTAX
   imports NAMED-LEMMAS-SYNTAX
   imports REFLECTION-SYNTAX
+
+  imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE
 
   rule lemmaCommuteMapSquareBracketAssignmentSameValue(M:Map, K1:KItem, K2:KItem, _V:KItem)
       =>  branchK(K1 ==K K2,

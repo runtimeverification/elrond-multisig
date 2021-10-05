@@ -24,6 +24,14 @@ klibrary(
   visibility = ["//visibility:public"],
 )
 
+klibrary(
+  name = "all-board-members-sign-for-interspersed-files",
+  srcs = ["all-board-members-sign-for-interspersed.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
 kprove_test(
   name = "proof-can-be-deleted",
   srcs = ["proof-can-be-deleted.k"],
@@ -94,7 +102,7 @@ kprove_test(
   ],
   semantics = "can-be-deleted-execute",
   timeout = "eternal",
-  breadth = "11",
+  breadth = "22",
 )
 
 ktrusted(
@@ -109,9 +117,10 @@ kprove_test(
   trusted = [
       ":trusted-run-external-call-from-user",
       "//protocol-correctness/proof/lemmas/0/map:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-only-this-signer-diffs-transitive",
   ],
   semantics = "can-be-deleted-execute",
-  timeout = "moderate",
+  timeout = "long",
   breadth = "2",
 )
 

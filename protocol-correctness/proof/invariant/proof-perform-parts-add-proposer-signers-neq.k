@@ -1,5 +1,5 @@
 // timeout = eternal
-// breadth = 4
+// breadth = 6
 //@ proof
 require "../functions/trusted-perform-action-endpoint-add-proposer-BoardMember-marker.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-add-proposer-BoardMember-no-quorum-marker.k"  //@ Bazel remove

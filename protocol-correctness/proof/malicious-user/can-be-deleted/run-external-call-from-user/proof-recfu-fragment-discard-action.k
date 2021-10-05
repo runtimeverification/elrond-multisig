@@ -1,13 +1,21 @@
-// timeout = eternal
-// breadth = 7
+// timeout = long
+// breadth = 6
 //@ proof
 
-require "trusted-recfu-discard-action-error.k"  //@ Bazel remove
-require "trusted-recfu-discard-action-void.k"  //@ Bazel remove
+require "trusted-recfu-discard-action-error-eq.k"  //@ Bazel remove
+require "trusted-recfu-discard-action-error-ne.k"  //@ Bazel remove
+// require "trusted-recfu-discard-action-void-eq.k"  //@ Bazel remove
+require "trusted-recfu-discard-action-void-ne.k"  //@ Bazel remove
+
+require "../../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel remove
 
 module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
-  imports TRUSTED-RECFU-DISCARD-ACTION-ERROR
-  imports TRUSTED-RECFU-DISCARD-ACTION-VOID
+  imports TRUSTED-RECFU-DISCARD-ACTION-ERROR-EQ
+  imports TRUSTED-RECFU-DISCARD-ACTION-ERROR-NE
+  // imports TRUSTED-RECFU-DISCARD-ACTION-VOID-EQ
+  imports TRUSTED-RECFU-DISCARD-ACTION-VOID-NE
+
+  imports TRUSTED-MAKE-CONCRETE-VALUE-FRAGMENT
 
 //@ trusted
 // module TRUSTED-RECFU-FRAGMENT-DISCARD-ACTION
@@ -36,6 +44,13 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
               ~> runExternalCall(
                   from MaliciousAddress:Address run discardAction(ActionId);
                 )
+              ~> concretizeExpressionList(
+                    toExpressionListOrDefault(
+                        OldActionSigners[ActionId] orDefault [.],
+                        [.]
+                    ),
+                  1
+                )
               ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
@@ -45,11 +60,16 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
               (MaliciousAddress |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               OldActionData:Map,
-              (DeleteActionId |-> Signers:ExpressionList ActionSignersRemainder) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV] #as Signers
+                ActionSignersRemainder
+              ) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -81,6 +101,7 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
+        andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)

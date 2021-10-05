@@ -47,7 +47,7 @@ kprove_test(
   ],
   semantics = "invariant-execute",
   timeout = "eternal",
-  breadth = "4",
+  breadth = "8",
 )
 
 ktrusted(
@@ -66,7 +66,7 @@ kprove_test(
   ],
   semantics = "invariant-execute",
   timeout = "eternal",
-  breadth = "4",
+  breadth = "8",
 )
 
 ktrusted(
@@ -173,7 +173,7 @@ kprove_test(
   ],
   semantics = "invariant-execute",
   timeout = "eternal",
-  breadth = "2",
+  breadth = "6",
 )
 
 ktrusted(
@@ -395,7 +395,7 @@ kprove_test(
   ],
   semantics = "invariant-execute",
   timeout = "eternal",
-  breadth = "4",
+  breadth = "6",
 )
 
 ktrusted(

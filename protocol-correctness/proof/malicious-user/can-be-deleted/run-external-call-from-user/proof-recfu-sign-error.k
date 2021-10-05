@@ -1,3 +1,4 @@
+// timeout = moderate
 // breadth = 2
 //@ proof
 

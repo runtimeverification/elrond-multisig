@@ -1,15 +1,17 @@
 // timeout = eternal
-// breadth = 9
+// breadth = 10
 //@ proof
 
 require "trusted-recfu-sign-error.k"  //@ Bazel remove
 require "trusted-recfu-sign-void-no-signers.k"  //@ Bazel remove
-require "trusted-recfu-sign-void-signers.k"  //@ Bazel remove
+require "trusted-recfu-sign-void-signers-eq.k"  //@ Bazel remove
+require "trusted-recfu-sign-void-signers-neq.k"  //@ Bazel remove
 
 module PROOF-RECFU-FRAGMENT-SIGN
   imports TRUSTED-RECFU-SIGN-ERROR
   imports TRUSTED-RECFU-SIGN-VOID-NO-SIGNERS
-  imports TRUSTED-RECFU-SIGN-VOID-SIGNERS
+  imports TRUSTED-RECFU-SIGN-VOID-SIGNERS-EQ
+  imports TRUSTED-RECFU-SIGN-VOID-SIGNERS-NEQ
 
 //@ trusted
 // module TRUSTED-RECFU-FRAGMENT-SIGN
@@ -57,11 +59,16 @@ module PROOF-RECFU-FRAGMENT-SIGN
               (MaliciousAddress |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
-              u(OldActionLastIndex:Int),
+              u(OldActionLastIndex:Int),  // TODO: This does not change in the rewrite
               OldActionData:Map,
-              (DeleteActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+                _OldActionSigners
+              ) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -77,7 +84,8 @@ module PROOF-RECFU-FRAGMENT-SIGN
               u(Quorum),
               u(?NewActionLastIndex:Int),
               ?NewActionData:Map,
-              DeleteActionId |-> ?Signers:ExpressionList ?NewActionSigners:Map,
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
+                ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
@@ -93,12 +101,16 @@ module PROOF-RECFU-FRAGMENT-SIGN
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
+        andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(
             Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(DeleteActionId |-> ?Signers ?NewActionSigners)
+        andBool actionSignersInvariant(
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners
+                )
 
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
@@ -106,13 +118,17 @@ module PROOF-RECFU-FRAGMENT-SIGN
                     usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
-                    keysMap(DeleteActionId |-> ?Signers ?NewActionSigners),
+                    keysMap(
+                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                          ?NewActionSigners
+                    ),
                     usesExpanded)
 
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    DeleteActionId |-> ?Signers ?NewActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners,
                     UserIdToRole)
 
     //@ proof

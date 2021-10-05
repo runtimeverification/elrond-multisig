@@ -1,14 +1,15 @@
+// timeout = long
+// breadth = 3
 //@ proof
-// Not working because of https://github.com/kframework/kore/issues/2829
 
 require "../../../functions/trusted-sign-existing-signers-in-list.k"  //@ Bazel remove
 require "../../../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove
 
-module PROOF-RECFU-SIGN-VOID-SIGNERS
+module PROOF-RECFU-SIGN-VOID-SIGNERS-EQ
   imports TRUSTED-SIGN-EXISTING-SIGNERS-IN-LIST
   imports TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ trusted
-// module TRUSTED-RECFU-SIGN-VOID-SIGNERS
+// module TRUSTED-RECFU-SIGN-VOID-SIGNERS-EQ
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
@@ -19,7 +20,7 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
 
   claim <T><TT>
           <k> pushContext ~> preCall
-              ~> call(sign(ActionIdx:Usize))
+              ~> call(sign(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
               ~> clearExternalCallEnv
               ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
@@ -31,11 +32,16 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
               (address(MaliciousAddress) |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               ActionData:Map,
-              (DeleteActionId |-> Signers:ExpressionList _OldActionSigners:Map) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+                _OldActionSigners
+              ) #as OldActionSigners:Map,
               address(MaliciousAddress:Int),
               Stack:Stack,
               PerformedActions:List)
@@ -57,15 +63,18 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
               u(Quorum),
               u(ActionLastIndex),
               ActionData,
-              DeleteActionId |-> ?Signers:ExpressionList ?NewActionSigners,
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
+                ?NewActionSigners:Map,
               address(MaliciousAddress),
               Stack:Stack,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool ActionIdx in_keys ( ActionData )
+        andBool ActionId ==K DeleteActionId
+
+        andBool ActionId in_keys ( ActionData )
         andBool MaliciousRole ==K BoardMember
-        andBool ActionIdx in_keys(OldActionSigners)
+        andBool ActionId in_keys(OldActionSigners)
 
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
 
@@ -77,14 +86,30 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS
         andBool userIdToRoleInvariant(UserIdToRole)
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, DeleteActionId |-> ?Signers ?NewActionSigners, UserIdToRole)
+        andBool actionSignersInvariant(
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners
+                )
 
-        andBool actionSignersInvariant(DeleteActionId |-> ?Signers ?NewActionSigners)
+        andBool mapKeysAreBelowLimitSafe(
+                    ActionLastIndex +Int 1,
+                    keysMap(
+                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                          ?NewActionSigners
+                    ),
+                    usesExpanded)
 
-        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(DeleteActionId |-> ?Signers ?NewActionSigners), usesExpanded)
+        andBool onlyThisSignerDiffs(
+                    MaliciousId,
+                    OldActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners,
+                    UserIdToRole)
+
     //@ proof
     //@ trusted
     // [trusted]

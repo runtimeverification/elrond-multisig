@@ -24,6 +24,7 @@ module RUNNING-EXTERNAL
 
   rule (evaluate(E:Expression) => .K) ~> clearExternalCallEnv
     requires isKResult(E)
+    [label(removeEvaluateBeforeClearExternalCallEnv)]
 
   rule (E:Expression => .K) ~> clearExternalCallEnv
     requires isKResult(E)

@@ -1,9 +1,51 @@
 load("//:proof.bzl", "kprove_test", "ktrusted")
 
 kprove_test(
-  name = "proof-call-invariant",
-  srcs = ["proof-call-invariant.k"],
+  name = "proof-call-invariant-fragment-sign",
+  srcs = ["proof-call-invariant-fragment-sign.k"],
   trusted = [
+      ":trusted-call-invariant-prefix-fragment-sign",
+      ":trusted-call-invariant-suffix-fragment",
+      ":trusted-sign",
+      "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
+  timeout = "eternal",
+  breadth = "32",
+)
+
+ktrusted(
+  name = "trusted-call-invariant-fragment-sign",
+  srcs = ["proof-call-invariant-fragment-sign.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-call-invariant-fragment-unsign",
+  srcs = ["proof-call-invariant-fragment-unsign.k"],
+  trusted = [
+      ":trusted-call-invariant-suffix-fragment",
+      ":trusted-unsign",
+      "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
+  timeout = "eternal",
+  breadth = "32",
+)
+
+ktrusted(
+  name = "trusted-call-invariant-fragment-unsign",
+  srcs = ["proof-call-invariant-fragment-unsign.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-call-invariant-in-keys",
+  srcs = ["proof-call-invariant-in-keys.k"],
+  trusted = [
+      ":trusted-call-invariant-fragment-sign",
+      ":trusted-call-invariant-fragment-unsign",
+      ":trusted-call-invariant-suffix-fragment",
       ":trusted-discard-action",
       ":trusted-perform-action",
       ":trusted-propose-add-board-member",
@@ -13,9 +55,7 @@ kprove_test(
       ":trusted-propose-sc-call",
       ":trusted-propose-sc-deploy",
       ":trusted-propose-send-egld",
-      ":trusted-sign",
-      ":trusted-unsign",
-      "//protocol-correctness/proof/lemmas/0/map:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
   ],
   semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
   timeout = "eternal",
@@ -23,8 +63,69 @@ kprove_test(
 )
 
 ktrusted(
-  name = "trusted-call-invariant",
-  srcs = ["proof-call-invariant.k"],
+  name = "trusted-call-invariant-in-keys",
+  srcs = ["proof-call-invariant-in-keys.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-call-invariant-not-in-keys",
+  srcs = ["proof-call-invariant-not-in-keys.k"],
+  trusted = [
+      ":trusted-call-invariant-fragment-sign",
+      ":trusted-call-invariant-fragment-unsign",
+      ":trusted-call-invariant-suffix-fragment",
+      ":trusted-discard-action",
+      ":trusted-perform-action",
+      ":trusted-propose-add-board-member",
+      ":trusted-propose-add-proposer",
+      ":trusted-propose-change-quorum",
+      ":trusted-propose-remove-user",
+      ":trusted-propose-sc-call",
+      ":trusted-propose-sc-deploy",
+      ":trusted-propose-send-egld",
+      "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
+  timeout = "eternal",
+  breadth = "32",
+)
+
+ktrusted(
+  name = "trusted-call-invariant-not-in-keys",
+  srcs = ["proof-call-invariant-not-in-keys.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-call-invariant-prefix-fragment-sign",
+  srcs = ["proof-call-invariant-prefix-fragment-sign.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
+  breadth = "4",
+)
+
+ktrusted(
+  name = "trusted-call-invariant-prefix-fragment-sign",
+  srcs = ["proof-call-invariant-prefix-fragment-sign.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-call-invariant-suffix-fragment",
+  srcs = ["proof-call-invariant-suffix-fragment.k"],
+  trusted = [
+      "//protocol-correctness/proof/lemmas/0/map:trusted-map-keys-are-below-limit-ignore-property-handling",
+  ],
+  semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-call-invariant-suffix-fragment",
+  srcs = ["proof-call-invariant-suffix-fragment.k"],
   visibility = ["//visibility:public"],
 )
 
@@ -32,11 +133,12 @@ kprove_test(
   name = "proof-cannot-perform",
   srcs = ["proof-cannot-perform.k"],
   trusted = [
-      ":trusted-call-invariant",
+      ":trusted-call-invariant-in-keys",
+      ":trusted-call-invariant-not-in-keys",
   ],
   semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
   timeout = "long",
-  breadth = "2",
+  breadth = "4",
 )
 
 ktrusted(

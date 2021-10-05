@@ -94,6 +94,10 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-NEW
       // something to map values to keys.
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+
+      andBool mapKeysAreOfType(UserIdToAddress, rUsize)
+      andBool mapKeysAreOfType(UserIdToRole, rUsize)
+
       andBool NumBoardMembers +Int NumProposers >Int 0
       andBool Quorum <=Int NumBoardMembers
 

@@ -6,12 +6,12 @@ require "../../../functions/trusted-discard-action-has-signers.k"  //@ Bazel rem
 require "../../../functions/trusted-discard-action-no-role.k"  //@ Bazel remove
 require "../../../functions/trusted-discard-action-no-user.k"  //@ Bazel remove
 
-module PROOF-RECFU-DISCARD-ACTION-ERROR
+module PROOF-RECFU-DISCARD-ACTION-ERROR-EQ
   imports TRUSTED-DISCARD-ACTION-HAS-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-ROLE
   imports TRUSTED-DISCARD-ACTION-NO-USER
 //@ trusted
-// module TRUSTED-RECFU-DISCARD-ACTION-ERROR
+// module TRUSTED-RECFU-DISCARD-ACTION-ERROR-EQ
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
@@ -24,6 +24,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
               ~> call(discardAction(ActionId:Usize))
               ~> popContext ~> evaluateReturnValue
               ~> clearExternalCallEnv
+              ~> concretizeExpressionList(_:ExpressionList, _:Int) #as Cel:KItem
               ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K:K
           </k>
@@ -46,6 +47,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
         <T><TT>
           <k> error
               ~> clearExternalCallEnv
+              ~> Cel
               ~> deleteMaliciousUserActionId(DeleteActionId:Usize)
               ~> K
           </k>
@@ -65,6 +67,7 @@ module PROOF-RECFU-DISCARD-ACTION-ERROR
               PerformedActions:List):StateCell
         </TT></T>
     requires true
+        andBool DeleteActionId ==K ActionId
         andBool notBool u(0) in_keys(UserIdToRole)
 
         andBool userIdToRoleInvariant(UserIdToRole)

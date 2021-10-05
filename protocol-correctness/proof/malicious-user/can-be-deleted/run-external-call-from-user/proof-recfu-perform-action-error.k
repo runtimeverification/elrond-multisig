@@ -1,5 +1,5 @@
 // timeout = moderate
-// breadth = 6
+// breadth = 10
 //@ proof
 
 require "../../../functions/trusted-perform-action-endpoint-no-quorum.k"  //@ Bazel remove

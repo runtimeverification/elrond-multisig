@@ -9,13 +9,15 @@ module PROOF-CAN-BE-DELETED
 // module TRUSTED-CAN-BE-DELETED
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
-    imports PSEUDOCODE-CONFIGURATION
+  imports PSEUDOCODE-CONFIGURATION
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
 
   claim <T><TT>
           <k> nop
               ~> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress)
               ~> withPickedUserCall(proposeRemoveUser(MaliciousAddress))
+
+              ~> makeConcreteDeleteProposer(add(ActionLastIndex, u(1)))
 
               ~> runExternalCallsFromUser(
                     MaliciousAddress:Address,

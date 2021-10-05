@@ -64,10 +64,14 @@ module PROOF-PROPOSE-DELETE-MALICIOUS
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
+        andBool mapKeysAreOfType(ActionData, rUsize)
+        andBool mapKeysAreOfType(ActionSigners, rUsize)
         andBool mapValuesAreOfType(UserIdToRole, rUserRole)
         andBool mapValuesAreKResult(UserIdToRole)
     ensures true
         andBool notBool ?SomeId ==K MaliciousId
+        andBool ?SomeId in_keys(UserIdToRole)
+        andBool UserIdToRole[?SomeId] ==K BoardMember
     //@ proof
     //@ trusted
     // [trusted]

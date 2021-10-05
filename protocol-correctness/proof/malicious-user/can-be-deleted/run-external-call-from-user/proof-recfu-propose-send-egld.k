@@ -73,9 +73,9 @@ module PROOF-RECFU-PROPOSE-SEND-EGLD
         andBool actionSignersInvariant(OldActionSigners)
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
 
-
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreOfType(ActionData, rUsize)
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)

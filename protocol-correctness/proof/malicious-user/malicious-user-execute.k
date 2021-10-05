@@ -1,9 +1,11 @@
 require "protocol-correctness/multisig/lib/functions/count-can-sign-function.k"
 require "protocol-correctness/lib/functions/list-contains.k"
+require "protocol-correctness/lib/language/cast.k"
 require "protocol-correctness/multisig/lib/functions/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
-require "protocol-correctness/proof/named-lemmas.k"
+require "protocol-correctness/proof/named-lemmas/named-lemma-only-this-signer-diffs-transitive.k"
+require "protocol-correctness/proof/named-lemmas/named-lemmas.k"
 require "protocol-correctness/proof/properties/properties-execute.k"
 
 module MALICIOUS-USER-EXECUTE-SYNTAX
@@ -147,18 +149,34 @@ endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports BASE-TYPES-SYNTAX
+  imports MAP
 
   syntax KItem ::= "actionDataKeysAreBelowLimitConvertExpanded"
   syntax KItem ::= "actionSignersKeysAreBelowLimitConvertExpanded"
   syntax KItem ::= deleteMaliciousUserActionId(Usize)
+  syntax KItem ::= concretizeDeleteActionSigners(Usize)
+  syntax KItem ::= "passSigners"
+
+  syntax KItem ::=  callLemmaOnlyThisSignerDiffsTransitiveFreezer(
+                        signerId:Usize,
+                        oldActionSigners:Map
+                    )
+  syntax KItem ::=  callLemmaOnlyThisSignerDiffsTransitive(
+                        signerId:Usize,
+                        oldActionSigners:Map,
+                        intermediateActionSigners:Map
+                    )
 endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS
+  imports CAST-SYNTAX
   imports CONCRETIZE-VALUE-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
   imports INSTRUMENTATION-PROOF
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
+  imports MAP
+  imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE-SYNTAX
   imports NAMED-LEMMAS-SYNTAX
   imports PSEUDOCODE-SYNTAX
 
@@ -166,11 +184,25 @@ module MALICIOUS-USER-EXTERNAL-CALLS
 
   rule runExternalCallsFromUser(_:Address, _ActionId:Usize, Steps:Int) => .K
     requires Steps <=Int 0  [label(runExternalCallsFUStepsLE0)]
-  rule runExternalCallsFromUser(A:Address, ActionId:Usize, Steps:Int)
-      =>  runExternalCallFromUser(A, ActionId)
-          ~> actionDataKeysAreBelowLimitConvertExpanded
-          ~> actionSignersKeysAreBelowLimitConvertExpanded
-          ~> runExternalCallsFromUser(A, ActionId, Steps -Int 1)
+  rule  <k>
+          runExternalCallsFromUser(A:Address, ActionId:Usize, Steps:Int)
+          =>  runExternalCallFromUser(A, ActionId)
+              ~> actionDataKeysAreBelowLimitConvertExpanded
+              ~> actionSignersKeysAreBelowLimitConvertExpanded
+              ~> concretizeDeleteActionSigners(ActionId)
+              ~> passSigners
+              ~> runExternalCallsFromUser(A, ActionId, Steps -Int 1)
+              ~> callLemmaOnlyThisSignerDiffsTransitiveFreezer(
+                  toUsizeOrDefault(AddressToUserId[A] orDefault u(0), u(0)),
+                  ActionSigners)
+          ...
+        </k>
+        <address-to-user-id>
+          AddressToUserId:Map
+        </address-to-user-id>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
     requires Steps >Int 0  [label(runExternalCallsFUStepsGT0)]
 
   rule  runExternalCallFromUser(A:Address, ActionId:Usize)
@@ -289,6 +321,13 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                       .K
                     )
                 ~>  runExternalCall(from A run discardAction(?ActionId:Usize);)
+                ~> concretizeExpressionList(  // TODO: This should not be needed.
+                      toExpressionListOrDefault(
+                          ActionSigners[?ActionId] orDefault [.],
+                          [.]
+                      ),
+                    1
+                  )
                 ~> deleteMaliciousUserActionId(ActionId)
             ...
         </k>
@@ -328,6 +367,66 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         </action-signers>
 
   rule deleteMaliciousUserActionId(_:Usize) => .K
+
+  rule  <k> concretizeDeleteActionSigners(ActionId:Usize)
+            => makeConcreteValue(ActionId, rExpressionList, ActionSigners)
+            ...
+        </k>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+    requires ActionId in_keys(ActionSigners)
+    [label(concretizeDeleteSignersInKeys)]
+  rule  <k> concretizeDeleteActionSigners(ActionId:Usize)
+            => .K
+            ...
+        </k>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+    requires notBool ActionId in_keys(ActionSigners)
+    [label(concretizeDeleteSignersNotInKeys)]
+
+  rule  <k>
+          passSigners
+              ~> K:KItem
+              ~> callLemmaOnlyThisSignerDiffsTransitiveFreezer(
+                    SignerId:Usize,
+                    OldActionSigners:Map
+                )
+          =>  K
+              ~>  callLemmaOnlyThisSignerDiffsTransitive(
+                      SignerId,
+                      OldActionSigners,
+                      ActionSigners
+                  )
+          ...
+        </k>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+  
+  rule  <k>
+            callLemmaOnlyThisSignerDiffsTransitive(
+                    SignerId:Usize,
+                    OldActionSigners:Map,
+                    IntermediateActionSigners:Map
+                )
+          =>  lemmaOnlyThisSignerDiffsTransitive(
+                      SignerId,
+                      OldActionSigners,
+                      IntermediateActionSigners,
+                      ActionSigners,
+                      UserIdToRole
+                  )
+          ...
+        </k>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+        <user-roles>
+          UserIdToRole:Map
+        </user-roles>
 endmodule
 
 module MALICIOUS-USER-EXECUTE

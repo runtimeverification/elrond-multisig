@@ -1,13 +1,15 @@
-// timeout = moderate
+// timeout = long
 // breadth = 2
 //@ proof
 
 require "trusted-run-external-call-from-user.k"  //@ Bazel remove
 require "../../lemmas/0/map/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../lemmas/0/signers/trusted-only-this-signer-diffs-transitive.k"  //@ Bazel remove
 
 module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
   imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
   imports TRUSTED-RUN-EXTERNAL-CALL-FROM-USER
+  imports TRUSTED-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE
 
 //@ trusted
 // module TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
@@ -19,7 +21,7 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
 
   claim <T><TT>
           <k> runExternalCallsFromUser(
-                  MaliciousAddress:Address, ActionId:Usize, _Steps:Int)
+                  MaliciousAddress:Address, DeleteActionId:Usize, _Steps:Int)
               ~> K:K
           </k>
           invariantState(
@@ -28,11 +30,16 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
               (MaliciousAddress |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              (ActionId |-> _Signers:ExpressionList _OldActionSigners) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+                _OldActionSigners
+              ) #as OldActionSigners:Map,
               PerformedActions:List)
         </TT></T>
       =>
@@ -48,11 +55,12 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
               u(Quorum),
               u(?NewActionLastIndex),
               ?NewActionData,
-              ActionId |-> ?NewSigners:ExpressionList ?NewActionSigners,
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
+                ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
-        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
+        andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
@@ -64,16 +72,31 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
+        andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
-        andBool actionSignersInvariant(ActionId |-> ?NewSigners ?NewActionSigners)
+        andBool actionSignersInvariant(
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners
+                )
 
         andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
-        andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionSigners), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(
+                    ?NewActionLastIndex +Int 1,
+                    keysMap(
+                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                          ?NewActionSigners
+                    ),
+                    usesExpanded)
 
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, ActionId |-> ?NewSigners ?NewActionSigners, UserIdToRole)
+        andBool onlyThisSignerDiffs(
+                    MaliciousId,
+                    OldActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners,
+                    UserIdToRole)
 
     //@ proof
     //@ trusted

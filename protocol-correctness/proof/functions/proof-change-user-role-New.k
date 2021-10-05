@@ -55,6 +55,9 @@ module PROOF-CHANGE-USER-ROLE-NEW
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
 
+      andBool mapKeysAreOfType(UserIdToRole, rUsize)
+      andBool mapKeysAreOfType(UserIdToAddress, rUsize)
+
       andBool notBool UserAddress in_keys(AddressToUserId)
     ensures true
     //@ proof

@@ -1,7 +1,10 @@
 // timeout = eternal
-// breadth = 31
+// breadth = 32
 // Fails because it takes ~65 minutes to run. Should extract part of it.
 //@ proof
+require "trusted-call-invariant-fragment-sign.k"  //@ Bazel remove
+require "trusted-call-invariant-fragment-unsign.k"  //@ Bazel remove
+require "trusted-call-invariant-suffix-fragment.k"  //@ Bazel remove
 require "trusted-discard-action.k"  //@ Bazel remove
 require "trusted-perform-action.k"  //@ Bazel remove
 require "trusted-propose-add-board-member.k"  //@ Bazel remove
@@ -11,13 +14,15 @@ require "trusted-propose-remove-user.k"  //@ Bazel remove
 require "trusted-propose-sc-call.k"  //@ Bazel remove
 require "trusted-propose-sc-deploy.k"  //@ Bazel remove
 require "trusted-propose-send-egld.k"  //@ Bazel remove
-require "trusted-sign.k"  //@ Bazel remove
-require "trusted-unsign.k"  //@ Bazel remove
 
-require "../../lemmas/0/map/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel remove
 
-module PROOF-CALL-INVARIANT
+module PROOF-CALL-INVARIANT-NOT-IN-KEYS
+    imports TRUSTED-CALL-INVARIANT-FRAGMENT-SIGN
+    imports TRUSTED-CALL-INVARIANT-FRAGMENT-UNSIGN
+    imports TRUSTED-CALL-INVARIANT-SUFFIX-FRAGMENT
     imports TRUSTED-DISCARD-ACTION
+    imports TRUSTED-MAKE-CONCRETE-VALUE-FRAGMENT
     imports TRUSTED-PERFORM-ACTION
     imports TRUSTED-PROPOSE-ADD-BOARD-MEMBER
     imports TRUSTED-PROPOSE-ADD-PROPOSER
@@ -26,21 +31,26 @@ module PROOF-CALL-INVARIANT
     imports TRUSTED-PROPOSE-SC-CALL
     imports TRUSTED-PROPOSE-SC-DEPLOY
     imports TRUSTED-PROPOSE-SEND-EGLD
-    imports TRUSTED-SIGN
-    imports TRUSTED-UNSIGN
 
-    imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
 //@ trusted
-// module TRUSTED-CALL-INVARIANT
+// module TRUSTED-CALL-INVARIANT-NOT-IN-KEYS
 //@ end
   imports MALICIOUS-USER-EXECUTE
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address, ActionId:Usize)
+          <k> runExternalCallFromUser(MaliciousAddress:Address, u(0) #as ActionId:Usize)
               ~> actionDataKeysAreBelowLimitConvertExpanded
               ~> actionSignersKeysAreBelowLimitConvertExpanded
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, ActionId:Usize, Count:Int)
+              ~> concretizeDeleteActionSigners(ActionId)
+              ~> passSigners
+              ~> (runExternalCallsFromUser(
+                      MaliciousAddress:Address, ActionId:Usize, Count:Int
+                  ) #as Ruecfu:KItem)
+              ~> callLemmaOnlyThisSignerDiffsTransitiveFreezer(
+                    MaliciousId:Usize,
+                    ActionSigners:Map
+                )
               ~> K:K
           </k>
           invariantState(
@@ -58,7 +68,12 @@ module PROOF-CALL-INVARIANT
         </TT></T>
       =>
         <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, ActionId:Usize, Count:Int)
+          <k> Ruecfu
+              ~> callLemmaOnlyThisSignerDiffsTransitive(
+                    MaliciousId,
+                    ActionSigners:Map,
+                    ?ActionSigners:Map
+                )
               ~> K:K
           </k>
           invariantState(
@@ -75,6 +90,7 @@ module PROOF-CALL-INVARIANT
               PerformedActions:List):StateCell
         </TT></T>
     requires true
+        andBool notBool MaliciousAddress in_keys(AddressToUserId)
         andBool maliciousInvariant(
             MaliciousAddress,
             NumUsers,

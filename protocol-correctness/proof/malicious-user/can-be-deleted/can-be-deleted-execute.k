@@ -29,6 +29,7 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
                       /*addressToUserId:*/Map,
                       /*userIdToAddress:*/Map,
                       Address)
+  syntax KItem ::= makeConcreteDeleteProposer(deleteActionId:Usize)
 endmodule
 
 module MALICIOUS-USER-DELETE-ACTIONS
@@ -124,6 +125,17 @@ module MALICIOUS-USER-DELETE-ACTIONS
         ~> makeConcreteValue(UserIdToAddress[UserId], rUsize, AddressToUserId)
         ~> concretizeMapKey(UserIdToAddress[UserId], AddressToUserId)
         )
+
+  rule  <k>
+          makeConcreteDeleteProposer(DeleteActionId:Usize)
+          =>  concretizeValue(UserId)
+              ~> makeConcreteValue(UserId, rUserRole, UserIdToRole)
+          ...
+        </k>
+        <user-roles>UserIdToRole:Map</user-roles>
+        <action-signers>
+          DeleteActionId |-> [UserId:Usize, .] _ActionSigners:Map
+        </action-signers>
 
 endmodule
 

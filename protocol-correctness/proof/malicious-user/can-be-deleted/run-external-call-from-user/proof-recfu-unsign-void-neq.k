@@ -7,14 +7,14 @@ require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
 
-module PROOF-RECFU-UNSIGN-VOID
+module PROOF-RECFU-UNSIGN-VOID-NEQ
   imports TRUSTED-UNSIGN-NO-SIGNERS
   imports TRUSTED-UNSIGN-NOT-SIGNED
   imports TRUSTED-UNSIGN-ONLY-SIGNER
   imports TRUSTED-UNSIGN-OTHER-SIGNERS-FIRST
   imports TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
 //@ trusted
-// module TRUSTED-RECFU-UNSIGN-VOID
+// module TRUSTED-RECFU-UNSIGN-VOID-NEQ
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
@@ -37,11 +37,16 @@ module PROOF-RECFU-UNSIGN-VOID
               (address(MaliciousAddress) |-> MaliciousId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              ( MaliciousId |-> MaliciousRole:UserRole
+                DeleteFirstSignerId |-> BoardMember
+                _UserIdToRole:Map
+              ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(ActionLastIndex:Int),
               ActionData:Map,
-              (DeleteActionId |-> Signers:ExpressionList _OldActionSigners:Map) #as OldActionSigners:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+                _OldActionSigners
+              ) #as OldActionSigners:Map,
               address(MaliciousAddress:Int),
               Stack:Stack,
               PerformedActions:List)
@@ -63,12 +68,14 @@ module PROOF-RECFU-UNSIGN-VOID
               u(Quorum),
               u(ActionLastIndex),
               ActionData,
-              DeleteActionId |-> ?Signers:ExpressionList ?NewActionSigners,
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
+                ?NewActionSigners:Map,
               address(MaliciousAddress),
               Stack:Stack,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
+        andBool notBool UnsignActionId ==K DeleteActionId
         andBool UnsignActionId in_keys ( ActionData )
         andBool MaliciousRole ==K BoardMember
 
@@ -81,11 +88,26 @@ module PROOF-RECFU-UNSIGN-VOID
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, DeleteActionId |-> ?Signers ?NewActionSigners, UserIdToRole)
+        andBool actionSignersInvariant(
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners
+                )
 
-        andBool actionSignersInvariant(DeleteActionId |-> ?Signers ?NewActionSigners)
+        andBool mapKeysAreBelowLimitSafe(
+                    ActionLastIndex +Int 1,
+                    keysMap(
+                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                          ?NewActionSigners
+                    ),
+                    usesExpanded)
 
-        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(DeleteActionId |-> ?Signers ?NewActionSigners), usesExpanded)
+        andBool onlyThisSignerDiffs(
+                    MaliciousId,
+                    OldActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                      ?NewActionSigners,
+                    UserIdToRole)
+
     //@ proof
     //@ trusted
     // [trusted]

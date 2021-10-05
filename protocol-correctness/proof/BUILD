@@ -267,20 +267,8 @@ klibrary(
       ":instrumentation-unsign-files",
       "//protocol-correctness/proof/instrumentation/pushlist:pushlist-instrumentation-files",
       ":invariant-files",
-      ":named-lemmas-files",
+      "//protocol-correctness/proof/named-lemmas:named-lemmas-files",
       "//protocol-correctness:pseudocode-files",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
-  name = "named-lemmas-files",
-  srcs = ["named-lemmas.k"],
-  deps = [
-      "//protocol-correctness/lib/language:map-utils-files",
-      "//protocol-correctness/lib/language:reflection-files",
-      "//protocol-correctness/lib/proof/unsorted:formula-expansion-files",
-      ":instrumentation-proof-files",
   ],
   visibility = ["//visibility:public"],
 )

@@ -30,7 +30,13 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-NEW
                 <user-roles>UserIdToRole:Map</user-roles>
                 <quorum>u(Quorum:Int)</quorum>
               </board-state>
-              ActionState:ActionStateCell
+              <action-state>
+                <action-last-index>ActionLastIndex:Usize</action-last-index>
+                <actions>
+                  <action-data>ActionData:Map</action-data>
+                  <action-signers>ActionSigners:Map</action-signers>
+                </actions>
+              </action-state>
             </contract-state>
             <pseudocode-state>
               <variables>.Map</variables>
@@ -60,7 +66,13 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-NEW
                 <user-roles>UserIdToRole</user-roles>
                 <quorum>u(Quorum)</quorum>
               </board-state>
-              ActionState
+              <action-state>
+                <action-last-index>ActionLastIndex:Usize</action-last-index>
+                <actions>
+                  <action-data>ActionData:Map</action-data>
+                  <action-signers>ActionSigners:Map</action-signers>
+                </actions>
+              </action-state>
             </contract-state>
             <pseudocode-state>
               <variables>?_Variables:Map</variables>
@@ -81,6 +93,10 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-NEW
       // something to map values to keys.
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
       andBool mapKeysAreBelowLimitSafe(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
+
+      andBool mapKeysAreOfType(UserIdToAddress, rUsize)
+      andBool mapKeysAreOfType(UserIdToRole, rUsize)
+
       andBool NumBoardMembers +Int NumProposers >Int 0
       andBool Quorum <=Int NumBoardMembers
 
