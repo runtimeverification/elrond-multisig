@@ -15,14 +15,25 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
 
   imports PROPERTIES-EXECUTE
 
-  syntax KItem ::= allBoardMembersSignForInterspersed(/*actionId:*/Usize, K)
-  syntax KItem ::= boardMembersSignForInterspersed(/*actionId:*/Usize, /*userRoles:*/Map, K)
-  syntax KItem ::= boardMembersSignForInterspersedFreezer(/*actionId:*/Usize, K)
+  syntax KItem ::= allBoardMembersSignForInterspersed(
+                      actionId:Usize,
+                      maliciousId:Usize,
+                      K)
+  syntax KItem ::= boardMembersSignForInterspersed(
+                      actionId:Usize,
+                      maliciousId:Usize,
+                      userRoles:Map,
+                      K)
+  syntax KItem ::= boardMembersSignForInterspersedFreezer(
+                      actionId:Usize,
+                      maliciousId:Usize,
+                      K)
   syntax KItem ::= #boardMembersSignForInterspersed(
-                      /*actionId:*/Usize,
-                      /*key:*/KItem,
-                      /*value:*/KItem,
-                      /*userRoles:*/Map,
+                      actionId:Usize,
+                      maliciousId:Usize,
+                      key:KItem,
+                      value:KItem,
+                      userRoles:Map,
                       K)
   syntax KItem ::= pickOtherBoardMember(
                       /*userIdToRole:*/Map,
@@ -36,33 +47,67 @@ module MALICIOUS-USER-DELETE-ACTIONS
   imports CONCRETIZE-VALUE-SYNTAX
   imports MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
 
-  rule  <k> allBoardMembersSignForInterspersed(ActionId:Usize, K:K)
-            => boardMembersSignForInterspersed(ActionId, UserIdToRole, K)
+  rule  <k> allBoardMembersSignForInterspersed(
+                  ActionId:Usize,
+                  MaliciousId:Usize,
+                  K:K)
+            => boardMembersSignForInterspersed(
+                  ActionId, MaliciousId, UserIdToRole, K)
         ...</k>
         <user-roles> UserIdToRole:Map </user-roles>
         <action-signers> ActionSigners:Map </action-signers>
     requires notBool (ActionId in_keys(ActionSigners))
 
-  rule  <k> allBoardMembersSignForInterspersed(ActionId:Usize, K:K)
-            => boardMembersSignForInterspersed(ActionId, UserIdToRole, K)
+  rule  <k> allBoardMembersSignForInterspersed(
+                  ActionId:Usize,
+                  MaliciousId:Usize,
+                  K:K)
+            => boardMembersSignForInterspersed(
+                  ActionId, MaliciousId, UserIdToRole, K)
         ...</k>
         <user-roles> UserId |-> BoardMember UserIdToRole:Map </user-roles>
         <action-signers> ActionId |-> [UserId:Usize, .] _ActionSigners:Map </action-signers>
 
-  rule  boardMembersSignForInterspersed(_ActionId:Usize, .Map, _:K) => .K
-  rule  boardMembersSignForInterspersed(ActionId:Usize, UserIdToRole:Map, K:K)
+  rule  <k>
+          boardMembersSignForInterspersed(ActionId:Usize, MaliciousId:Usize, .Map, _:K)
+          => makeConcreteValue(MaliciousId, rUserRole, UserIdToRole)
+              ~> concretizeValue(#listContainsUnsafe(Signers, MaliciousId))        ...
+        </k>
+        <user-roles>
+          UserIdToRole:Map
+        </user-roles>
+        <action-signers>ActionId |-> Signers:ExpressionList _ActionSigners:Map </action-signers>
+    [label(boardMembersSignEmpty)]
+  rule  boardMembersSignForInterspersed(ActionId:Usize, MaliciousId, UserIdToRole:Map, K:K)
         =>  (  lazyMapSelectProperty(UserIdToRole, MEP.AlwaysTrue)
-            ~> boardMembersSignForInterspersedFreezer(ActionId, K)
+            ~> boardMembersSignForInterspersedFreezer(ActionId, MaliciousId, K)
             )
-    requires notBool (UserIdToRole ==K .Map)
+    requires true
+        andBool notBool (UserIdToRole ==K .Map)
+    [label(boardMembersSignIteration)]
 
-  rule  (  mapSelected(Key:KItem, Value:KItem, UserIdToRole:Map)
-        ~> boardMembersSignForInterspersedFreezer(ActionId:Usize, K:K)
+  rule
+      <k>
+        (  mapSelected(Key:KItem, Value:KItem, UserIdToRole:Map)
+        ~> boardMembersSignForInterspersedFreezer(
+              ActionId:Usize, MaliciousId, K:K)
         )
-        => #boardMembersSignForInterspersed(ActionId, Key, Value, UserIdToRole, K)
+        => branchK(
+              Key ==K MaliciousId,
+              concretizeValue(Value)
+                ~> concretizeValue(#listContainsUnsafe(Signers, MaliciousId))
+                ~> boardMembersSignForInterspersed(
+                    ActionId, MaliciousId, UserIdToRole, K),
+              #boardMembersSignForInterspersed(
+                  ActionId, MaliciousId, Key, Value, UserIdToRole, K)
+          )
+        ...
+      </k>
+      <action-signers>ActionId |-> Signers:ExpressionList _ActionSigners:Map </action-signers>
 
   rule  #boardMembersSignForInterspersed(
             ActionId:Usize,
+            MaliciousId:Usize,
             UserId:KItem,
             V:KItem,
             UserIdToRole:Map,
@@ -76,8 +121,10 @@ module MALICIOUS-USER-DELETE-ACTIONS
                     ~> removeValue
                     ~> signFor(ActionId, UserId)
                     ~> K
-                    ~> boardMembersSignFor(ActionId, UserIdToRole),
-                  boardMembersSignFor(ActionId, UserIdToRole)
+                    ~> boardMembersSignForInterspersed(
+                          ActionId, MaliciousId, UserIdToRole, K),
+                  boardMembersSignForInterspersed(
+                      ActionId, MaliciousId, UserIdToRole, K)
                 )
             )
 

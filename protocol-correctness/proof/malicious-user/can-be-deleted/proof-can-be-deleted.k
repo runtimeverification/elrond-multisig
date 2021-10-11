@@ -27,6 +27,7 @@ module PROOF-CAN-BE-DELETED
 
               ~> allBoardMembersSignForInterspersed(
                     add(ActionLastIndex, u(1)),
+                    UserId,
                     runExternalCallsFromUser(
                         MaliciousAddress:Address,
                         add(ActionLastIndex, u(1)),

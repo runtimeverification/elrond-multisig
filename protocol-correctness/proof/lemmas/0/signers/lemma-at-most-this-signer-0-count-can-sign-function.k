@@ -35,18 +35,7 @@ module LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
             ~~> case "u" == "e1" of
               | True ->
                 case "m" key "e1" of
-                  | . ->
-                    // TODO: The case below should not be needed, it just
-                    // forces predicate re-evaluation. Should
-                    // minimize and report a Haskell backend error.
-                    // Might be caused by
-                    // https://github.com/kframework/kore/issues/2829
-                    case "es1" of
-                      | . -> .Induction .
-                      | "e2" <> "es2" -> .Induction .
-                    esac
-                    ~~> reinduction("u", "es1", "m")
-                    .
+                  | . -> reinduction("u", "es1", "m") .
                   | "m1"["k1" <- "v1"] ->
                     call $castNoValue("v1", $rUserRole())
                     ~~> call $concretizeValue("v1")
@@ -56,17 +45,7 @@ module LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
                 .
               | False ->
                 case "m" key "e1" of
-                  | . ->
-                    // TODO: The case below should not be needed, it just
-                    // forces predicate re-evaluation. Should
-                    // minimize and report a Haskell backend error.
-                    // Might be caused by
-                    // https://github.com/kframework/kore/issues/2829
-                    case "es1" of
-                      | . -> .Induction .
-                      | "e2" <> "es2" -> .Induction .
-                    esac
-                    ~~> reinduction("u", "es1", "m") .
+                  | . -> reinduction("u", "es1", "m") .
                   | "m1"["k1" <- "v1"] ->
                     call $castNoValue("v1", $rUserRole())
                     ~~> call $concretizeValue("v1")

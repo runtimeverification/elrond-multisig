@@ -24,11 +24,35 @@ klibrary(
   visibility = ["//visibility:public"],
 )
 
-klibrary(
-  name = "all-board-members-sign-for-interspersed-files",
-  srcs = ["all-board-members-sign-for-interspersed.k"],
-  deps = [
+kprove_test(
+  name = "proof-all-board-members-sign-for-interspersed",
+  srcs = ["proof-all-board-members-sign-for-interspersed.k"],
+  trusted = [
+      ":trusted-board-members-sign-for-interspersed",
   ],
+  semantics = "can-be-deleted-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-all-board-members-sign-for-interspersed",
+  srcs = ["proof-all-board-members-sign-for-interspersed.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-board-members-sign-for-interspersed",
+  srcs = ["proof-board-members-sign-for-interspersed.k"],
+  trusted = [
+      "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
+  ],
+  semantics = "can-be-deleted-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-board-members-sign-for-interspersed",
+  srcs = ["proof-board-members-sign-for-interspersed.k"],
   visibility = ["//visibility:public"],
 )
 

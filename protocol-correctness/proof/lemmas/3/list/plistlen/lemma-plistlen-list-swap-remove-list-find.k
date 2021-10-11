@@ -24,17 +24,7 @@ module LEMMA-PLISTLEN-LIST-SWAP-REMOVE-LIST-FIND
             | "e1" <> "es1" -> 
               case "e" == "e1" of
                 | True -> .Induction .
-                | False ->
-                  // TODO: The case below should not be needed, it just
-                  // forces predicate re-evaluation. Should
-                  // minimize and report a Haskell backend error.
-                  // Might be caused by
-                  // https://github.com/kframework/kore/issues/2829
-                  case "es1" of
-                    | . -> .Induction .
-                    | "e2" <> "es2" -> .Induction .
-                  esac
-                  ~~> reinduction("e", "es1")
+                | False -> reinduction("e", "es1")
                   .
               esac
               .

@@ -33,17 +33,7 @@ module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
                   case "i" of
                     | = 0 -> .Induction .
                     | < 0 -> .Induction .
-                    | > 0 ->
-                      // TODO: The case below should not be needed, it just
-                      // forces predicate re-evaluation. Should
-                      // minimize and report a Haskell backend error.
-                      // Might be caused by
-                      // https://github.com/kframework/kore/issues/2829
-                      case "es1" of
-                        | . -> .Induction .
-                        | "e2" <> "es2" -> .Induction .
-                      esac
-                      ~~> reinduction("e", "es1", "i" - 1) .
+                    | > 0 -> reinduction("e", "es1", "i" - 1) .
                   esac
                   .
               esac
