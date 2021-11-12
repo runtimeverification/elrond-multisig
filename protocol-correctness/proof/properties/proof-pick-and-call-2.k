@@ -1,5 +1,5 @@
 // timeout = eternal
-// breadth = 3
+// breadth = 5
 // 2021-06-11: Failing because of https://github.com/kframework/kore/issues/2564
 //@ proof
 require "../functions/trusted-perform-action-endpoint-change-quorum-with-quorum-marker.k"  //@ Bazel remove
@@ -48,7 +48,7 @@ module PROOF-PICK-AND-CALL-2
               u(0),
               ActionLastIndex,
               ActionDataFinal,
-              ActionSigners,
+              ActionSigners[ActionLastIndex <- undef],
               ListItem(ChangeQuorum(u(0))) PerformedActions):StateCell
         </TT></T>
     requires invariant(

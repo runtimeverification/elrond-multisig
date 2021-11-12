@@ -268,6 +268,13 @@ module EXECUTION-PROOF-HELPERS
   rule #listContainsUnsafe([#pushList(Es:ExpressionCSV, E1:Expression)], E2:Expression)
       => #listContainsUnsafe([E1, Es], E2)
     [simplification]
+  rule #listContainsUnsafe([E:Expression, #pushList(Es:ExpressionCSV, E1:Expression)], E2:Expression)
+      => #listContainsUnsafe([E, E1, Es], E2)
+    [simplification]
+  rule #listContainsUnsafe([E1:Expression, E2:Expression, Es:ExpressionCSV], E:Expression)
+      => #listContainsUnsafe([E1, Es], E)
+    requires E2 =/=K E
+    [simplification]
 
   rule mapKeysAreOfType(keysMap(M:Map) => M, rUsize)
     [simplification]

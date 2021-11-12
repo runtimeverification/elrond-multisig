@@ -1,5 +1,7 @@
 // timeout = long
-// breadth = 2
+// breadth = 6
+// Should have breadth 2 except for this bug (or somehting similar):
+// https://github.com/kframework/kore/issues/2829
 //@ proof
 require "trusted-count-can-sign.k"  //@ Bazel remove
 //@ trusted
@@ -8,6 +10,8 @@ require "trusted-count-can-sign.k"  //@ Bazel remove
 //@ proof
 module PROOF-DISCARD-ACTION-NO-SIGNERS
   imports INVARIANT
+  imports MAP-UNIFICATION-SYNTAX
+
   imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-NO-SIGNERS
@@ -20,13 +24,14 @@ module PROOF-DISCARD-ACTION-NO-SIGNERS
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
-              (CallerAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
+              (CallerAddress |-> UserId:Usize _AddressToUserId:Map)
+                #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
               (UserId |-> Role:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
               Quorum:Usize,
               ActionLastIndex:Usize,
-              ActionId |-> _:Action ActionData:Map,
+              /*ActionId |-> _:Action */OldActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
               Stack:Stack,
@@ -55,6 +60,8 @@ module PROOF-DISCARD-ACTION-NO-SIGNERS
               ):StateCell
         </TT></T>
     requires true
+      // andBool mapUnification(CallerAddress |-> UserId:Usize _AddressToUserId:Map, AddressToUserId, _:Map)
+      andBool mapUnification(ActionId |-> _:Action ActionData:Map, OldActionData, _:Map)
       andBool notBool u(0) in_keys(UserIdToRole)
 
       andBool userIdToRoleInvariant(UserIdToRole)

@@ -1,6 +1,21 @@
 load("//:proof.bzl", "klibrary", "kprove_test", "ktrusted")
 
 kprove_test(
+  name = "proof-bool-to-int-sum-and-not",
+  srcs = ["proof-bool-to-int-sum-and-not.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-bool-to-int-sum-and-not",
+  srcs = ["proof-bool-to-int-sum-and-not.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-implies",
   srcs = ["proof-implies.k"],
   trusted = [

@@ -2,7 +2,7 @@
 //@ proof
 module LEMMA-PLISTLEN-LAST-TO-START
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 
 //@ trusted
 // require "protocol-correctness/lib/functions/plistlen-functions.k"

@@ -43,7 +43,7 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
                   .K
               )
               ~> concretizeValue(ActionId)
-              ~> concretizeValue(ActionId in_keys (OldActionData:Map))
+              ~> concretizeValue(ActionId in_keys (ActionData))
               ~> concretizeValue(ActionId ==K DeleteActionId)
               ~> runExternalCall(
                   from MaliciousAddress:Address run unsign(ActionId:Usize);)
@@ -61,8 +61,8 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
                 _UserIdToRole:Map
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
-              u(OldActionLastIndex:Int),
-              OldActionData:Map,
+              u(ActionLastIndex:Int),
+              ActionData:Map,
               ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
                 _OldActionSigners
               ) #as OldActionSigners:Map,
@@ -79,22 +79,24 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
               NumProposers,
               UserIdToRole,
               u(Quorum),
-              u(?NewActionLastIndex:Int),  // TODO: This does not change.
-              ?NewActionData:Map,
+              u(ActionLastIndex),  // TODO: This does not change.
+              ActionData,
               DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
                 ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
-        andBool actionDataInvariant(OldActionData)
+        andBool actionDataInvariant(ActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
         andBool actionSignersInvariant(OldActionSigners)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
 
-        andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
-        andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
+        andBool allKeysBecomeKeys(OldActionSigners, ActionData)
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
@@ -103,18 +105,18 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
     ensures true
         andBool noQuorumCanBeFilledBy(
             Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool actionDataInvariant(?NewActionData)
         andBool actionSignersInvariant(
                     DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
                       ?NewActionSigners
                 )
 
+        // TODO: Delete, should not be needed.
         andBool mapKeysAreBelowLimitSafe(
-                    ?NewActionLastIndex +Int 1,
-                    keysMap(?NewActionData),
+                    ActionLastIndex +Int 1,
+                    keysMap(ActionData),
                     usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
-                    ?NewActionLastIndex +Int 1,
+                    ActionLastIndex +Int 1,
                     keysMap(
                         DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
                           ?NewActionSigners
@@ -127,6 +129,10 @@ module PROOF-RECFU-FRAGMENT-UNSIGN
                     DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
                       ?NewActionSigners,
                     UserIdToRole)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    ActionData)
 
     //@ proof
     //@ trusted

@@ -6,7 +6,7 @@ require "../../../0/map/square-bracket/trusted-square-bracket-substitution.k"  /
 
 module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-SQ-B-SQ-B-SQ-B-DELETE
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports TRUSTED-COMMUTE-SQUARE-BRACKET
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 

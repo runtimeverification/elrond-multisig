@@ -2,7 +2,7 @@
 //@ proof
 module LEMMA-LIST-CONTAINS-LIST-FIND
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/functions/list-contains.k"
 // require "protocol-correctness/lib/functions/list-find.k"

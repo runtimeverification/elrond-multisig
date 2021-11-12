@@ -2,7 +2,7 @@
 //@ proof
 module LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE
   imports LEMMAS-0-EXECUTE-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports INT
   imports INDUCTION-SYNTAX
 

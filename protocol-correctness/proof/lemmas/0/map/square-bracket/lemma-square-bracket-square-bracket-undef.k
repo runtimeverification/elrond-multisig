@@ -2,10 +2,8 @@
 //@ proof
 module LEMMA-SQUARE-BRACKET-SQUARE-BRACKET-UNDEF
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 //@ trusted
-// require "protocol-correctness/lib/functions/last-functions.k"
-// require "protocol-correctness/lib/functions/list-contains.k"
 // 
 // module TRUSTED-LEMMA-SQUARE-BRACKET-SQUARE-BRACKET-UNDEF
 //@ end

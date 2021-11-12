@@ -13,7 +13,7 @@ require "../functions/trusted-sign-existing-signers-in-list.k"  //@ Bazel remove
 require "../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove
 
 module PROOF-BOARD-MEMBERS-SIGN-FOR
-  imports MAP-EXECUTE
+  // imports MAP-EXECUTE
   imports PROPERTIES-EXECUTE
   imports PSEUDOCODE
 

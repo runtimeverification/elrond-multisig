@@ -6,7 +6,8 @@ kprove_test(
   trusted = [
   ],
   semantics = "//protocol-correctness/proof/lemmas/1:lemmas-1-execute",
-  breadth = "8",
+  timeout = "moderate",
+  breadth = "13",
 )
 
 ktrusted(
@@ -101,6 +102,31 @@ klibrary(
       "//protocol-correctness/lib/functions:list-contains-files",
       "//protocol-correctness/lib/functions:remove-last-files",
       ":trusted-lemma-list-contains-remove-last-not-pound-last",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-list-find-lt-0",
+  srcs = ["lemma-list-find-lt-0.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/1:lemmas-1-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-find-lt-0",
+  srcs = ["lemma-list-find-lt-0.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-find-lt-0-files",
+  srcs = [":trusted-lemma-list-find-lt-0"],
+  deps = [
+      "//protocol-correctness/lib/functions:list-find-files",
+      ":trusted-lemma-list-find-lt-0",
   ],
   visibility = ["//visibility:public"],
 )

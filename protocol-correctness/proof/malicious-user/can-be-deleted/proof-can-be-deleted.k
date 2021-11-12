@@ -1,16 +1,22 @@
 //@ proof
+require "trusted-all-board-members-sign-for-interspersed.k"  //@ Bazel remove
 require "trusted-propose-delete-malicious.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
+require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
 
 module PROOF-CAN-BE-DELETED
+  imports TRUSTED-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
+  imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
   imports TRUSTED-PROPOSE-DELETE-MALICIOUS
   imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
 //@ trusted
 // module TRUSTED-CAN-BE-DELETED
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports CAN-BE-DELETED-INTERSPERSED-ACTIONS-SYNTAX
   imports PSEUDOCODE-CONFIGURATION
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
+  imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
 
   claim <T><TT>
           <k> nop
@@ -22,25 +28,45 @@ module PROOF-CAN-BE-DELETED
               ~> runExternalCallsFromUser(
                     MaliciousAddress:Address,
                     add(ActionLastIndex, u(1)),
-                    _Count1:Int
+                    _Count1:Int,
+                    .Map,
+                    LemmasForCanBeDeletedProof
                 )
+
+              ~> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+                    usesExpanded, expand(expanded))
 
               ~> allBoardMembersSignForInterspersed(
                     add(ActionLastIndex, u(1)),
                     UserId,
-                    runExternalCallsFromUser(
+                    runExternalCallsFromUserData(
                         MaliciousAddress:Address,
                         add(ActionLastIndex, u(1)),
-                        _Count:Int
+                        _Count:Int,
+                        LemmasForCanBeDeletedProof
                     )
                 )
 
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, add(ActionLastIndex, u(1)), _Count2:Int)
+              ~> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+                    usesExpanded, expand(expanded))
 
-              ~> pickBoardMemberOrProposer(UserIdToRole)
+              ~> runExternalCallsFromUser(
+                    MaliciousAddress:Address,
+                    add(ActionLastIndex, u(1)),
+                    _Count2:Int,
+                    .Map,
+                    LemmasForCanBeDeletedProof)
+
+              ~> pickOtherBoardMember(UserIdToRole, AddressToUserId, UserIdToAddress, MaliciousAddress)
+              // ~> pickFirstSignerAvoiding(add(ActionLastIndex, u(1)), UserId)
               ~> withPickedUserCall(performActionEndpoint(add(ActionLastIndex, u(1))))
 
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, add(ActionLastIndex, u(1)), _Count3:Int)
+              ~> runExternalCallsFromUser(
+                    MaliciousAddress:Address,
+                    add(ActionLastIndex, u(1)),
+                    _Count3:Int,
+                    .Map,
+                    LemmasForCanBeDeletedProof)
               ~> K:K
           </k>
           invariantState(

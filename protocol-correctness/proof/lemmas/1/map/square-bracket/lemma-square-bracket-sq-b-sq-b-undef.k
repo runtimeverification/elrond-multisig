@@ -4,7 +4,7 @@ require "../../../0/map/square-bracket/trusted-commute-square-bracket.k"  //@ Ba
 
 module LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports TRUSTED-COMMUTE-SQUARE-BRACKET
 
 //@ trusted

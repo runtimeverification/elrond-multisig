@@ -6,7 +6,7 @@ endmodule
 
 module EQUALITY-WITHOUT-SUBSTITUTION
   imports EQUALITY-WITHOUT-SUBSTITUTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 
   rule equalityWithoutSubstitution(First:KItem, Second:KItem, true:Bool)
       => First ==K Second

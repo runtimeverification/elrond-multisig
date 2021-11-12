@@ -14,7 +14,10 @@ require "run-external-call-from-user/trusted-recfu-propose-sc-call.k"  //@ Bazel
 require "run-external-call-from-user/trusted-recfu-propose-sc-deploy.k"  //@ Bazel remove
 require "run-external-call-from-user/trusted-recfu-propose-send-egld.k"  //@ Bazel remove
 
+require "../../lemmas/0/list/no-map-key-in-list/trusted-no-map-key-in-list-list-to-map-set.k"  //@ Bazel remove
+
 module PROOF-RUN-EXTERNAL-CALL-FROM-USER
+  imports TRUSTED-NO-MAP-KEY-IN-LIST-LIST-TO-MAP-SET
   imports TRUSTED-RECFU-FRAGMENT-DISCARD-ACTION
   imports TRUSTED-RECFU-FRAGMENT-SIGN
   imports TRUSTED-RECFU-FRAGMENT-UNSIGN
@@ -38,7 +41,11 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
   imports VALUE-IS-NOT-EMPTY-SYNTAX
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address, DeleteActionId:Usize)
+          <k> runExternalCallFromUser(
+                  MaliciousAddress:Address,
+                  DeleteActionId:Usize,
+                  UnprocessedUserRoles:Map,
+                  LemmasForCanBeDeletedProof)
               ~> K:K
           </k>
           invariantState(
@@ -53,8 +60,10 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
-              OldActionData:Map,
-              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
+              ( DeleteActionId |-> RemoveUser(MaliciousAddress)
+                _OldActionData:Map
+              ) #as OldActionData:Map,
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV] #as Signers:ExpressionList
                 _OldActionSigners
               ) #as OldActionSigners:Map,
               PerformedActions:List)
@@ -71,7 +80,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
               UserIdToRole,
               u(Quorum),
               u(?NewActionLastIndex:Int),
-              ?NewActionData:Map,
+              DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData:Map,
               DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
                 ?NewActionSigners:Map,
               PerformedActions:List):StateCell
@@ -84,8 +93,12 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
 
+        andBool noMapKeyInList(UnprocessedUserRoles[MaliciousId <- undef], Signers)
+
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
+        andBool allKeysBecomeKeys(OldActionSigners, OldActionData)
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
@@ -94,7 +107,7 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
     ensures true
         andBool noQuorumCanBeFilledBy(
             Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool actionDataInvariant(?NewActionData)
+        andBool actionDataInvariant(DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData)
         andBool actionSignersInvariant(
                     DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
                       ?NewActionSigners
@@ -102,7 +115,10 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
 
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
-                    keysMap(?NewActionData),
+                    keysMap(
+                        DeleteActionId |-> RemoveUser(MaliciousAddress)
+                          ?NewActionData
+                    ),
                     usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
@@ -118,6 +134,16 @@ module PROOF-RUN-EXTERNAL-CALL-FROM-USER
                     DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
                       ?NewActionSigners,
                     UserIdToRole)
+
+        andBool noMapKeyInList(
+                    UnprocessedUserRoles[MaliciousId <- undef],
+                    [DeleteFirstSignerId:Usize, ?NewSigners]
+                )
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData
+                )
 
     //@ proof
     //@ trusted

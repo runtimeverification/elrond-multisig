@@ -5,7 +5,7 @@ module PROOF-COMMUTE-SQUARE-BRACKET
 // module TRUSTED-COMMUTE-SQUARE-BRACKET
 //@ end
 
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports MAP
   imports NAMED-LEMMAS-SYNTAX
 

@@ -73,9 +73,11 @@ module PROOF-RECFU-PROPOSE-CHANGE-QUORUM
         andBool actionSignersInvariant(OldActionSigners)
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[ActionId <- undef], UserIdToRole)
 
-
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
+        andBool allKeysBecomeKeys(OldActionSigners, ActionData)
+
         andBool mapKeysAreOfType(ActionData, rUsize)
 
     ensures true
@@ -85,6 +87,11 @@ module PROOF-RECFU-PROPOSE-CHANGE-QUORUM
         andBool actionSignersInvariant(ActionId |-> Signers ?NewActionSigners)
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 2, keysMap(ActionId |-> Signers ?NewActionSigners), usesExpanded)
+
+        andBool allKeysBecomeKeys(
+                    ActionId |-> Signers ?NewActionSigners,
+                    ActionData u(ActionLastIndex +Int 1) |-> ChangeQuorum(NewQuorum))
+
     //@ proof
     //@ trusted
     // [trusted]

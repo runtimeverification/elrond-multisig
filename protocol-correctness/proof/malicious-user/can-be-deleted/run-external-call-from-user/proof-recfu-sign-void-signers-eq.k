@@ -86,19 +86,22 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS-EQ
         andBool userIdToRoleInvariant(UserIdToRole)
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
+        andBool allKeysBecomeKeys(OldActionSigners, ActionData)
+
         andBool DeleteFirstSignerId =/=K MaliciousId
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(
-                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                       ?NewActionSigners
                 )
 
         andBool mapKeysAreBelowLimitSafe(
                     ActionLastIndex +Int 1,
                     keysMap(
-                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                        DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                           ?NewActionSigners
                     ),
                     usesExpanded)
@@ -106,9 +109,13 @@ module PROOF-RECFU-SIGN-VOID-SIGNERS-EQ
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                       ?NewActionSigners,
                     UserIdToRole)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    ActionData)
 
     //@ proof
     //@ trusted

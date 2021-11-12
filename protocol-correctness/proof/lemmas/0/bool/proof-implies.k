@@ -6,7 +6,7 @@ module PROOF-IMPLIES
 //@ end
 
   imports BOOL
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports MAP
   imports NAMED-LEMMAS-SYNTAX
 

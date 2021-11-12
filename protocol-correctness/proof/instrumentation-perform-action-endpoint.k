@@ -3,6 +3,43 @@ require "protocol-correctness/proof/instrumentation-perform-split-action.k"
 require "protocol-correctness/proof/instrumentation-proof.k"
 require "protocol-correctness/pseudocode.k"
 
+module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT-SYNTAX
+  imports BASE-TYPES-SYNTAX
+  imports MAP
+  imports MULTISIG-SYNTAX
+
+  syntax KItem ::= splitPerformActionEndpoint(actionId:Usize)
+  syntax KItem ::= splitPerformActionEndpoint1(actionId:Usize)
+  syntax KItem ::= splitPerformActionEndpoint1a(actionId:Usize)
+  syntax KItem ::= splitPerformActionEndpoint2(actionId:Usize)
+  syntax KItem ::= splitPerformActionEndpoint3(action:Action)
+  syntax KItem ::= splitPerformActionEndpoint4(action:Action)
+  syntax KItem ::= splitActionSigners(actionId:Usize, signers:Map)
+
+
+  syntax KItem ::= splitAddBoardMember(Action)
+  syntax KItem ::= splitAddBoardMember1(Address)
+  syntax KItem ::= splitAddBoardMember2(Address)
+  syntax KItem ::= splitAddBoardMember3(Address)
+
+
+  syntax KItem ::= splitAddProposer(Action)
+  syntax KItem ::= splitAddProposer1(Address)
+  syntax KItem ::= splitAddProposer2(Address)
+  syntax KItem ::= splitAddProposer3(Address)
+
+
+  syntax KItem ::= splitRemoveUser(Action)
+  syntax KItem ::= splitRemoveUser1(Address)
+  syntax KItem ::= splitRemoveUser2(Address)
+  syntax KItem ::= splitRemoveUser3(Address)
+
+
+  syntax KItem ::= splitChangeQuorum(Action)
+
+
+endmodule
+
 module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
   // This is a diagram of the splits attempted here. The k files have only
   // their suffix. The missing prefix is 'proof-perform-action-endpoint-'.
@@ -68,17 +105,11 @@ module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
   //         action=sc-deploy? sc-deploy.k
   //         action=send-egld? send-egld.k
 
+  imports INSTRUMENTATION-PERFORM-ACTION-ENDPOINT-SYNTAX
+
   imports INSTRUMENTATION-PERFORM-SPLIT-ACTION
   imports INSTRUMENTATION-PROOF
   imports PSEUDOCODE
-
-  syntax KItem ::= splitPerformActionEndpoint(actionId:Usize)
-  syntax KItem ::= splitPerformActionEndpoint1(actionId:Usize)
-  syntax KItem ::= splitPerformActionEndpoint1a(actionId:Usize)
-  syntax KItem ::= splitPerformActionEndpoint2(actionId:Usize)
-  syntax KItem ::= splitPerformActionEndpoint3(action:Action)
-  syntax KItem ::= splitPerformActionEndpoint4(action:Action)
-  syntax KItem ::= splitActionSigners(actionId:Usize, signers:Map)
 
   rule  <k> preCall
             ~> (.K => splitPerformActionEndpoint(ActionId))
@@ -220,11 +251,6 @@ module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
               )
           )
 
-  syntax KItem ::= splitAddBoardMember(Action)
-  syntax KItem ::= splitAddBoardMember1(Address)
-  syntax KItem ::= splitAddBoardMember2(Address)
-  syntax KItem ::= splitAddBoardMember3(Address)
-
   rule  <k>
           splitAddBoardMember(AddBoardMember(UserAddress:Address))
           =>  branchK(
@@ -292,10 +318,6 @@ module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
         <address-to-user-id>UserAddress |-> UserId _AddressToUserId:Map</address-to-user-id>
     requires UserId in_keys(UserIdToRole)
 
-  syntax KItem ::= splitAddProposer(Action)
-  syntax KItem ::= splitAddProposer1(Address)
-  syntax KItem ::= splitAddProposer2(Address)
-  syntax KItem ::= splitAddProposer3(Address)
 
   rule  <k>
           splitAddProposer(AddProposer(UserAddress:Address))
@@ -380,8 +402,6 @@ module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
         <address-to-user-id>UserAddress |-> UserId:Usize _AddressToUserId:Map</address-to-user-id>
     requires UserId in_keys(UserIdToRole)
 
-  syntax KItem ::= splitChangeQuorum(Action)
-
   rule  <k>
           splitChangeQuorum(ChangeQuorum(u(NewQuorum:Int)))
           => branchK(
@@ -391,11 +411,6 @@ module INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
           )
         ...</k>
         <num-board-members>u(NumBoardMembers:Int)</num-board-members>
-
-  syntax KItem ::= splitRemoveUser(Action)
-  syntax KItem ::= splitRemoveUser1(Address)
-  syntax KItem ::= splitRemoveUser2(Address)
-  syntax KItem ::= splitRemoveUser3(Address)
 
   rule  <k>
           splitRemoveUser(RemoveUser(UserAddress:Address))

@@ -2,7 +2,7 @@
 // breadth = 1
 //@ proof
 
-require "../../lemmas/0/map/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
 
 module PROOF-CALL-INVARIANT-SUFFIX-FRAGMENT
   imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING

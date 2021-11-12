@@ -2,7 +2,7 @@
 //@ proof
 module LEMMA-BOOL-TO-INT-LE-1
   imports CONCRETIZE-VALUE-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/functions/bool-to-int.k"
 // module TRUSTED-LEMMA-BOOL-TO-INT-LE-1

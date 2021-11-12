@@ -5,15 +5,25 @@ require "../functions/trusted-perform-action-endpoint-add-board-member-BoardMemb
 require "../functions/trusted-perform-action-endpoint-add-board-member-Proposer-eq-marker.k"  //@ Bazel remove
 
 module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER-EQ
-  imports INVARIANT-EXECUTE
+  //imports INVARIANT-EXECUTE
 
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-BOARD-MEMBER-BOARDMEMBER-EQ-MARKER
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-BOARD-MEMBER-PROPOSER-EQ-MARKER
 //@ trusted
 // module TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-EQ
-//   imports INVARIANT-FUNCTIONS
-//   imports INSTRUMENTATION-PERFORM-ACTION-ENDPOINT
 //@ end
+  
+  imports BOOL
+  imports COUNT-CAN-SIGN-FUNCTION-SYNTAX
+  imports FORMULA-EXPANSION-SYNTAX
+  imports FUNCTION-CALL-SYNTAX
+  imports INSTRUMENTATION-PERFORM-ACTION-ENDPOINT-SYNTAX
+  imports INVARIANT
+  imports INVARIANT-FUNCTIONS-SYNTAX
+  imports K-EQUAL-SYNTAX
+  imports MULTISIG-SYNTAX
+  imports PSEUDOCODE-CONFIGURATION
+  imports RUNNING-EXTERNAL
 
   claim <T><TT>
           <k> splitAddBoardMember1(CallerAddress:Address)

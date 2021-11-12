@@ -1,5 +1,5 @@
 // timeout = eternal
-// breadth = 14
+// breadth = 12
 //@ proof
 
 require "../../../functions/trusted-discard-action-no-signers.k"  //@ Bazel remove
@@ -39,7 +39,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID-NE
               (MaliciousId |-> MaliciousRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(ActionLastIndex:Int),
-              OldActionData:Map,
+              (DeleteActionId |-> RemoveUser(address(MaliciousAddress)) _OldActionData:Map) #as OldActionData:Map,
               (DeleteActionId |-> Signers:ExpressionList _OldActionSigners:Map) #as OldActionSigners:Map,
               address(MaliciousAddress:Int) #as CallerAddress:Address,
               Stack:Stack,
@@ -62,7 +62,7 @@ module PROOF-RECFU-DISCARD-ACTION-VOID-NE
               UserIdToRole,
               u(Quorum),
               u(ActionLastIndex),
-              ?NewActionData,
+              DeleteActionId |-> RemoveUser(address(MaliciousAddress)) ?NewActionData,
               DeleteActionId |-> Signers:ExpressionList ?NewActionSigners,
               address(MaliciousAddress),
               Stack:Stack,
@@ -94,15 +94,27 @@ module PROOF-RECFU-DISCARD-ACTION-VOID-NE
               )
             )
 
+        // TODO: Add this everywhere
+        andBool allKeysBecomeKeys(OldActionSigners, OldActionData)
+
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool onlyThisSignerDiffs(MaliciousId, OldActionSigners, DeleteActionId |-> Signers:ExpressionList ?NewActionSigners, UserIdToRole)
 
-        andBool actionDataInvariant(?NewActionData)
+        andBool actionDataInvariant(DeleteActionId |-> RemoveUser(address(MaliciousAddress)) ?NewActionData)
         andBool actionSignersInvariant(DeleteActionId |-> Signers:ExpressionList ?NewActionSigners)
 
-        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(
+                    ActionLastIndex +Int 1,
+                    keysMap(DeleteActionId |-> RemoveUser(address(MaliciousAddress)) ?NewActionData),
+                    usesExpanded
+                )
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(DeleteActionId |-> Signers:ExpressionList ?NewActionSigners), usesExpanded)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> Signers:ExpressionList ?NewActionSigners,
+                    DeleteActionId |-> RemoveUser(address(MaliciousAddress)) ?NewActionData
+                )
     //@ proof
     //@ trusted
     // [trusted]

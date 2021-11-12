@@ -9,6 +9,7 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
 // module TRUSTED-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
+  imports CAN-BE-DELETED-INTERSPERSED-ACTIONS-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-INVARIANT-FUNCTIONS
 
@@ -16,8 +17,11 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
           <k> allBoardMembersSignForInterspersed(
                   DeleteActionId:Usize,
                   MaliciousId:Usize,
-                  runExternalCallsFromUser(
-                      MaliciousAddress:Address, DeleteActionId:Usize, _Steps:Int)
+                  runExternalCallsFromUserData(
+                      MaliciousAddress:Address,
+                      DeleteActionId:Usize,
+                      _Steps:Int,
+                      LemmasForCanBeDeletedProof)
               )
               ~> K:K
           </k>
@@ -34,7 +38,7 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, .]
+              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers]
                 _OldActionSigners
               ) #as OldActionSigners:Map,
               PerformedActions:List)
@@ -52,7 +56,7 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               u(Quorum),
               u(?NewActionLastIndex),
               ?NewActionData,
-              DeleteActionId |-> ?NewSigners:ExpressionList
+              DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
                 ?NewActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
@@ -64,6 +68,7 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
         andBool actionSignersInvariant(OldActionSigners)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
+        andBool userIdToAddressInvariant(UserIdToAddress)
 
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
@@ -72,31 +77,36 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
         andBool Quorum >Int 1
         andBool DeleteFirstSignerId =/=K MaliciousId
 
+        andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
+        andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
+        andBool mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
+
+        andBool DeleteFirstSignerId in_keys(UserIdToAddress)
+
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionDataInvariant(?NewActionData)
         andBool actionSignersInvariant(
-                    DeleteActionId |-> ?NewSigners ?NewActionSigners
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners
                 )
 
         andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
-                    keysMap(DeleteActionId |-> ?NewSigners ?NewActionSigners),
+                    keysMap(DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners),
                     usesExpanded)
 
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    DeleteActionId |-> ?NewSigners ?NewActionSigners,
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
                     UserIdToRole)
 
-        andBool countCanSignFunction(?NewSigners, UserIdToRole)
+        andBool countCanSignFunction([DeleteFirstSignerId, ?NewSigners], UserIdToRole)
                 ==Int NumBoardMembers
-                      -Int 1
-                      +Int boolToInt(
+                      -Int boolToInt(
                               MaliciousRole ==K BoardMember
-                              andBool #listContainsSafe(?NewSigners, MaliciousId)
+                              andBool notBool #listContainsSafe([DeleteFirstSignerId, ?NewSigners], MaliciousId)
                           )
 
     //@ proof

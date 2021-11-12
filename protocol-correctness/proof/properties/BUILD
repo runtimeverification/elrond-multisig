@@ -143,7 +143,7 @@ kprove_test(
   ],
   semantics = "properties-execute",
   timeout = "eternal",
-  breadth = "3",
+  breadth = "5",
 )
 
 ktrusted(

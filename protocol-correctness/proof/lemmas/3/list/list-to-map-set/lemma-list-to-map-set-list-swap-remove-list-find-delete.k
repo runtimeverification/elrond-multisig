@@ -1,12 +1,12 @@
 // timeout = moderate
-// breadth = 5
+// breadth = 6
 //@ proof
 require "../../../0/map/square-bracket/trusted-commute-square-bracket.k"  //@ Bazel remove
 require "../../../0/map/square-bracket/trusted-square-bracket-substitution.k"  //@ Bazel remove
 
 module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports TRUSTED-COMMUTE-SQUARE-BRACKET
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
@@ -32,7 +32,12 @@ module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
                 | False -> .Induction .
               esac
               ~~> case $#listFindUnsafe("es", "e") of
-                | < 0 -> .Induction .
+                | < 0 ->
+                  // TODO: This should not be needed, Haskell backend bug
+                  case "es1" of
+                    | . -> .Induction .
+                    | "e2" <> "es2" -> .Induction .
+                  esac .
                 | = 0 -> .Induction .
                 | > 0 ->
                   call $lemmaCommuteMapSquareBracketAssignmentDelete(
@@ -69,7 +74,13 @@ module LEMMA-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-DELETE
                                 $mapDelete($listToMapSet("es1"), "e"),
                                 "e1", 0,
                                 true
-                            ) .
+                            )
+                            // TODO: This should not be needed, Haskell backend bug
+                            ~~> case "es1" of
+                                | . -> .Induction .
+                                | "e2" <> "es2" -> .Induction .
+                              esac
+                            .
                       esac
                   .
               esac

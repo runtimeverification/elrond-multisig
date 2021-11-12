@@ -5,7 +5,7 @@ module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ trusted
 // module TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ end
-    imports INVARIANT
+  imports INVARIANT
   imports PUSH-LIST-SYNTAX
 
   claim <T><TT>
@@ -56,7 +56,9 @@ module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
       andBool ActionId in_keys(ActionData)
       andBool isKResult(Signers)
       andBool notBool #listContainsSafe([Signers], UserId)
+
     ensures true
+
     //@ proof
     //@ trusted
     // [trusted]

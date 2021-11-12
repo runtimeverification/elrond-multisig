@@ -1,4 +1,4 @@
-// timeout = long
+// timeout = eternal
 // breadth = 8
 //@ proof
 
@@ -87,17 +87,19 @@ module PROOF-RECFU-UNSIGN-VOID-EQ
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
+        andBool allKeysBecomeKeys(OldActionSigners, ActionData)
+
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(
-                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                       ?NewActionSigners
                 )
 
         andBool mapKeysAreBelowLimitSafe(
                     ActionLastIndex +Int 1,
                     keysMap(
-                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                        DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                           ?NewActionSigners
                     ),
                     usesExpanded)
@@ -105,9 +107,13 @@ module PROOF-RECFU-UNSIGN-VOID-EQ
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                       ?NewActionSigners,
                     UserIdToRole)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    ActionData)
 
     //@ proof
     //@ trusted

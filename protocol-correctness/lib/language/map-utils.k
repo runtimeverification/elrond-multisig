@@ -28,7 +28,7 @@ endmodule
 
 module MAP-UTILS-BASIC
   imports BOOL
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports MAP
   imports MAP-UTILS-SYNTAX
   imports MAP-UTILS-SYNTAX-PRIVATE

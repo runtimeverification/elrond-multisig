@@ -22,7 +22,7 @@ module INDUCTION-DATA-ITEM
   imports BOOL
   imports INDUCTION-DATA-ITEM-INTERNAL-SYNTAX
   imports INDUCTION-DATA-ITEM-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 
   rule addDataItem((Name:InductionId, Value:KItem), (Name1:InductionId, Value1:KItem))
       => (Name1:InductionId, Value1:KItem) <> (Name:InductionId, Value:KItem)

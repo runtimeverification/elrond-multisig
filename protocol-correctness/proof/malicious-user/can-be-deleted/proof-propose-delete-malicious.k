@@ -1,4 +1,4 @@
-// timeout = long
+// timeout = eternal
 // breadth = 6
 //@ proof
 require "../../functions/trusted-propose-action-BoardMember.k"  //@ Bazel remove

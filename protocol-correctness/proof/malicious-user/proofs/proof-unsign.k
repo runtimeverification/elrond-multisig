@@ -28,7 +28,10 @@ module PROOF-UNSIGN
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCall(from MaliciousAddress run unsign(_ActionId:Usize);) ~> K:K </k>
+          <k>
+              runExternalCall(from MaliciousAddress run unsign(_ActionId:Usize);)
+              ~> K:K
+          </k>
           invariantState(
               NumUsers:Usize,
               UserIdToAddress:Map,

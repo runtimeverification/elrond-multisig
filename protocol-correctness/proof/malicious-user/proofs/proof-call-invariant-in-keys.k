@@ -35,17 +35,25 @@ module PROOF-CALL-INVARIANT-IN-KEYS
 //@ trusted
 // module TRUSTED-CALL-INVARIANT-IN-KEYS
 //@ end
+  imports BASE-TYPES-SYNTAX
   imports MALICIOUS-USER-EXECUTE
+  imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address, u(0) #as ActionId:Usize)
+          <k> runExternalCallFromUser(
+                  MaliciousAddress:Address,
+                  u(0) #as ActionId:Usize,
+                  UnprocessedUserRoles:Map,
+                  LemmasForCannotExecuteProof)
               ~> actionDataKeysAreBelowLimitConvertExpanded
               ~> actionSignersKeysAreBelowLimitConvertExpanded
               ~> concretizeDeleteActionSigners(ActionId)
               ~> passSigners
               ~> (runExternalCallsFromUser(
-                      MaliciousAddress:Address, ActionId:Usize, Count:Int
+                      MaliciousAddress:Address, ActionId:Usize, Count:Int,
+                      UnprocessedUserRoles:Map,
+                      LemmasForCannotExecuteProof
                   ) #as Ruecfu:KItem)
               ~> callLemmaOnlyThisSignerDiffsTransitiveFreezer(
                     MaliciousId:Usize,

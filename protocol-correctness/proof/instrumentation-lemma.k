@@ -20,7 +20,6 @@ module INSTRUMENTATION-LEMMA-SYNTAX
   syntax KItem ::= lemmaIterateList(ExpressionList, IterateArguments)
   syntax KItem ::= lemmaIterateList2(ExpressionList, IterateArguments)
 
-  syntax KItem ::= lemmaIterateListContains1(ExpressionList, Expression)
   syntax KItem ::= lemmaIterateListContains2(ExpressionList, Int)
 
   syntax KItem ::= lemmaNop()
@@ -65,18 +64,6 @@ module INSTRUMENTATION-LEMMA
   rule  lemmaIterateList2([_:Expression, .:ExpressionCSV], _:IterateArguments) => .K
   rule  lemmaIterateList2([_:Expression, ((_, _:ExpressionCSV) #as L:ExpressionCSV)], A:IterateArguments)
         => lemmaIterateList2([L], A)
-
-  rule lemmaIterateListContains1([.:ExpressionCSV], _:Expression) => .K
-    [label(lemmaIterateListContains1Empty)]
-  rule lemmaIterateListContains1([E1:Expression, .:ExpressionCSV], E2:Expression)
-        => concretizeValue(E2 ==K E1)
-    [label(lemmaIterateListContains1One)]
-  rule lemmaIterateListContains1([E1:Expression, ((_, _:ExpressionCSV) #as L:ExpressionCSV)], E2:Expression)
-        =>  concretizeValue(E1 ==K last(L))
-            ~> concretizeValue(E2 ==K last(L))
-            ~> concretizeValue(E2 ==K E1)
-            ~> lemmaIterateListContains1([L], E2)
-    [label(lemmaIterateListContains1AtLeastTwo)]
 
   rule lemmaIterateListContains2([.:ExpressionCSV], I:Int) => splitIntSign(I)
     [label(lemmaIterateListContains2Empty)]

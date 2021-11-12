@@ -6,10 +6,14 @@ module INVARIANT-EXECUTE-SYNTAX
   imports MAIN-PROOF-EXECUTE-SYNTAX
 endmodule
 
+module INVARIANT-FUNCTIONS-SYNTAX
+  syntax CustomInvariantData ::= "no-data"
+endmodule
+
 module INVARIANT-FUNCTIONS
   imports INVARIANT
+  imports INVARIANT-FUNCTIONS-SYNTAX
 
-  syntax CustomInvariantData ::= "no-data"
   rule  customInvariant(
           no-data,
           _NumUsers:Usize,

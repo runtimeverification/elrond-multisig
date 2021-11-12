@@ -31,6 +31,14 @@ sh_binary(
 )
 
 sh_binary(
+  name = "kprovex_tool",
+  srcs = ["kprovex.sh"],
+  deps = [":k_release"],
+  data = [":k_release"],
+  visibility = ["//visibility:public"],
+)
+
+sh_binary(
   name = "ktrusted_tool",
   srcs = ["make-trusted.py"],
   visibility = ["//visibility:public"],

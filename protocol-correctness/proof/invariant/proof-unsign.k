@@ -44,8 +44,8 @@ module PROOF-UNSIGN
               u(NumProposers:Int),
               UserRoles:Map,
               u(Quorum:Int),
-              ActionLastIndex0:Usize,
-              ActionData0:Map,
+              ActionLastIndex:Usize,
+              ActionData:Map,
               ActionSigners0:Map,
               PerformedActions:List)
         </TT></T>
@@ -60,8 +60,8 @@ module PROOF-UNSIGN
               u(NumProposers),
               UserRoles,
               u(Quorum),
-              ?ActionLastIndex1:Usize,
-              ?ActionData1:Map,
+              ActionLastIndex,
+              ActionData,
               ?ActionSigners1:Map,
               PerformedActions:List):StateCell
         </TT></T>
@@ -74,8 +74,8 @@ module PROOF-UNSIGN
         u(NumProposers),
         UserRoles,
         u(Quorum),
-        ActionLastIndex0,
-        ActionData0,
+        ActionLastIndex,
+        ActionData,
         ActionSigners0,
         expand(expanded))
     ensures invariant(
@@ -87,8 +87,8 @@ module PROOF-UNSIGN
         u(NumProposers),
         UserRoles,
         u(Quorum),
-        ?ActionLastIndex1,
-        ?ActionData1,
+        ActionLastIndex,
+        ActionData,
         ?ActionSigners1,
         usesExpanded)
     //@ proof

@@ -39,22 +39,19 @@ ktrusted(
 )
 
 kprove_test(
-  name = "proof-recfu-discard-action-void-eq",
-  srcs = ["proof-recfu-discard-action-void-eq.k"],
+  name = "proof-recfu-discard-action-void-ne-fragment",
+  srcs = ["proof-recfu-discard-action-void-ne-fragment.k"],
   trusted = [
       "//protocol-correctness/proof/functions:trusted-discard-action-no-signers",
       "//protocol-correctness/proof/functions:trusted-discard-action-no-signers-no-action",
-      "//protocol-correctness/proof/functions:trusted-discard-action-no-valid-signers",
-      "//protocol-correctness/proof/functions:trusted-discard-action-no-valid-signers-no-action",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "eternal",
-  breadth = "6",
+  breadth = "3",
 )
 
 ktrusted(
-  name = "trusted-recfu-discard-action-void-eq",
-  srcs = ["proof-recfu-discard-action-void-eq.k"],
+  name = "trusted-recfu-discard-action-void-ne-fragment",
+  srcs = ["proof-recfu-discard-action-void-ne-fragment.k"],
   visibility = ["//visibility:public"],
 )
 
@@ -69,7 +66,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
   timeout = "eternal",
-  breadth = "14",
+  breadth = "12",
 )
 
 ktrusted(
@@ -379,7 +376,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-unsign-other-signers-not-first",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
-  timeout = "long",
+  timeout = "eternal",
   breadth = "8",
 )
 
@@ -400,6 +397,8 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-unsign-other-signers-not-first",
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
+  timeout = "eternal",
+  breadth = "16",
 )
 
 ktrusted(

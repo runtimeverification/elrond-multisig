@@ -15,7 +15,7 @@ endmodule
 module LIST-CONTAINS
   imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LIST-CONTAINS-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 
   rule #listContainsSafe(Es, E) => #listContainsUnsafe(Es, E)
     requires isKResult(Es) andBool isKResult(E)

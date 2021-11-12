@@ -15,7 +15,11 @@ module PROOF-CANNOT-PERFORM
 
   claim <T><TT>
           <k> runExternalCallsFromUser(
-                  MaliciousAddress:Address, u(0) #as ActionId:Usize, _Count:Int
+                  MaliciousAddress:Address,
+                  u(0) #as ActionId:Usize,
+                  _Count:Int,
+                  UnprocessedUserRoles:Map,
+                  LemmasForCannotExecuteProof
               )
               ~> K:K
           </k>
@@ -52,9 +56,7 @@ module PROOF-CANNOT-PERFORM
         andBool maliciousInvariant(
             MaliciousAddress,
             NumUsers,
-            // UserIdToAddress,
             UserIdToAddress,
-            // AddressToUserId,
             AddressToUserId,
             NumBoardMembers,
             NumProposers,
@@ -71,9 +73,7 @@ module PROOF-CANNOT-PERFORM
             MaliciousAddress,
             NumUsers,
             UserIdToAddress,
-            // ?UserIdToAddress,
             AddressToUserId,
-            // ?AddressToUserId,
             NumBoardMembers,
             NumProposers,
             UserIdToRole,

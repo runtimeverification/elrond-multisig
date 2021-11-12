@@ -10,7 +10,7 @@ endmodule
 
 module CAN-SIGN-FUNCTION
   imports CAN-SIGN-FUNCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 
   rule canSignFunction(Role:UserRole) => Role ==K BoardMember
 endmodule

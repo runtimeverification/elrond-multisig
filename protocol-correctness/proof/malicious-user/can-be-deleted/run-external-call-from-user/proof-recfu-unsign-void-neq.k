@@ -1,5 +1,6 @@
+// timeout = eternal
+// breadth = 16
 //@ proof
-// Not working because of https://github.com/kframework/kore/issues/2829
 
 require "../../../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
@@ -86,17 +87,19 @@ module PROOF-RECFU-UNSIGN-VOID-NEQ
 
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
 
+        andBool allKeysBecomeKeys(OldActionSigners, ActionData)
+
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(
-                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                       ?NewActionSigners
                 )
 
         andBool mapKeysAreBelowLimitSafe(
                     ActionLastIndex +Int 1,
                     keysMap(
-                        DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                        DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                           ?NewActionSigners
                     ),
                     usesExpanded)
@@ -104,9 +107,13 @@ module PROOF-RECFU-UNSIGN-VOID-NEQ
         andBool onlyThisSignerDiffs(
                     MaliciousId,
                     OldActionSigners,
-                    DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
                       ?NewActionSigners,
                     UserIdToRole)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    ActionData)
 
     //@ proof
     //@ trusted

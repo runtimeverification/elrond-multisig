@@ -151,7 +151,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "long",
-  breadth = "2",
+  breadth = "6",
 )
 
 ktrusted(

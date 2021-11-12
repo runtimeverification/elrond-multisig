@@ -26,8 +26,10 @@ klibrary(
   deps = [
       "//protocol-correctness/proof/lemmas/1:lemmas-0-files",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-last-to-start-files",
+      "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-list-find-files",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-pound-last-files",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-remove-last-not-pound-last-files",
+      "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-find-lt-0-files",
       "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-last-files",
       "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-last-usize-files",
       "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-last-to-start-kresult-files",

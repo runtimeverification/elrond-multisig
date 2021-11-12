@@ -4,7 +4,7 @@
 require "../map/trusted-map-semantics.k"  //@ Bazel remove
 
 module PROOF-BOARD-MEMBERS-SIGN-FOR-3
-  imports MAP-EXECUTE
+  // imports MAP-EXECUTE
   imports PROPERTIES-EXECUTE
   imports PSEUDOCODE
 

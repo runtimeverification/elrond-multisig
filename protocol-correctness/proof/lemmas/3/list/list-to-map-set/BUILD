@@ -9,7 +9,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof/lemmas/3:lemmas-3-execute",
   timeout = "moderate",
-  breadth = "5",
+  breadth = "6",
 )
 
 ktrusted(

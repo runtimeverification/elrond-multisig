@@ -4,7 +4,6 @@
 
 require "trusted-recfu-discard-action-error-eq.k"  //@ Bazel remove
 require "trusted-recfu-discard-action-error-ne.k"  //@ Bazel remove
-// require "trusted-recfu-discard-action-void-eq.k"  //@ Bazel remove
 require "trusted-recfu-discard-action-void-ne.k"  //@ Bazel remove
 
 require "../../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel remove
@@ -12,7 +11,6 @@ require "../../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel r
 module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
   imports TRUSTED-RECFU-DISCARD-ACTION-ERROR-EQ
   imports TRUSTED-RECFU-DISCARD-ACTION-ERROR-NE
-  // imports TRUSTED-RECFU-DISCARD-ACTION-VOID-EQ
   imports TRUSTED-RECFU-DISCARD-ACTION-VOID-NE
 
   imports TRUSTED-MAKE-CONCRETE-VALUE-FRAGMENT
@@ -66,7 +64,7 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(ActionLastIndex:Int),
-              OldActionData:Map,
+              (DeleteActionId |-> RemoveUser(MaliciousAddress) _OldActionData:Map) #as OldActionData:Map,
               ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV] #as Signers
                 ActionSignersRemainder
               ) #as OldActionSigners:Map,
@@ -84,7 +82,7 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
               UserIdToRole,
               u(Quorum),
               u(ActionLastIndex),
-              ?NewActionData:Map,
+              DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData:Map,
               DeleteActionId |-> Signers:ExpressionList ?NewActionSigners,
               PerformedActions:List):StateCell
         </TT></T>
@@ -103,14 +101,16 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
         andBool Quorum >Int 1
         andBool DeleteFirstSignerId =/=K MaliciousId
 
+        andBool allKeysBecomeKeys(OldActionSigners, OldActionData)
+
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool actionDataInvariant(?NewActionData)
+        andBool actionDataInvariant(DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData)
         andBool actionSignersInvariant(DeleteActionId |-> Signers ?NewActionSigners)
 
         andBool mapKeysAreBelowLimitSafe(
                     ActionLastIndex +Int 1,
-                    keysMap(?NewActionData),
+                    keysMap(DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData),
                     usesExpanded)
 
         andBool mapKeysAreBelowLimitSafe(
@@ -124,6 +124,11 @@ module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
                     OldActionSigners,
                     DeleteActionId |-> Signers ?NewActionSigners,
                     UserIdToRole
+                )
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> Signers ?NewActionSigners,
+                    DeleteActionId |-> RemoveUser(MaliciousAddress) ?NewActionData
                 )
 
     //@ proof

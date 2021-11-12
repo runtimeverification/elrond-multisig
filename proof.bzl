@@ -320,6 +320,102 @@ kore_test = rule(
     test = True,
 )
 
+def _kprovex_test_impl(ctx):
+  if len(ctx.files.srcs) != 1:
+    fail
+
+  tmp_file = ctx.actions.declare_file(ctx.label.name + ".tmp-proof.k")
+  ctx.actions.run(
+      inputs=depset([ctx.files.srcs[0]]),
+      outputs=[tmp_file],
+      arguments=['proof', ctx.files.srcs[0].path, tmp_file.path],
+      progress_message="Preparing %s" % ctx.files.srcs[0].path,
+      executable=ctx.executable.ktrusted_tool)
+
+  merged_file = ctx.actions.declare_file(ctx.label.name + '-merged.k')
+
+  _merge_trusted(
+      tmp_file,
+      ctx.attr.trusted,
+      ctx.executable.kmerge_tool,
+      ctx.actions,
+      merged_file)
+
+  script_file = ctx.actions.declare_file(ctx.label.name + '-runner.sh')
+  tool_call = "kompile-tool/kprovex_tool %s %s %s" % (
+          ctx.attr.semantics[KompileInfo].files[0].short_path,
+          ctx.files.srcs[0].short_path,
+          merged_file.short_path)
+  command_parts = [
+      "pushd $(pwd) > /dev/null",
+      "%s --debug" % tool_call,
+      "popd > /dev/null",
+  ]
+  script_lines = [
+      "#!/usr/bin/env bash",
+      "",
+      "echo 'To debug:'",
+      'echo "%s"' % ("; ".join(command_parts)),
+      "%s %s || (echo 'Proof FAILED!'; false)" % (tool_call, '"$@"'),
+  ]
+  ctx.actions.write(script_file, "\n".join(script_lines), is_executable = True)
+
+  runfiles = ctx.runfiles(
+      [ merged_file
+      , ctx.executable.kprovex_tool
+      ]
+      + ctx.attr.semantics[KompileInfo].files
+      + ctx.attr.k_distribution[DefaultInfo].files.to_list()
+      + ctx.attr.debug_script[DefaultInfo].files.to_list()
+  )
+  return [
+      DefaultInfo(
+          runfiles = runfiles,
+          executable = script_file,
+      )
+  ]
+
+kprovex_test = rule(
+    implementation = _kprovex_test_impl,
+    attrs = {
+        "srcs": attr.label_list(allow_files = [".k"]),
+        "trusted": attr.label_list(providers=[DefaultInfo, KtrustedInfo]),
+        "semantics": attr.label(mandatory=True, providers=[DefaultInfo, KompileInfo]),
+        "kprovex_tool": attr.label(
+            executable = True,
+            cfg = "exec",
+            allow_files = True,
+            default = Label("//kompile-tool:kprovex_tool"),
+        ),
+        "ktrusted_tool": attr.label(
+            executable = True,
+            cfg = "exec",
+            allow_files = True,
+            default = Label("//kompile-tool:ktrusted_tool"),
+        ),
+        "kmerge_tool": attr.label(
+            executable = True,
+            cfg = "exec",
+            allow_files = True,
+            default = Label("//kompile-tool:kmerge_tool"),
+        ),
+        "k_distribution": attr.label(
+            executable = False,
+            cfg = "exec",
+            allow_files = True,
+            default = Label("//kompile-tool:k_release"),
+        ),
+        "debug_script": attr.label(
+            executable = False,
+            cfg = "exec",
+            allow_files = True,
+            default = Label("//kompile-tool:kast_script"),
+        ),
+        "breadth": attr.string(mandatory=True),
+    },
+    test = True,
+)
+
 def kprove_test(*, name, srcs, trusted=[], semantics, breadth="1", timeout="short"):
   kprove_kompile(
     name = "%s-kompile" % name,

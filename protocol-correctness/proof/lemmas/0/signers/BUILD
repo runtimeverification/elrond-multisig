@@ -47,3 +47,160 @@ klibrary(
   visibility = ["//visibility:public"],
 )
 
+kprove_test(
+  name = "lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys",
+  srcs = ["lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys",
+  srcs = ["lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys-files",
+  srcs = [":trusted-lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys"],
+  deps = [
+      "//protocol-correctness/lib/functions:list-find-files",
+      "//protocol-correctness/lib/functions:list-swap-remove-files",
+      "//protocol-correctness/multisig/lib/functions:count-can-sign-function-files",
+      ":trusted-lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-count-can-sign-function-element-last-to-start",
+  srcs = ["lemma-count-can-sign-function-element-last-to-start.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-count-can-sign-function-element-last-to-start",
+  srcs = ["lemma-count-can-sign-function-element-last-to-start.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-count-can-sign-function-element-last-to-start-files",
+  srcs = [":trusted-lemma-count-can-sign-function-element-last-to-start"],
+  deps = [
+      "//protocol-correctness/lib/functions:last-to-start-files",
+      "//protocol-correctness/multisig/lib/functions:count-can-sign-function-files",
+      ":trusted-lemma-count-can-sign-function-element-last-to-start",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-count-can-sign-function-last-remove-last",
+  srcs = ["lemma-count-can-sign-function-last-remove-last.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-count-can-sign-function-last-remove-last",
+  srcs = ["lemma-count-can-sign-function-last-remove-last.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-count-can-sign-function-last-remove-last-files",
+  srcs = [":trusted-lemma-count-can-sign-function-last-remove-last"],
+  deps = [
+      "//protocol-correctness/lib/functions:last-functions-files",
+      "//protocol-correctness/lib/functions:remove-last-files",
+      "//protocol-correctness/multisig/lib/functions:count-can-sign-function-files",
+      ":trusted-lemma-count-can-sign-function-last-remove-last",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-count-can-sign-function-second-element",
+  srcs = ["lemma-count-can-sign-function-second-element.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-count-can-sign-function-second-element",
+  srcs = ["lemma-count-can-sign-function-second-element.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-count-can-sign-function-second-element-files",
+  srcs = [":trusted-lemma-count-can-sign-function-second-element"],
+  deps = [
+      "//protocol-correctness/multisig/lib/functions:count-can-sign-function-files",
+      ":trusted-lemma-count-can-sign-function-second-element",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-count-can-sign-push-list-2",
+  srcs = ["lemma-count-can-sign-push-list-2.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-count-can-sign-push-list-2",
+  srcs = ["lemma-count-can-sign-push-list-2.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-count-can-sign-push-list-2-files",
+  srcs = [":trusted-lemma-count-can-sign-push-list-2"],
+  deps = [
+      "//protocol-correctness/multisig/lib/functions:count-can-sign-function-files",
+      "//protocol-correctness/lib/functions:push-list-files",
+      ":trusted-lemma-count-can-sign-push-list-2",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-count-can-sign-push-list",
+  srcs = ["lemma-count-can-sign-push-list.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-lemma-count-can-sign-push-list",
+  srcs = ["lemma-count-can-sign-push-list.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-count-can-sign-push-list-files",
+  srcs = [":trusted-lemma-count-can-sign-push-list"],
+  deps = [
+      "//protocol-correctness/multisig/lib/functions:count-can-sign-function-files",
+      "//protocol-correctness/lib/functions:push-list-files",
+      ":trusted-lemma-count-can-sign-push-list",
+  ],
+  visibility = ["//visibility:public"],
+)
+

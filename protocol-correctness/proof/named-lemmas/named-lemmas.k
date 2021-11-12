@@ -3,9 +3,13 @@ require "protocol-correctness/lib/language/reflection.k"
 require "protocol-correctness/lib/proof/unsorted/formula-expansion.k"
 require "protocol-correctness/proof/instrumentation-proof.k"
 
-require "protocol-correctness/proof/named-lemmas/named-lemma-only-this-signer-diffs-transitive.k"
+require "protocol-correctness/proof/named-lemmas/bool-to-int-sum-and-not.k"
+require "protocol-correctness/proof/named-lemmas/count-can-sign-list-to-map-set-square-bracket-3.k"
+require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-list-to-map-set-square-bracket.k"
+require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
 
 module NAMED-LEMMAS-SYNTAX
+  imports BASE-TYPES-SYNTAX
   imports BOOL
   imports FORMULA-EXPANSION-SYNTAX
   imports INT
@@ -21,6 +25,7 @@ module NAMED-LEMMAS-SYNTAX
   syntax KItem ::= lemmaImplies(Bool, Bool)
   syntax KItem ::= lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
             limit:Int, Map, PropertyHandling, PropertyHandling)
+  syntax KItem ::= lemmaNoMapKeyInListListToMapSet(toRemove:Usize, Map, old:ExpressionList, new:ExpressionList)
 endmodule
 
 module NAMED-LEMMAS
@@ -31,6 +36,9 @@ module NAMED-LEMMAS
   imports NAMED-LEMMAS-SYNTAX
   imports REFLECTION-SYNTAX
 
+  imports NAMED-LEMMA-BOOL-TO-INT-SUM-AND-NOT
+  imports NAMED-LEMMA-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3
+  imports NAMED-LEMMAS-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET
   imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE
 
   rule lemmaCommuteMapSquareBracketAssignmentSameValue(M:Map, K1:KItem, K2:KItem, _V:KItem)
@@ -154,5 +162,8 @@ module NAMED-LEMMAS
     => .K
     ensures false
     [owise]
+
+  rule lemmaNoMapKeyInListListToMapSet(_ToRemove:Usize, _:Map, _Old:ExpressionList, _New:ExpressionList)
+      => .K
 
 endmodule

@@ -28,7 +28,7 @@ module INDUCTION-EXPRESSION
   imports INT
   imports INDUCTION-EXPRESSION-SYNTAX
   imports INDUCTION-INTERNAL-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports REFLECTION-SYNTAX
 
   // Identifiers

@@ -14,6 +14,7 @@ module CONCRETIZE-EXPRESSION-LIST
 
   rule concretizeExpressionList([.:ExpressionCSV], X:Int) => .K
     requires X >Int 0
+    [label(concretizeListEmpty)]
   rule concretizeExpressionList([_:Expression , L:ExpressionCSV], X:Int)
       => concretizeExpressionList([L], X -Int 1)
     requires X >Int 0

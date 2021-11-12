@@ -44,6 +44,12 @@ module PROOF-CALL-INVARIANT-FRAGMENT-UNSIGN
                     from MaliciousAddress run unsign(ActionId);
                 )
               ~> deleteMaliciousUserActionId(DeleteActionId)
+              // ~> callLemmaNoMapKeyInListListToMapSet
+              //     ( DeleteActionId
+              //     , AddressToUserId:Map[MaliciousAddress] orDefault void
+              //     , UnprocessedUserRoles
+              //     , DeleteSigners:KItem
+              //     )
               ~> actionDataKeysAreBelowLimitConvertExpanded
               ~> actionSignersKeysAreBelowLimitConvertExpanded
               ~> concretizeDeleteActionSigners(DeleteActionId)
@@ -51,7 +57,9 @@ module PROOF-CALL-INVARIANT-FRAGMENT-UNSIGN
               ~> runExternalCallsFromUser(
                     MaliciousAddress,
                     DeleteActionId,
-                    Count:Int
+                    Count:Int,
+                    UnprocessedUserRoles:Map,
+                    LemmasForCannotExecuteProof
                 )
               ~> callLemmaOnlyThisSignerDiffsTransitiveFreezer(
                     MaliciousId:Usize,
@@ -74,7 +82,12 @@ module PROOF-CALL-INVARIANT-FRAGMENT-UNSIGN
         </TT></T>
       =>
         <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, DeleteActionId:Usize, Count:Int)
+          <k> runExternalCallsFromUser(
+                    MaliciousAddress:Address,
+                    DeleteActionId:Usize,
+                    Count:Int,
+                    UnprocessedUserRoles,
+                    LemmasForCannotExecuteProof)
               ~> callLemmaOnlyThisSignerDiffsTransitive(
                     MaliciousId:Usize,
                     ActionSigners,

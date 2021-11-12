@@ -116,7 +116,7 @@ kprove_test(
   name = "proof-call-invariant-suffix-fragment",
   srcs = ["proof-call-invariant-suffix-fragment.k"],
   trusted = [
-      "//protocol-correctness/proof/lemmas/0/map:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
   ],
   semantics = "//protocol-correctness/proof/malicious-user:malicious-user-execute",
   timeout = "moderate",

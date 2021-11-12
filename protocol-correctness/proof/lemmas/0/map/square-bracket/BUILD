@@ -31,6 +31,30 @@ ktrusted(
 )
 
 kprove_test(
+  name = "lemma-square-bracket-ordefault-not-in-keys",
+  srcs = ["lemma-square-bracket-ordefault-not-in-keys.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-square-bracket-ordefault-not-in-keys",
+  srcs = ["lemma-square-bracket-ordefault-not-in-keys.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-square-bracket-ordefault-not-in-keys-files",
+  srcs = [":trusted-lemma-square-bracket-ordefault-not-in-keys"],
+  deps = [
+      ":trusted-lemma-square-bracket-ordefault-not-in-keys",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-square-bracket-square-bracket-undef",
   srcs = ["lemma-square-bracket-square-bracket-undef.k"],
   trusted = [
@@ -49,8 +73,6 @@ klibrary(
   name = "trusted-lemma-square-bracket-square-bracket-undef-files",
   srcs = [":trusted-lemma-square-bracket-square-bracket-undef"],
   deps = [
-      "//protocol-correctness/lib/functions:last-functions-files",
-      "//protocol-correctness/lib/functions:list-contains-files",
       ":trusted-lemma-square-bracket-square-bracket-undef",
   ],
   visibility = ["//visibility:public"],

@@ -16,7 +16,7 @@ require "../functions/trusted-propose-action-error-no-user.k"  //@ Bazel remove
 require "../functions/trusted-propose-action-error-no-role.k"  //@ Bazel remove
 
 module PROOF-CAN-PROPOSE-AND-EXECUTE
-  imports MAP-EXECUTE
+  // imports MAP-EXECUTE
   imports PROPERTIES-EXECUTE
   imports PSEUDOCODE
 

@@ -1,7 +1,9 @@
 require "protocol-correctness/proof/lemmas/1/lemmas-0.k"
 require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"
+require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-list-find.k"
 require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-pound-last.k"
 require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-remove-last-not-pound-last.k"
+require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-find-lt-0.k"
 require "protocol-correctness/proof/lemmas/1/list/last/trusted-lemma-last.k"
 require "protocol-correctness/proof/lemmas/1/list/last/trusted-lemma-last-usize.k"
 require "protocol-correctness/proof/lemmas/1/list/last/trusted-lemma-last-to-start-kresult.k"
@@ -28,7 +30,9 @@ module LEMMAS-1
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
   imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
+  imports TRUSTED-LEMMA-LIST-CONTAINS-LIST-FIND
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LAST
+  imports TRUSTED-LEMMA-LIST-FIND-LT-0
   imports TRUSTED-LEMMA-LIST-TO-MAP-SET-POUND-REMOVE-LAST-POUND-LAST
   imports TRUSTED-LEMMA-PLISTLEN-REMOVE-LAST
   imports TRUSTED-LEMMA-POUND-LAST

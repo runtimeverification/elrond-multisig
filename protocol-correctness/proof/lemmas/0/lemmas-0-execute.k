@@ -2,7 +2,7 @@ require "protocol-correctness/proof/main-proof-execute-no-lemmas.k"
 
 module LEMMAS-0-EXECUTE-SYNTAX
   imports MAIN-PROOF-EXECUTE-NO-LEMMAS-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 
 endmodule
 

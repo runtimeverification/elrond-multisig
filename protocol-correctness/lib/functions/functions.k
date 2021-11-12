@@ -22,6 +22,8 @@ require "protocol-correctness/lib/functions/map-included.k"
 require "protocol-correctness/lib/functions/map-keys-are-below-limit.k"
 require "protocol-correctness/lib/functions/map-keys-are-kresult.k"
 require "protocol-correctness/lib/functions/map-keys-are-of-type.k"
+require "protocol-correctness/lib/functions/map-representation.k"
+require "protocol-correctness/lib/functions/map-unification.k"
 require "protocol-correctness/lib/functions/map-values-are-distinct.k"
 require "protocol-correctness/lib/functions/map-values-are-expression-list-of-usize.k"
 require "protocol-correctness/lib/functions/map-values-are-kresult.k"
@@ -67,6 +69,8 @@ module FUNCTIONS
   imports MAP-KEYS-ARE-BELOW-LIMIT
   imports MAP-KEYS-ARE-KRESULT
   imports MAP-KEYS-ARE-OF-TYPE
+  imports MAP-REPRESENTATION
+  imports MAP-UNIFICATION
   imports MAP-VALUES-ARE-DISTINCT
   imports MAP-VALUES-ARE-EXPRESSION-LIST-OF-USIZE
   imports MAP-VALUES-ARE-KRESULT

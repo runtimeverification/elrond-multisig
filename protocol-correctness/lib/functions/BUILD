@@ -122,6 +122,8 @@ klibrary(
       ":map-keys-are-below-limit-files",
       ":map-keys-are-kresult-files",
       ":map-keys-are-of-type-files",
+      ":map-representation-files",
+      ":map-unification-files",
       ":map-values-are-distinct-files",
       ":map-values-are-expression-list-of-usize-files",
       ":map-values-are-kresult-files",
@@ -294,6 +296,23 @@ klibrary(
   srcs = ["map-keys-are-of-type.k"],
   deps = [
       "//protocol-correctness/lib/language:type-reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-representation-files",
+  srcs = ["map-representation.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-unification-files",
+  srcs = ["map-unification.k"],
+  deps = [
+      ":map-representation-files",
   ],
   visibility = ["//visibility:public"],
 )

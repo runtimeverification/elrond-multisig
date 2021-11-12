@@ -4,7 +4,7 @@ require "protocol-correctness/lib/language/cast.k"
 require "protocol-correctness/multisig/lib/functions/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
-require "protocol-correctness/proof/named-lemmas/named-lemma-only-this-signer-diffs-transitive.k"
+require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
 require "protocol-correctness/proof/named-lemmas/named-lemmas.k"
 require "protocol-correctness/proof/properties/properties-execute.k"
 
@@ -142,15 +142,30 @@ endmodule
 module MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports BASE-TYPES-SYNTAX
   imports INT
+  imports MAP
 
-  syntax KItem ::= runExternalCallsFromUser(Address, actionId:Usize, steps:Int)
-  syntax KItem ::= runExternalCallFromUser(Address, actionId:Usize)
+  syntax MaliciousUserLemmas ::= "LemmasForCannotExecuteProof" | "LemmasForCanBeDeletedProof"
+
+  syntax KItem ::= runExternalCallsFromUser(
+                      Address,
+                      actionId:Usize,
+                      steps:Int,
+                      unprocessedUserRoles:Map,
+                      MaliciousUserLemmas)
+  syntax KItem ::= runExternalCallFromUser(
+                      Address,
+                      actionId:Usize,
+                      unprocessedUserRoles:Map,
+                      MaliciousUserLemmas)
 endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports BASE-TYPES-SYNTAX
+  imports FORMULA-EXPANSION-SYNTAX
   imports MAP
 
+  syntax KItem ::= callLemmaMapKeysAreBelowLimitIgnoresPropertyHandling(PropertyHandling, PropertyHandling)
+  // TODO: Replace these two symbols with the above.
   syntax KItem ::= "actionDataKeysAreBelowLimitConvertExpanded"
   syntax KItem ::= "actionSignersKeysAreBelowLimitConvertExpanded"
   syntax KItem ::= deleteMaliciousUserActionId(Usize)
@@ -166,6 +181,13 @@ module MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
                         oldActionSigners:Map,
                         intermediateActionSigners:Map
                     )
+
+  syntax KItem ::= callLemmaNoMapKeyInListListToMapSet
+                      ( actionId:Usize
+                      , userId:KItem
+                      , unprocessedUserRoles:Map
+                      , oldSigners:KItem
+                      )
 endmodule
 
 module MALICIOUS-USER-EXTERNAL-CALLS
@@ -182,16 +204,24 @@ module MALICIOUS-USER-EXTERNAL-CALLS
 
   syntax KResult
 
-  rule runExternalCallsFromUser(_:Address, _ActionId:Usize, Steps:Int) => .K
+  rule  runExternalCallsFromUser(
+            _:Address, _ActionId:Usize, Steps:Int, _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas
+        )
+        => .K
     requires Steps <=Int 0  [label(runExternalCallsFUStepsLE0)]
   rule  <k>
-          runExternalCallsFromUser(A:Address, ActionId:Usize, Steps:Int)
-          =>  runExternalCallFromUser(A, ActionId)
+          runExternalCallsFromUser(
+              A:Address, ActionId:Usize, Steps:Int, UnprocessedUserRoles:Map,
+              Lemmas:MaliciousUserLemmas
+          )
+          =>  runExternalCallFromUser(A, ActionId, UnprocessedUserRoles, Lemmas)
               ~> actionDataKeysAreBelowLimitConvertExpanded
               ~> actionSignersKeysAreBelowLimitConvertExpanded
               ~> concretizeDeleteActionSigners(ActionId)
               ~> passSigners
-              ~> runExternalCallsFromUser(A, ActionId, Steps -Int 1)
+              ~> runExternalCallsFromUser(
+                    A, ActionId, Steps -Int 1, UnprocessedUserRoles, Lemmas)
               ~> callLemmaOnlyThisSignerDiffsTransitiveFreezer(
                   toUsizeOrDefault(AddressToUserId[A] orDefault u(0), u(0)),
                   ActionSigners)
@@ -205,28 +235,52 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         </action-signers>
     requires Steps >Int 0  [label(runExternalCallsFUStepsGT0)]
 
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         =>  runExternalCall(from A run proposeAddBoardMember(?_UserAddress:Address);)
             ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeAddBoardMember)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         =>  runExternalCall(from A run proposeAddProposer(?_UserAddress:Address);)
             ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeAddBoardProposer)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         =>  runExternalCall(from A run proposeRemoveUser(?_UserAddress:Address);)
             ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeRemoveUser)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+          A:Address,
+          ActionId:Usize,
+          _UnprocessedUserRoles:Map,
+          _Lemmas:MaliciousUserLemmas)
         =>  runExternalCall(from A run proposeChangeQuorum(?_Quorum:Usize);)
             ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeChangeQuorum)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         =>  runExternalCall(from A run proposeSendEgld(
                 ?_To:Address, ?_Amount:BigUint, ?_Data:BoxedBytes);)
             ~> deleteMaliciousUserActionId(ActionId)
     [label(runProposeSendEgld)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         =>  concretizeValue(?Amount)
             ~> concretizeValue(?Code)
             ~> concretizeValue(?Args)
@@ -240,7 +294,11 @@ module MALICIOUS-USER-EXTERNAL-CALLS
             ~> deleteMaliciousUserActionId(ActionId)
     ensures isKResult(?Args)
     [label(runProposeSCDeploy)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         => concretizeValue(?To)
             ~> concretizeValue(?Amount)
             ~> concretizeValue(?Function)
@@ -253,7 +311,11 @@ module MALICIOUS-USER-EXTERNAL-CALLS
             ~> deleteMaliciousUserActionId(ActionId)
     ensures isKResult(?Args)
     [label(runProposeSCCall)]
-  rule  <k> runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  <k> runExternalCallFromUser(
+                A:Address,
+                ActionId:Usize,
+                UnprocessedUserRoles:Map,
+                Lemmas:MaliciousUserLemmas)
           => branchK(A in_keys(AddressToUserId),
                   makeConcreteValue(A, rUsize, AddressToUserId)
                     ~>  branchK(AddressToUserId[A] orDefault void in_keys(UserIdToRole),
@@ -267,6 +329,17 @@ module MALICIOUS-USER-EXTERNAL-CALLS
             ~> concretizeValue(?ActionId ==K ActionId)
             ~> runExternalCall(from A run sign(?ActionId:Usize);)
             ~> deleteMaliciousUserActionId(ActionId)
+            ~>  #if Lemmas ==K LemmasForCanBeDeletedProof
+                #then
+                  callLemmaNoMapKeyInListListToMapSet
+                      ( ActionId
+                      , AddressToUserId[A] orDefault void
+                      , UnprocessedUserRoles
+                      , ActionSigners[ActionId] orDefault void
+                      )
+                #else
+                  .K
+                #fi
           ...
         </k>
         <address-to-user-id>
@@ -278,10 +351,15 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         <action-data>
           ActionData:Map
         </action-data>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
     [label(runSign)]
-  // rule  runExternalCallFromUser(A:Address)
-  //         =>  runExternalCall(from A run unsign(?_ActionId:Usize);)
-  rule  <k> runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  <k> runExternalCallFromUser(
+                A:Address,
+                ActionId:Usize,
+                UnprocessedUserRoles:Map,
+                Lemmas:MaliciousUserLemmas)
           =>  branchK(A in_keys(AddressToUserId),
                   makeConcreteValue(A, rUsize, AddressToUserId)
                     ~>  branchK(AddressToUserId[A] orDefault void in_keys(UserIdToRole),
@@ -290,11 +368,22 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                         ),
                   .K
               )
-              ~> concretizeValue(?ActionId)
-              ~> concretizeValue(?ActionId in_keys(ActionData))
-              ~> concretizeValue(?ActionId ==K ActionId)
-              ~> runExternalCall(from A run unsign(?ActionId:Usize);)
+              ~> concretizeValue(u(?ActionId))
+              ~> concretizeValue(u(?ActionId) in_keys(ActionData))
+              ~> concretizeValue(u(?ActionId) ==K ActionId)
+              ~> runExternalCall(from A run unsign(u(?ActionId:Int));)
               ~> deleteMaliciousUserActionId(ActionId)
+              ~>  #if Lemmas ==K LemmasForCanBeDeletedProof
+                  #then
+                    callLemmaNoMapKeyInListListToMapSet
+                        ( ActionId
+                        , AddressToUserId[A] orDefault void
+                        , UnprocessedUserRoles
+                        , ActionSigners[ActionId] orDefault void
+                        )
+                  #else
+                    .K
+                  #fi
           ...
         </k>
         <address-to-user-id>
@@ -306,14 +395,25 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         <action-data>
           ActionData:Map
         </action-data>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
     [label(runUnsign)]
-  rule  runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  runExternalCallFromUser(
+            A:Address,
+            ActionId:Usize,
+            _UnprocessedUserRoles:Map,
+            _Lemmas:MaliciousUserLemmas)
         =>  runExternalCall(from A run performActionEndpoint(?ActionId:Usize);)
             ~> deleteMaliciousUserActionId(ActionId)
     ensures notBool ?ActionId ==K ActionId
 
     [label(runPerformAction)]
-  rule  <k> runExternalCallFromUser(A:Address, ActionId:Usize)
+  rule  <k> runExternalCallFromUser(
+                A:Address,
+                ActionId:Usize,
+                _UnprocessedUserRoles:Map,
+                _Lemmas:MaliciousUserLemmas)
             =>  concretizeValue(?ActionId)
                 ~> concretizeValue(?ActionId ==K ActionId)
                 ~>  branchK(?ActionId in_keys(ActionSigners),
@@ -336,6 +436,28 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         </action-signers>
     [label(runDiscardAction)]
 
+  rule  <k> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandling(P1:PropertyHandling, P2:PropertyHandling)
+            =>  lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+                    ActionLastIndex +Int 1,
+                    keysMap(ActionData),
+                    P1, P2)
+                ~> lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
+                    ActionLastIndex +Int 1,
+                    keysMap(ActionSigners),
+                    P1, P2)
+            ...
+        </k>
+        <action-last-index>
+          u(ActionLastIndex:Int)
+        </action-last-index>
+        <action-data>
+          ActionData:Map
+        </action-data>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+
+  // TODO: Replace these two rules with the above.
   rule  <k> actionDataKeysAreBelowLimitConvertExpanded
             => lemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
                 ActionLastIndex +Int 1,
@@ -427,6 +549,27 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         <user-roles>
           UserIdToRole:Map
         </user-roles>
+
+  rule
+      <k>
+        callLemmaNoMapKeyInListListToMapSet
+            ( ActionId:Usize
+            , UserId:Usize
+            , UnprocessedUserRoles:Map
+            , OldSigners:ExpressionList
+            )
+        => lemmaNoMapKeyInListListToMapSet
+            ( UserId
+            , UnprocessedUserRoles
+            , OldSigners
+            , NewSigners
+            )
+        ...
+      </k>
+      <action-signers>
+        ActionId |-> NewSigners:ExpressionList _ActionSigners:Map
+      </action-signers>
+
 endmodule
 
 module MALICIOUS-USER-EXECUTE

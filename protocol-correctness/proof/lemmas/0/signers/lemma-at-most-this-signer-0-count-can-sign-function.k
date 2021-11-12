@@ -3,7 +3,7 @@
 //@ proof
 module LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/functions/list-elements-are-usize.k"
 // require "protocol-correctness/lib/functions/map-values-are-kresult.k"

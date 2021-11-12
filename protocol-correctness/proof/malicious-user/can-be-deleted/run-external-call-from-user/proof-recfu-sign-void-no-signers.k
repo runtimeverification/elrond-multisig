@@ -81,9 +81,11 @@ module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
         andBool actionSignersInvariant(OldActionSigners)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToRoleInvariant(UserIdToRole)
-        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
 
+        andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), usesExpanded)
         andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+
+        andBool allKeysBecomeKeys(OldActionSigners, ActionData)
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
@@ -106,6 +108,11 @@ module PROOF-RECFU-SIGN-VOID-NO-SIGNERS
                     DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners]
                       ?NewActionSigners,
                     UserIdToRole)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    ActionData)
+
     //@ proof
     //@ trusted
     // [trusted]

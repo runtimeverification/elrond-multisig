@@ -7,7 +7,7 @@ require "../../../0/equality/trusted-equality-transitivity.k"  //@ Bazel remove
 
 module LEMMA-LIST-TO-MAP-SET-LAST-TO-START
   imports INDUCTION-SYNTAX
-  imports K-EQUAL
+  imports K-EQUAL-SYNTAX
   imports TRUSTED-COMMUTE-SQUARE-BRACKET
   imports TRUSTED-SQUARE-BRACKET-SUBSTITUTION
 
