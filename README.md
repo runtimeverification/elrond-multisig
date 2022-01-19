@@ -1,6 +1,30 @@
 Elrond multisig proofs
 ======================
 
+This repository contains proofs for the Elrond Multisig protocol. Note that
+these proofs verify the protocol itself, and not the contract that is/will be
+deployed.
+
+This repository defines its own language, and defines the protocol as it was
+implemented by the Elrond Multisig code in May-June 2021.
+
+The proofs do not check what happens when reentrant calls are being made.
+In the Multisig implementation mentioned above, the contract state is not
+read nor written after external calls, so these were considered to be safe.
+
+The repository contains the following proofs:
+1. The contract maintains a certain invariant:
+   [protocol-correctness/proof/invariant/proof-*.k](https://github.com/runtimeverification/elrond-multisig/tree/master/protocol-correctness/proof/invariant)
+1. The contract cannot get stuck:
+   [protocol-correctness/proof/properties/proof-can-propose-and-execute.k](https://github.com/runtimeverification/elrond-multisig/blob/master/protocol-correctness/proof/properties/proof-can-propose-and-execute.k)
+1. If the quorum is at least 2, a malicious user cannot do anything without help
+   from someone else:
+   [protocol-correctness/proof/malicious-user/proofs/proof-cannot-perform.k](https://github.com/runtimeverification/elrond-multisig/blob/master/protocol-correctness/proof/malicious-user/proofs/proof-cannot-perform.k)
+1. (in progress) If a single user is malicious, the quorum is at least 2 and
+   the quorum can be met without the malicious user, then that user can be
+   deleted:
+   [protocol-correctness/proof/malicious-user/can-be-deleted/proof-can-be-deleted.k](https://github.com/runtimeverification/elrond-multisig/blob/master/protocol-correctness/proof/malicious-user/can-be-deleted/proof-can-be-deleted.k)
+
 Table of contents
 -----------------
 * Setup
@@ -35,66 +59,74 @@ Unless specified otherwise, all following commands should be run in the
 
 Repository outline
 ------------------
-kompile-tool
-        - Contains the tools that help Bazel compile and run the proofs
-protocol-correctness
-        - Contains the Multisig semantics and proofs
-  * pseudocode-*.k
-        - Semantics for the language used in the Multisig proofs
-+- lib
-        - Various pieces of the main language used in this repository
-  +- functions
-        - Function definitions, usually one function per file
-  +- language
-        - The building blocks of the language
-  +- proof
-    +- induction
-        - Helpers for running lemma proofs, usually by coinduction
-    +- unsorted
-        - random things used in proofs
-+- mex
-        - work in progress
-+- multisig/lib
-        - language extensions for the multisig contract
-  +- functions
-        - function definitions for the multisig contract
-  +- language
-        - language extensions for the multisig contract (e.g. specific data types)
-+- proof
-        - Proofs and semantics for the proofs. Also contains random
-          proof-related things.
-  +- fragments
-        - should contain fragments of proof execution that are extracted here
-          in order to make proofs faster.
-  +- functions
-        - proofs describing all methods defined in the Multisig contract.
-  +- instrumentation
-        - should be refactored
-  +- invariant
-        - proofs that executing any endpoint preserves the main multisig
-          invariant
-  +- lemmas
-        - lemmas used in the multisig proofs. They are organized in numbered
-          directories; proofs for lemmas in a given directory have access to
-          all lemmas in lower-numbered directories.
-  +- malicious-user
-        - semantics and proofs for the case when one user behaves maliciously
-    +- can-be-deleted
-        - proofs that, under certain conditions, a single malicious user
-          can be deleted (currently under construction)
-    +- proofs
-        - proofs that, under certain conditions, a single malicious user
-          cannot do anything without help from someone else.
-  +- map
-        - proofs related to the `K` language `Map`
-  +- named-lemmas
-        - symbols for lemmas that are used on-demand (the Haskell backend will
-          not apply them automatically)
-  +- properties
-        - proofs that, when the main invariant holds, the contract is not
-          "stuck", i.e. actions can be proposed and executed.
-+- tests
-        - (kind of obsolete) tests for the multisig contract.
+
+This is a work in progress, so some parts will not work, and there are things
+that are not organized properly.
+
+* `kompile-tool`
+        Contains the tools that help Bazel compile and run the proofs
+* `protocol-correctness`
+        Contains the Multisig semantics and proofs
+  * `pseudocode-*.k`
+        Semantics for the language used in the Multisig proofs
+  * `lib`:
+        Various pieces of the main language used in this repository
+    * `functions`:
+          Function definitions, usually one function per file
+    * `language`:
+          The building blocks of the language
+    * `proof`
+      * `induction`:
+          helpers for running lemma proofs, usually by coinduction
+      * `unsorted`:
+          random things used in proofs
+  * `mex`:
+        work in progress
+  * `multisig/lib`:
+        language extensions for the multisig contract
+    * `functions`:
+        function definitions for the multisig contract
+    * `language`:
+        language extensions for the multisig contract (e.g. specific data types)
+  * `proof`:
+        Proofs and semantics for the proofs. Also contains random
+        proof-related things. Most simplification rules in this directory should
+        be moved to the `lemmas` directory and should have proofs.
+    * `fragments`:
+        should contain fragments of proof execution that are extracted here
+        in order to make proofs faster.
+    * `functions`:
+        proofs describing all methods defined in the Multisig contract.
+    * `instrumentation`:
+        should be refactored
+    * `invariant`:
+        proofs that executing any endpoint preserves the main multisig
+        invariant
+    * `lemmas`:
+        lemmas used in the multisig proofs. They are organized in numbered
+        directories; proofs for lemmas in a given directory have access to
+        all lemmas in lower-numbered directories.
+
+        Unproven lemmas start in the `0` directory and move to higher numbered
+        ones when dependencies are discovered.
+
+        Currently this direcotry contains unproven lemmas.
+    * `malicious-user`:
+        semantics and proofs for the case when one user behaves maliciously
+      * `can-be-deleted`:
+        proofs that, under certain conditions, a single malicious user
+        can be deleted (currently under construction)
+      * `proofs`: proofs that, under certain conditions, a single malicious user
+        cannot do anything without help from someone else.
+    * `map`:
+        proofs related to the `K` language `Map`
+    * `named-lemmas`:
+        symbols for lemmas that are used on-demand (the Haskell backend will
+        not apply them automatically)
+    * `properties`:
+        proofs that, when the main invariant holds, the contract is not
+        "stuck", i.e. actions can be proposed and executed.
+  * `tests`: (kind of obsolete) tests for the multisig contract.
 
 Running the proofs
 ------------------
