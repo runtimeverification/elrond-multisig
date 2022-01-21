@@ -1,4 +1,5 @@
-// breadth = 1
+// timeout = long
+// breadth = 3
 //@ proof
 
 require "trusted-board-members-sign-for-interspersed.k"  //@ Bazel remove
@@ -33,12 +34,13 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               NumProposers:Usize,
               ( MaliciousId |-> MaliciousRole:UserRole
                 DeleteFirstSignerId |-> BoardMember
-                _UserIdToRole:Map
+                RemainingUserIdToRole:Map
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
               OldActionData:Map,
-              ( DeleteActionId |-> [DeleteFirstSignerId:Usize, _Signers]
+              ( DeleteActionId |->
+                    [DeleteFirstSignerId:Usize, _Signers] #as Signers:ExpressionList
                 _OldActionSigners
               ) #as OldActionSigners:Map,
               PerformedActions:List)
@@ -82,6 +84,11 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
         andBool mapsAreReverseHalf(UserIdToAddress, AddressToUserId)
 
         andBool DeleteFirstSignerId in_keys(UserIdToAddress)
+        andBool listToMapSet(Signers)[MaliciousId <- undef]
+                ==K listToMapSet([DeleteFirstSignerId, .])[MaliciousId <- undef]
+        andBool ( Signers ==K [DeleteFirstSignerId, .]
+                orBool Signers ==K [DeleteFirstSignerId, MaliciousId, .]
+                )
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)

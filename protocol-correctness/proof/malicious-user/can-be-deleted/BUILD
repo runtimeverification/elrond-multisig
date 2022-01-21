@@ -4,6 +4,7 @@ kompile(
   name = "can-be-deleted-execute",
   srcs = ["can-be-deleted-execute.k"],
   deps = [
+      "//protocol-correctness/lib/functions:concretize-expression-list-files",
       "//protocol-correctness/proof:main-proof-execute-files",
       "//protocol-correctness/proof/invariant:invariant-execute-files",
       "//protocol-correctness/proof/malicious-user:malicious-user-execute-files",
@@ -19,6 +20,7 @@ klibrary(
   name = "can-be-deleted-execute-files",
   srcs = ["can-be-deleted-execute.k"],
   deps = [
+      "//protocol-correctness/lib/functions:concretize-expression-list-files",
       "//protocol-correctness/proof:main-proof-execute-files",
       "//protocol-correctness/proof/invariant:invariant-execute-files",
       "//protocol-correctness/proof/malicious-user:malicious-user-execute-files",
@@ -37,7 +39,8 @@ kprove_test(
       ":trusted-board-members-sign-for-interspersed",
   ],
   semantics = "can-be-deleted-execute",
-  breadth = "1",
+  timeout = "long",
+  breadth = "3",
 )
 
 ktrusted(

@@ -1,3 +1,4 @@
+require "protocol-correctness/lib/functions/concretize-expression-list.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
 require "protocol-correctness/proof/malicious-user/malicious-user-execute.k"
@@ -66,6 +67,7 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
 endmodule
 
 module MALICIOUS-USER-DELETE-ACTIONS
+  imports CONCRETIZE-EXPRESSION-LIST-SYNTAX
   imports CONCRETIZE-VALUE-SYNTAX
   imports MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
@@ -88,8 +90,9 @@ module MALICIOUS-USER-DELETE-ACTIONS
                   ActionId:Usize,
                   MaliciousId:Usize,
                   Data:InterspersedActionsData)
-            => boardMembersSignForInterspersed(
-                  ActionId, MaliciousId, UserIdToRole, Data)
+            =>  concretizeExpressionList(Signers, 3)
+                ~> boardMembersSignForInterspersed(
+                      ActionId, MaliciousId, UserIdToRole, Data)
         ...</k>
         <user-roles> UserId |-> BoardMember UserIdToRole:Map </user-roles>
         <action-signers>
