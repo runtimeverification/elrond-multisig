@@ -112,6 +112,8 @@ module PROOF-CAN-BE-DELETED
             ActionData,
             ActionSigners,
             expand(expand(expanded)))
+        // TODO: Move to the invariant
+        andBool allKeysBecomeKeys(ActionSigners, ActionData)
     ensures true
         andBool ?NumBoardMembersFinal
                 ==K
