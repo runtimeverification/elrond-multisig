@@ -79,6 +79,7 @@ kprove_test(
       ":trusted-propose-delete-malicious",
       ":trusted-run-external-calls-from-user",
       "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/lemmas/0/list/list-to-map-set:trusted-list-to-map-set-concretize",
   ],
   semantics = "can-be-deleted-execute",
 )

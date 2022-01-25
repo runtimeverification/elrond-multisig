@@ -46,6 +46,17 @@ klibrary(
 )
 
 klibrary(
+  name = "list-to-map-set-concretize-files",
+  srcs = ["list-to-map-set-concretize.k"],
+  deps = [
+      "//protocol-correctness/lib/functions:concretize-expression-list-files",
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/proof/induction:syntax-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "named-lemmas-files",
   srcs = ["named-lemmas.k"],
   deps = [
@@ -56,6 +67,7 @@ klibrary(
       ":bool-to-int-sum-and-not-files",
       ":count-can-sign-list-to-map-set-square-bracket-3-files",
       ":list-contains-unsafe-list-to-map-set-square-bracket-files",
+      ":list-to-map-set-concretize-files",
       ":only-this-signer-diffs-transitive-files",
   ],
   visibility = ["//visibility:public"],

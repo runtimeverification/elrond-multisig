@@ -3,9 +3,11 @@ require "trusted-all-board-members-sign-for-interspersed.k"  //@ Bazel remove
 require "trusted-propose-delete-malicious.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
 require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../lemmas/0/list/list-to-map-set/trusted-list-to-map-set-concretize.k"  //@ Bazel remove
 
 module PROOF-CAN-BE-DELETED
   imports TRUSTED-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
+  imports TRUSTED-LIST-TO-MAP-SET-CONCRETIZE
   imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
   imports TRUSTED-PROPOSE-DELETE-MALICIOUS
   imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
@@ -35,6 +37,10 @@ module PROOF-CAN-BE-DELETED
 
               ~> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
                     usesExpanded, expand(expanded))
+              ~> callLemmaListToMapSetConcretize(
+                    add(ActionLastIndex, u(1)),
+                    UserId
+                )
 
               ~> allBoardMembersSignForInterspersed(
                     add(ActionLastIndex, u(1)),
@@ -91,7 +97,7 @@ module PROOF-CAN-BE-DELETED
               AddressToUserId:Map,
               ?NumBoardMembersFinal:Usize,
               ?NumProposersFinal:Usize,
-              UserIdToRole,
+              UserIdToRoleFinal,
               u(Quorum),
               u(?ActionLastIndex:Int),
               ?ActionData:Map,

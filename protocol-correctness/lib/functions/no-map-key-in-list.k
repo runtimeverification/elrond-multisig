@@ -11,7 +11,7 @@ endmodule
 module NO-MAP-KEY-IN-LIST
   imports NO-MAP-KEY-IN-LIST-SYNTAX
 
-  rule noMapKeyInList(M:Map, [.]) => true
+  rule noMapKeyInList(_:Map, [.]) => true
   rule noMapKeyInList(M:Map, [E:Expression, Es:ExpressionCSV])
     => notBool E in_keys(M) andBool noMapKeyInList(M, [Es])
 

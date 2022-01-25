@@ -4,8 +4,9 @@ require "protocol-correctness/lib/language/cast.k"
 require "protocol-correctness/multisig/lib/functions/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
-require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
+require "protocol-correctness/proof/named-lemmas/list-to-map-set-concretize.k"
 require "protocol-correctness/proof/named-lemmas/named-lemmas.k"
+require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
 require "protocol-correctness/proof/properties/properties-execute.k"
 
 module MALICIOUS-USER-EXECUTE-SYNTAX
@@ -172,6 +173,8 @@ module MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   syntax KItem ::= concretizeDeleteActionSigners(Usize)
   syntax KItem ::= "passSigners"
 
+  syntax KItem ::= callLemmaListToMapSetConcretize(deleteActionId:Usize, maliciousSignerId:Usize)
+
   syntax KItem ::=  callLemmaOnlyThisSignerDiffsTransitiveFreezer(
                         signerId:Usize,
                         oldActionSigners:Map
@@ -198,6 +201,7 @@ module MALICIOUS-USER-EXTERNAL-CALLS
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MAP
+  imports NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE-SYNTAX
   imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE-SYNTAX
   imports NAMED-LEMMAS-SYNTAX
   imports PSEUDOCODE-SYNTAX
@@ -527,7 +531,16 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         <action-signers>
           ActionSigners:Map
         </action-signers>
-  
+
+  rule  <k> callLemmaListToMapSetConcretize(DeleteActionId:Usize, MaliciousSignerId:Usize)
+            =>  lemmaListToMapSetConcretize([Signers], FirstSignerId, MaliciousSignerId)
+            ...
+        </k>
+        <action-signers>
+          DeleteActionId |-> [FirstSignerId:Usize, Signers:ExpressionCSV]
+          ActionSigners:Map
+        </action-signers>
+
   rule  <k>
             callLemmaOnlyThisSignerDiffsTransitive(
                     SignerId:Usize,
