@@ -1,9 +1,12 @@
 require "protocol-correctness/multisig/lib/functions/count-can-sign-function.k"
+require "protocol-correctness/lib/functions/first-or-default.k"
 require "protocol-correctness/lib/functions/list-contains.k"
+require "protocol-correctness/lib/functions/remove-first.k"
 require "protocol-correctness/lib/language/cast.k"
 require "protocol-correctness/multisig/lib/functions/only-this-signer-diffs.k"
 require "protocol-correctness/proof/main-proof-execute.k"
 require "protocol-correctness/proof/invariant/invariant-execute.k"
+require "protocol-correctness/proof/named-lemmas/count-can-sign-list-to-map-set-square-bracket-3.k"
 require "protocol-correctness/proof/named-lemmas/list-to-map-set-concretize.k"
 require "protocol-correctness/proof/named-lemmas/named-lemmas.k"
 require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
@@ -145,7 +148,10 @@ module MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports INT
   imports MAP
 
-  syntax MaliciousUserLemmas ::= "LemmasForCannotExecuteProof" | "LemmasForCanBeDeletedProof"
+  syntax MaliciousUserLemmas
+            ::= "LemmasForCannotExecuteProof"
+              | "LemmasForCanBeDeletedProof"
+              | "LemmasForNoUserRole"
 
   syntax KItem ::= runExternalCallsFromUser(
                       Address,
@@ -184,6 +190,12 @@ module MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
                         oldActionSigners:Map,
                         intermediateActionSigners:Map
                     )
+  syntax KItem ::=  callLemmaOnlyThisSignerDiffsTransitiveRemoveAction(
+                        actionId:Usize,
+                        signerId:Usize,
+                        oldActionSigners:Map,
+                        intermediateActionSigners:Map
+                    )
 
   syntax KItem ::= callLemmaNoMapKeyInListListToMapSet
                       ( actionId:Usize
@@ -196,8 +208,10 @@ endmodule
 module MALICIOUS-USER-EXTERNAL-CALLS
   imports CAST-SYNTAX
   imports CONCRETIZE-VALUE-SYNTAX
+  imports FIRST-OR-DEFAULT-SYNTAX
   imports INSTRUMENTATION-CONCRETIZE
   imports INSTRUMENTATION-PROOF
+  imports NAMED-LEMMA-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MAP
@@ -205,6 +219,7 @@ module MALICIOUS-USER-EXTERNAL-CALLS
   imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE-SYNTAX
   imports NAMED-LEMMAS-SYNTAX
   imports PSEUDOCODE-SYNTAX
+  imports REMOVE-FIRST-SYNTAX
 
   syntax KResult
 
@@ -533,12 +548,12 @@ module MALICIOUS-USER-EXTERNAL-CALLS
         </action-signers>
 
   rule  <k> callLemmaListToMapSetConcretize(DeleteActionId:Usize, MaliciousSignerId:Usize)
-            =>  lemmaListToMapSetConcretize([Signers], FirstSignerId, MaliciousSignerId)
+            =>  lemmaListToMapSetConcretize(Signers, FirstSignerId, MaliciousSignerId)
             ...
         </k>
         <action-signers>
           DeleteActionId |-> [FirstSignerId:Usize, Signers:ExpressionCSV]
-          ActionSigners:Map
+          _ActionSigners:Map
         </action-signers>
 
   rule  <k>
@@ -552,6 +567,29 @@ module MALICIOUS-USER-EXTERNAL-CALLS
                       OldActionSigners,
                       IntermediateActionSigners,
                       ActionSigners,
+                      UserIdToRole
+                  )
+          ...
+        </k>
+        <action-signers>
+          ActionSigners:Map
+        </action-signers>
+        <user-roles>
+          UserIdToRole:Map
+        </user-roles>
+
+  rule  <k>
+            callLemmaOnlyThisSignerDiffsTransitiveRemoveAction(
+                    ActionId:Usize,
+                    SignerId:Usize,
+                    OldActionSigners:Map,
+                    IntermediateActionSigners:Map
+                )
+          =>  lemmaOnlyThisSignerDiffsTransitive(
+                      SignerId,
+                      OldActionSigners,
+                      IntermediateActionSigners,
+                      ActionSigners[ActionId <- undef],
                       UserIdToRole
                   )
           ...

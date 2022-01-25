@@ -27,6 +27,10 @@ module PROOF-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET-3
       listToMapSet(L)[E1 <- 0][EDelete <- undef]
       ==K listToMapSet(L2)[E <- 0][E1 <- 0][EDelete <- undef]
     ensures
-      #listContainsUnsafe(L, E) ==K true
+      #listContainsUnsafe(L, E)
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
 
 endmodule

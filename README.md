@@ -35,13 +35,17 @@ Setup
 -----
 
 * Install [Bazel](https://docs.Bazel.build/versions/4.0.0/install.html)
+* Install rlwrap (for debugging)
+  ```
+  sudo apt install rlwrap
+  ```
 * Install [K](https://github.com/kframework/k/releases)
   Last tested version:
-  - K release: v5.1.51 (fairly old, not tested recently)
+  - K release: v5.2.103-1-gdbd4429473
 
   Or, if you want to build K manually:
-  - K commit: 76e8272b399f81855b5e501854a677c54364642d
-  - Haskell backend commit: f5bed2d571628241f68c37e22d0bacb15094b6ee
+  - K commit: dbd4429473b7ae6f34f654fee37d9b602c9a1ece
+  - Haskell backend commit: ed00c99446ef93d291ef651719ae5c634b7cf36e
 * Clone this repository
   ```
   git clone git@github.com:runtime-verification/elrond-multisig

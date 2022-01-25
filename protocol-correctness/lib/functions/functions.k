@@ -5,6 +5,7 @@ require "protocol-correctness/lib/functions/can-add-list-elements-at-index.k"
 require "protocol-correctness/lib/functions/can-add-value-for-list-elements-at-index.k"
 require "protocol-correctness/lib/functions/concretize-value.k"
 require "protocol-correctness/lib/functions/concretize-expression-list.k"
+require "protocol-correctness/lib/functions/first-or-default.k"
 require "protocol-correctness/lib/functions/forall-v-greater-or-equal-than-u-v-not-in-m.k"
 require "protocol-correctness/lib/functions/keys-map.k"
 require "protocol-correctness/lib/functions/last-functions.k"
@@ -36,6 +37,7 @@ require "protocol-correctness/lib/functions/map-values-are-below-limit.k"
 require "protocol-correctness/lib/functions/plistlen-functions.k"
 require "protocol-correctness/lib/functions/prepend.k"
 require "protocol-correctness/lib/functions/push-list.k"
+require "protocol-correctness/lib/functions/remove-first.k"
 require "protocol-correctness/lib/functions/remove-last.k"
 require "protocol-correctness/lib/functions/reverse-expression-csv.k"
 require "protocol-correctness/lib/functions/value-is-not-empty.k"
@@ -52,6 +54,7 @@ module FUNCTIONS
   imports CAN-ADD-VALUE-FOR-LIST-ELEMENTS-AT-INDEX
   imports CONCRETIZE-VALUE
   imports CONCRETIZE-EXPRESSION-LIST
+  imports FIRST-OR-DEFAULT
   imports FORALL-V-GREATER-OR-EQUAL-THAN-U-V-NOT-IN-M
   imports KEYS-MAP
   imports LAST-FUNCTIONS
@@ -83,6 +86,7 @@ module FUNCTIONS
   imports PLISTLEN-FUNCTIONS
   imports PREPEND
   imports PUSH-LIST
+  imports REMOVE-FIRST
   imports REMOVE-LAST
   imports REVERSE-EXPRESSION-CSV
   imports VALUE-IS-NOT-EMPTY

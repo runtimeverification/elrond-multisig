@@ -85,6 +85,16 @@ klibrary(
 )
 
 klibrary(
+  name = "first-or-default-files",
+  srcs = ["first-or-default.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "forall-v-greater-or-equal-than-u-v-not-in-m-files",
   srcs = ["forall-v-greater-or-equal-than-u-v-not-in-m.k"],
   deps = [
@@ -105,6 +115,7 @@ klibrary(
       ":can-add-value-for-list-elements-at-index-files",
       ":concretize-value-files",
       ":concretize-expression-list-files",
+      ":first-or-default-files",
       ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
       ":keys-map-files",
       ":last-functions-files",
@@ -136,6 +147,7 @@ klibrary(
       ":plistlen-functions-files",
       ":prepend-files",
       ":push-list-files",
+      ":remove-first-files",
       ":remove-last-files",
       ":reverse-expression-csv-files",
       ":value-is-not-empty-files",
@@ -424,6 +436,17 @@ klibrary(
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
       ":prepend-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "remove-first-files",
+  srcs = ["remove-first.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/language:reflection-files",
+      ":plistlen-functions-files",
   ],
   visibility = ["//visibility:public"],
 )

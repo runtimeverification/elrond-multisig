@@ -6,7 +6,7 @@ module NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE-SYNTAX
   imports BASE-TYPES-SYNTAX
 
   syntax KItem ::= lemmaListToMapSetConcretize(
-                      ExpressionList, toAdd:Expression, toDelete:Expression)
+                      ExpressionCSV, toAdd:Expression, toDelete:Expression)
 endmodule
 
 module NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE
@@ -16,7 +16,7 @@ module NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE
   imports INDUCTION-SYNTAX
 
   rule lemmaListToMapSetConcretize(
-            [Es:ExpressionCSV], ToAdd:Expression, ToRemove:Expression)
+            Es:ExpressionCSV, ToAdd:Expression, ToRemove:Expression)
       => induction(
           case "es" of
             | . -> .Induction .

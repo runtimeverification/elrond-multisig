@@ -54,15 +54,18 @@ kprove_test(
   srcs = ["proof-board-members-sign-for-interspersed.k"],
   trusted = [
       "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-sign-existing-signers-not-in-list",
       "//protocol-correctness/proof/functions:trusted-sign-existing-signers-not-in-list",
       "//protocol-correctness/proof/lemmas/0/bool:trusted-bool-to-int-sum-and-not",
       "//protocol-correctness/proof/lemmas/0/list/contains:trusted-list-contains-unsafe-list-to-map-set-square-bracket-3",
       "//protocol-correctness/proof/lemmas/0/list/count-can-sign:trusted-count-can-sign-list-to-map-set-square-bracket-3",
       "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-only-this-signer-diffs-transitive",
       ":trusted-run-external-calls-from-user",
   ],
   semantics = "can-be-deleted-execute",
-  breadth = "1",
+  timeout = "eternal",
+  breadth = "16",
 )
 
 ktrusted(
@@ -76,12 +79,18 @@ kprove_test(
   srcs = ["proof-can-be-deleted.k"],
   trusted = [
       ":trusted-all-board-members-sign-for-interspersed",
+      ":trusted-execute-delete-malicious",
       ":trusted-propose-delete-malicious",
       ":trusted-run-external-calls-from-user",
+      ":trusted-run-external-calls-from-user-None",
+      "//protocol-correctness/proof/malicious-user/proofs:trusted-cannot-perform",
       "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/lemmas/0/list/count-can-sign:trusted-count-can-sign-list-to-map-set-square-bracket-3",
       "//protocol-correctness/proof/lemmas/0/list/list-to-map-set:trusted-list-to-map-set-concretize",
   ],
   semantics = "can-be-deleted-execute",
+  timeout = "long",
+  breadth = "6",
 )
 
 ktrusted(
@@ -98,12 +107,33 @@ kprove_test(
       "//protocol-correctness/proof/map:trusted-map-semantics",
   ],
   semantics = "can-be-deleted-execute",
-  breadth = "4",
+  timeout = "moderate",
+  breadth = "3",
 )
 
 ktrusted(
   name = "trusted-concretize-board-member",
   srcs = ["proof-concretize-board-member.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-execute-delete-malicious",
+  srcs = ["proof-execute-delete-malicious.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-perform-action-endpoint-remove-user-BoardMember-marker",
+      "//protocol-correctness/proof/functions:trusted-perform-action-endpoint-remove-user-Proposer-marker",
+      "//protocol-correctness/proof/map:trusted-map-semantics",
+      ":trusted-concretize-board-member",
+  ],
+  semantics = "can-be-deleted-execute",
+  timeout = "long",
+  breadth = "6",
+)
+
+ktrusted(
+  name = "trusted-execute-delete-malicious",
+  srcs = ["proof-execute-delete-malicious.k"],
   visibility = ["//visibility:public"],
 )
 
@@ -123,6 +153,34 @@ kprove_test(
 ktrusted(
   name = "trusted-propose-delete-malicious",
   srcs = ["proof-propose-delete-malicious.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-from-user-None",
+  srcs = ["proof-run-external-call-from-user-None.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-unsign-no-action",
+      "//protocol-correctness/proof/functions:trusted-unsign-no-role-marker",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-discard-action-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-perform-action-endpoint-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-add-board-member-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-add-proposer-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-change-quorum-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-remove-user-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-sc-call-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-sc-deploy-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-propose-send-egld-caller-none",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-sign-caller-none",
+  ],
+  semantics = "can-be-deleted-execute",
+  timeout = "long",
+  breadth = "30",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-from-user-None",
+  srcs = ["proof-run-external-call-from-user-None.k"],
   visibility = ["//visibility:public"],
 )
 
@@ -155,6 +213,24 @@ ktrusted(
 )
 
 kprove_test(
+  name = "proof-run-external-calls-from-user-None",
+  srcs = ["proof-run-external-calls-from-user-None.k"],
+  trusted = [
+      ":trusted-run-external-call-from-user-None",
+      "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
+  ],
+  semantics = "can-be-deleted-execute",
+  timeout = "moderate",
+  breadth = "4",
+)
+
+ktrusted(
+  name = "trusted-run-external-calls-from-user-None",
+  srcs = ["proof-run-external-calls-from-user-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-run-external-calls-from-user",
   srcs = ["proof-run-external-calls-from-user.k"],
   trusted = [
@@ -164,7 +240,7 @@ kprove_test(
   ],
   semantics = "can-be-deleted-execute",
   timeout = "long",
-  breadth = "2",
+  breadth = "3",
 )
 
 ktrusted(

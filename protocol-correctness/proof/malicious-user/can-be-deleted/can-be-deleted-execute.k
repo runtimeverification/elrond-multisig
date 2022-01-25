@@ -27,10 +27,12 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
                       actionId:Usize,
                       maliciousId:Usize,
                       userRoles:Map,
+                      initialActionSigners:Map,
                       InterspersedActionsData)
   syntax KItem ::= boardMembersSignForInterspersedFreezer(
                       actionId:Usize,
                       maliciousId:Usize,
+                      initialActionSigners:Map,
                       InterspersedActionsData)
   syntax KItem ::= #boardMembersSignForInterspersed(
                       actionId:Usize,
@@ -38,6 +40,7 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
                       key:KItem,
                       value:KItem,
                       userRoles:Map,
+                      initialActionSigners:Map,
                       InterspersedActionsData)
   syntax KItem ::= pickOtherBoardMember(
                       /*userIdToRole:*/Map,
@@ -59,6 +62,18 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
                       userId:KItem,
                       maliciousId:Usize,
                       deleteActionId:Usize)
+  syntax KItem ::= callLemmaCountCanSignListToMapSetSquareBracket3AfterKItem
+                      ( actionId:Usize
+                      , maliciousId:Usize
+                      )
+  syntax KItem ::= callLemmaMapKeysAreBelowLimitIgnoresPropertyHandlingActionData
+                      ( existing:PropertyHandling
+                      , desired:PropertyHandling
+                      )
+  syntax KItem ::= callLemmaMapKeysAreBelowLimitIgnoresPropertyHandlingActionSigners
+                      ( existing:PropertyHandling
+                      , desired:PropertyHandling
+                      )
 
   syntax InterspersedActionsData
   syntax K ::= interpersedActionsForUnprocessedUserRoles(
@@ -80,7 +95,7 @@ module MALICIOUS-USER-DELETE-ACTIONS
                   MaliciousId:Usize,
                   Data:InterspersedActionsData)
             => boardMembersSignForInterspersed(
-                  ActionId, MaliciousId, UserIdToRole, Data)
+                  ActionId, MaliciousId, UserIdToRole, ActionSigners, Data)
         ...</k>
         <user-roles> UserIdToRole:Map </user-roles>
         <action-signers> ActionSigners:Map </action-signers>
@@ -92,19 +107,24 @@ module MALICIOUS-USER-DELETE-ACTIONS
                   Data:InterspersedActionsData)
             =>  concretizeExpressionList(Signers, 3)
                 ~> boardMembersSignForInterspersed(
-                      ActionId, MaliciousId, UserIdToRole, Data)
+                      ActionId, MaliciousId, UserIdToRole, ActionSigners, Data)
         ...</k>
         <user-roles> UserId |-> BoardMember UserIdToRole:Map </user-roles>
         <action-signers>
-          ActionId |-> ([UserId:Usize, _:ExpressionCSV] #as Signers:ExpressionList)
-          _ActionSigners:Map
+          ( ActionId |-> ([UserId:Usize, _:ExpressionCSV] #as Signers:ExpressionList)
+            _ActionSigners:Map
+          ) #as ActionSigners:Map
         </action-signers>
     requires
       listToMapSet(Signers)[MaliciousId <- undef]
           ==K listToMapSet([UserId, .])[MaliciousId <- undef]
 
   rule  <k>
-          boardMembersSignForInterspersed(ActionId:Usize, MaliciousId:Usize, .Map, _:InterspersedActionsData)
+          boardMembersSignForInterspersed
+              ( ActionId:Usize, MaliciousId:Usize
+              , .Map, _InitialActionSigners:Map
+              , _:InterspersedActionsData
+              )
           => makeConcreteValue(MaliciousId, rUserRole, UserIdToRole)
               ~> concretizeValue(#listContainsUnsafe(Signers, MaliciousId))        ...
         </k>
@@ -113,9 +133,14 @@ module MALICIOUS-USER-DELETE-ACTIONS
         </user-roles>
         <action-signers>ActionId |-> Signers:ExpressionList _ActionSigners:Map </action-signers>
     [label(boardMembersSignEmpty)]
-  rule  boardMembersSignForInterspersed(ActionId:Usize, MaliciousId, UserIdToRole:Map, Data:InterspersedActionsData)
+  rule  boardMembersSignForInterspersed
+                ( ActionId:Usize, MaliciousId:Usize
+                , UserIdToRole:Map, InitialActionSigners:Map
+                , Data:InterspersedActionsData
+                )
         =>  (  lazyMapSelectProperty(UserIdToRole, MEP.AlwaysTrue)
-            ~> boardMembersSignForInterspersedFreezer(ActionId, MaliciousId, Data)
+            ~> boardMembersSignForInterspersedFreezer
+                  (ActionId, MaliciousId, InitialActionSigners, Data)
             )
     requires true
         andBool notBool (UserIdToRole ==K .Map)
@@ -125,16 +150,16 @@ module MALICIOUS-USER-DELETE-ACTIONS
       <k>
         (  mapSelected(Key:KItem, Value:KItem, UserIdToRole:Map)
         ~> boardMembersSignForInterspersedFreezer(
-              ActionId:Usize, MaliciousId, Data:InterspersedActionsData)
+              ActionId:Usize, MaliciousId, ActionSigners:Map, Data:InterspersedActionsData)
         )
         => branchK(
               Key ==K MaliciousId,
               concretizeValue(Value)
                 ~> concretizeValue(#listContainsUnsafe(Signers, MaliciousId))
                 ~> boardMembersSignForInterspersed(
-                    ActionId, MaliciousId, UserIdToRole, Data),
+                    ActionId, MaliciousId, UserIdToRole, ActionSigners, Data),
               #boardMembersSignForInterspersed(
-                  ActionId, MaliciousId, Key, Value, UserIdToRole, Data)
+                  ActionId, MaliciousId, Key, Value, UserIdToRole, ActionSigners, Data)
           )
         ...
       </k>
@@ -148,6 +173,7 @@ module MALICIOUS-USER-DELETE-ACTIONS
             UserId:KItem,
             V:KItem,
             UnprocessedUserIdToRole:Map,
+            InitialActionSigners:Map,
             Data:InterspersedActionsData)
         =>  (   cast(V, rUserRole)
             ~>  removeValue
@@ -174,13 +200,24 @@ module MALICIOUS-USER-DELETE-ACTIONS
                         UserId, MaliciousId, [SignersLeft], ActionId)
                     ~> callLemmaCountCanSignListToMapSetSquareBracket3(
                         [SignersLeft], UserId, MaliciousId, ActionId)
+                    ~> callLemmaOnlyThisSignerDiffsTransitiveRemoveAction
+                          ( ActionId
+                          , MaliciousId
+                          , InitialActionSigners[ActionId <- undef]
+                          , ActionSigners
+                          )
                     ~> boardMembersSignForInterspersed(
-                          ActionId, MaliciousId, UnprocessedUserIdToRole, Data),
+                          ActionId, MaliciousId,
+                          UnprocessedUserIdToRole, InitialActionSigners,
+                          Data)
+                    ,
                   // TODO: THIS SHOULD NOT BE NEEDED.
                   cast(UserId, rUsize)
                     ~> removeValue
                     ~> boardMembersSignForInterspersed(
-                          ActionId, MaliciousId, UnprocessedUserIdToRole, Data)
+                          ActionId, MaliciousId,
+                          UnprocessedUserIdToRole, InitialActionSigners,
+                          Data)
                 )
             )
         ...
@@ -189,7 +226,7 @@ module MALICIOUS-USER-DELETE-ACTIONS
       <user-roles>UserIdToRoleCell:Map</user-roles>
       <action-signers>
           ActionId |-> [_:Expression, SignersLeft:ExpressionCSV] #as Signers:ExpressionList
-          _ActionSigners:Map
+          ActionSigners:Map
       </action-signers>
 
   rule pickOtherBoardMember(UserIdToRole:Map, AddressToUserId:Map, UserIdToAddress:Map, Address:Address)
@@ -312,6 +349,110 @@ module MALICIOUS-USER-DELETE-ACTIONS
           _ActionSigners:Map
         </action-signers>
 
+  // rule
+  //     <k>
+  //       callLemmaCountCanSignListToMapSetSquareBracket3
+  //           ( ActionId:Usize
+  //           , OldSigners:ExpressionList
+  //           , FirstSignerId:Usize
+  //           , MaliciousId:Usize
+  //           )
+  //       => lemmaCountCanSignListToMapSetSquareBracket3
+  //           ( OldSigners
+  //           , NewSigners
+  //           , UserIdToRole[FirstSignerId <- undef][MaliciousId <- undef]
+  //           , FirstSignerId
+  //           , FirstSignerId
+  //           , MaliciousId
+  //           )
+  //     </k>
+  //     <action-signers>
+  //       ActionId |-> NewSigners:ExpressionList _ActionSigners:Map
+  //     </action-signers>
+  //     <user-roles>
+  //       UserIdToRole:Map
+  //     </user-roles>
+
+  rule
+      <k>
+        ( callLemmaCountCanSignListToMapSetSquareBracket3AfterKItem
+            ( ActionId:Usize
+            , MaliciousId:Usize
+            )
+        ~> Next:KItem
+        ) 
+        =>
+        ( Next
+        ~> callLemmaCountCanSignListToMapSetSquareBracket3
+            ( removeFirstOrDefault
+                ( toExpressionListOrDefault
+                    ( ActionSigners[ActionId] orDefault void
+                    , [.]
+                    )
+                , [.]
+                )
+            , toUsizeOrDefault
+                ( firstOrDefault
+                  ( toExpressionListOrDefault
+                      ( ActionSigners[ActionId] orDefault void
+                      , [.]
+                      )
+                  , void
+                  )
+                , u(0)
+                )
+            , MaliciousId
+            , ActionId
+            )
+        )
+        ...
+      </k>
+      <action-signers>
+        ActionSigners:Map
+      </action-signers>
+
+  rule
+      <k>
+        callLemmaMapKeysAreBelowLimitIgnoresPropertyHandlingActionData
+            ( Existing:PropertyHandling
+            , Desired:PropertyHandling
+            )
+        => lemmaMapKeysAreBelowLimitIgnoresPropertyHandling
+            ( ActionLastIndex +Int 1
+            , ActionData
+            , Existing
+            , Desired
+            )
+        ...
+      </k>
+      <action-last-index>
+        u(ActionLastIndex:Int)
+      </action-last-index>
+      <action-data>
+        ActionData:Map
+      </action-data>
+
+  rule
+      <k>
+        callLemmaMapKeysAreBelowLimitIgnoresPropertyHandlingActionSigners
+            ( Existing:PropertyHandling
+            , Desired:PropertyHandling
+            )
+        => lemmaMapKeysAreBelowLimitIgnoresPropertyHandling
+            ( ActionLastIndex +Int 1
+            , ActionSigners
+            , Existing
+            , Desired
+            )
+        ...
+      </k>
+      <action-last-index>
+        u(ActionLastIndex:Int)
+      </action-last-index>
+      <action-signers>
+        ActionSigners:Map
+      </action-signers>
+
 endmodule
 
 module MALICIOUS-USER-DELETE-INVARIANT-SYNTAX
@@ -424,6 +565,7 @@ module CAN-BE-DELETED-EXECUTE
   imports CAN-BE-DELETED-INTERSPERSED-ACTIONS
   imports MALICIOUS-USER-DELETE-INVARIANT
   imports MALICIOUS-USER-DELETE-ACTIONS
+  imports MALICIOUS-USER-EXECUTE
   imports MALICIOUS-USER-EXTERNAL-CALLS
   imports MALICIOUS-USER-INVARIANT
   imports MAIN-PROOF-EXECUTE

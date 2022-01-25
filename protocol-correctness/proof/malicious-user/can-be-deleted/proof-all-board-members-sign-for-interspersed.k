@@ -38,7 +38,9 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
-              OldActionData:Map,
+              ( DeleteActionId |-> (RemoveUser(MaliciousAddress) #as DeleteAction)
+                  _OldActionData:Map
+              ) #as OldActionData:Map,
               ( DeleteActionId |->
                     [DeleteFirstSignerId:Usize, _Signers] #as Signers:ExpressionList
                 _OldActionSigners
@@ -57,7 +59,7 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               UserIdToRole,
               u(Quorum),
               u(?NewActionLastIndex),
-              ?NewActionData,
+              DeleteActionId |-> DeleteAction ?NewActionData:Map,
               DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
                 ?NewActionSigners:Map,
               PerformedActions:List):StateCell
@@ -74,6 +76,7 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
 
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool allKeysBecomeKeys(OldActionSigners, OldActionData)
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
@@ -92,21 +95,29 @@ module PROOF-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool actionDataInvariant(?NewActionData)
+        andBool actionDataInvariant(DeleteActionId |-> DeleteAction ?NewActionData)
         andBool actionSignersInvariant(
                     DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners
                 )
 
-        andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(
+                    ?NewActionLastIndex +Int 1,
+                    keysMap(DeleteActionId |-> DeleteAction ?NewActionData),
+                    usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
                     keysMap(DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners),
                     usesExpanded)
 
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
+                        ?NewActionSigners,
+                    DeleteActionId |-> DeleteAction ?NewActionData)
+
         andBool onlyThisSignerDiffs(
                     MaliciousId,
-                    OldActionSigners,
-                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    OldActionSigners[DeleteActionId <- undef],
+                    ?NewActionSigners,
                     UserIdToRole)
 
         andBool countCanSignFunction([DeleteFirstSignerId, ?NewSigners], UserIdToRole)

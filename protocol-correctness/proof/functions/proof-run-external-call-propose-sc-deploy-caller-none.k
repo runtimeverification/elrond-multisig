@@ -1,0 +1,62 @@
+// timeout = long
+// breadth = 8
+
+require "trusted-propose-action-error-no-role.k"  //@ Bazel remove
+
+//@ proof
+module PROOF-RUN-EXTERNAL-CALL-PROPOSE-SC-DEPLOY-CALLER-NONE
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-ROLE
+//@ trusted
+// module TRUSTED-RUN-EXTERNAL-CALL-PROPOSE-SC-DEPLOY-CALLER-NONE
+//@ end
+    imports INVARIANT
+
+  claim <T><TT>
+          <k>
+              runExternalCall
+                  (from CallerAddress run proposeSCDeploy(
+                        _Amount:BigUint,
+                        _Code:BoxedBytes,
+                        _Upgradeable:Bool,
+                        _Payable:Bool,
+                        _Readable:Bool,
+                        Args:ExpressionList);)
+              => .K
+              ...
+          </k>
+          invariantStateFull(
+              NumUsers:Usize,
+              UserIdToAddress:Map,
+              (CallerAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
+              NumBoardMembers:Usize,
+              NumProposers:Usize,
+              UserIdToRole:Map,
+              Quorum:Usize,
+              ActionLastIndex:Usize,
+              ActionData:Map,
+              ActionSigners:Map,
+              uninitialized,
+              .stack,
+              .Map,
+              PerformedActions:List
+              )
+        </TT></T>
+    requires true
+      andBool notBool u(0) in_keys(UserIdToRole)
+
+      andBool mapValuesAreKResult(AddressToUserId)
+      andBool mapValuesAreOfType(AddressToUserId, rUsize)
+      andBool mapValuesAreNotEmpty(AddressToUserId, rUsize)
+
+      andBool mapValuesAreOfType(UserIdToRole, rUserRole)
+      andBool mapValuesAreKResult(UserIdToRole)
+
+      andBool isKResult(Args)
+
+      andBool notBool UserId in_keys(UserIdToRole)
+    ensures true
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
+endmodule

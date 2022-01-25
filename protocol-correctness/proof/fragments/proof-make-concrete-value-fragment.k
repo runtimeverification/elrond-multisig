@@ -1,5 +1,4 @@
-// breadth = 1
-// Fails because of https://github.com/kframework/kore/issues/2828
+// breadth = 4
 //@ proof
 module PROOF-MAKE-CONCRETE-VALUE-FRAGMENT
 //@ trusted
@@ -15,8 +14,9 @@ module PROOF-MAKE-CONCRETE-VALUE-FRAGMENT
         .K
     requires true
       andBool isExpressionList(Value)
+      andBool isKResult(Value)
     ensures true
-      andBool Value ==K [?CSV:ExpressionCSV]
+      andBool Value ==K [?_CSV:ExpressionCSV]
     //@ proof
     //@ trusted
     // [trusted]
@@ -30,8 +30,9 @@ module PROOF-MAKE-CONCRETE-VALUE-FRAGMENT
         .K
     requires true
       andBool isUsize(Value)
+      andBool isKResult(Value)
     ensures true
-      andBool Value ==K u(?V)
+      andBool Value ==K u(?_V)
     //@ proof
     //@ trusted
     // [trusted]
@@ -45,8 +46,9 @@ module PROOF-MAKE-CONCRETE-VALUE-FRAGMENT
         .K
     requires true
       andBool isAddress(Value)
+      andBool isKResult(Value)
     ensures true
-      andBool Value ==K address(?V)
+      andBool Value ==K address(?_V)
     //@ proof
     //@ trusted
     // [trusted]
@@ -60,8 +62,41 @@ module PROOF-MAKE-CONCRETE-VALUE-FRAGMENT
         .K
     requires true
       andBool isUserRole(Value)
+      andBool isKResult(Value)
+      andBool Value ==K BoardMember
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
+
+  claim endSplitMap
+        ~> cast(Value:KItem, rUserRole)
+        ~> removeValue
+        ~> concretizeValue(Value)
+      =>
+        .K
+    requires true
+      andBool isUserRole(Value)
+      andBool isKResult(Value)
+      andBool Value ==K Proposer
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
+
+  claim endSplitMap
+        ~> cast(Value:KItem, rUserRole)
+        ~> removeValue
+        ~> concretizeValue(Value)
+      =>
+        .K
+    requires true
+      andBool isUserRole(Value)
+      andBool isKResult(Value)
+      andBool Value =/=K BoardMember
+      andBool Value =/=K Proposer
     ensures true
-      andBool {Value #Equals BoardMember} #Or {Value #Equals Proposer} #Or {Value #Equals None}
+      andBool Value ==K None
     //@ proof
     //@ trusted
     // [trusted]

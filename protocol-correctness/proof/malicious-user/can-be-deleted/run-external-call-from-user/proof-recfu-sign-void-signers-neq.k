@@ -1,7 +1,6 @@
 // timeout = long
-// breadth = 3
+// breadth = 5
 //@ proof
-// Not working because of https://github.com/kframework/kore/issues/2829
 
 require "../../../functions/trusted-sign-existing-signers-in-list.k"  //@ Bazel remove
 require "../../../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove

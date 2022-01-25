@@ -1,21 +1,33 @@
+// timeout = long
+// breadth = 6
 //@ proof
 require "trusted-all-board-members-sign-for-interspersed.k"  //@ Bazel remove
+require "trusted-execute-delete-malicious.k"  //@ Bazel remove
 require "trusted-propose-delete-malicious.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
+require "trusted-run-external-calls-from-user-None.k"  //@ Bazel remove
+require "../proofs/trusted-cannot-perform.k"  //@ Bazel remove
 require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../lemmas/0/list/count-can-sign/trusted-count-can-sign-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "../../lemmas/0/list/list-to-map-set/trusted-list-to-map-set-concretize.k"  //@ Bazel remove
 
 module PROOF-CAN-BE-DELETED
   imports TRUSTED-ALL-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
+  imports TRUSTED-CANNOT-PERFORM
+  imports TRUSTED-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3
+  imports TRUSTED-EXECUTE-DELETE-MALICIOUS
   imports TRUSTED-LIST-TO-MAP-SET-CONCRETIZE
   imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
   imports TRUSTED-PROPOSE-DELETE-MALICIOUS
   imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
+  imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER-NONE
+
 //@ trusted
 // module TRUSTED-CAN-BE-DELETED
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports CAN-BE-DELETED-INTERSPERSED-ACTIONS-SYNTAX
+  imports CAST-SYNTAX
   imports PSEUDOCODE-CONFIGURATION
   imports MALICIOUS-USER-EXTERNAL-CALLS-SYNTAX
   imports MALICIOUS-USER-EXTERNAL-CALLS-ADDITIONAL-SYNTAX
@@ -56,6 +68,11 @@ module PROOF-CAN-BE-DELETED
               ~> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandling(
                     usesExpanded, expand(expanded))
 
+              ~> callLemmaCountCanSignListToMapSetSquareBracket3AfterKItem(
+                    add(ActionLastIndex, u(1)),
+                    toUsizeOrDefault
+                        (AddressToUserId[MaliciousAddress] orDefault void, u(0)))
+
               ~> runExternalCallsFromUser(
                     MaliciousAddress:Address,
                     add(ActionLastIndex, u(1)),
@@ -67,12 +84,17 @@ module PROOF-CAN-BE-DELETED
               // ~> pickFirstSignerAvoiding(add(ActionLastIndex, u(1)), UserId)
               ~> withPickedUserCall(performActionEndpoint(add(ActionLastIndex, u(1))))
 
+              ~> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandlingActionData
+                  (usesExpanded, expand(expanded))
+              ~> callLemmaMapKeysAreBelowLimitIgnoresPropertyHandlingActionSigners
+                  (usesExpanded, expand(expanded))
+
               ~> runExternalCallsFromUser(
                     MaliciousAddress:Address,
                     add(ActionLastIndex, u(1)),
                     _Count3:Int,
                     .Map,
-                    LemmasForCanBeDeletedProof)
+                    LemmasForNoUserRole)
               ~> K:K
           </k>
           invariantState(
@@ -93,16 +115,17 @@ module PROOF-CAN-BE-DELETED
           <k> K </k>
           invariantState(
               NumUsers,
-              UserIdToAddress:Map,
-              AddressToUserId:Map,
+              UserIdToAddress,
+              AddressToUserId,
               ?NumBoardMembersFinal:Usize,
               ?NumProposersFinal:Usize,
               UserIdToRoleFinal,
               u(Quorum),
-              u(?ActionLastIndex:Int),
-              ?ActionData:Map,
-              ?ActionSigners:Map,
-              PerformedActions:List):StateCell
+              u(?_ActionLastIndex:Int),
+              ?_ActionData,
+              ?_ActionSigners,
+              ListItem(RemoveUser(MaliciousAddress)) PerformedActions
+          ):StateCell
         </TT></T>
     requires true
         andBool maliciousDeleteInvariant(
@@ -120,6 +143,9 @@ module PROOF-CAN-BE-DELETED
             expand(expand(expanded)))
         // TODO: Move to the invariant
         andBool allKeysBecomeKeys(ActionSigners, ActionData)
+        andBool Quorum
+                <=Int NumBoardMembers -Int boolToInt(Role ==K BoardMember)
+        andBool usizeToInt(ActionLastIndex) >=Int 0
     ensures true
         andBool ?NumBoardMembersFinal
                 ==K

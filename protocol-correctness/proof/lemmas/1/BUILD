@@ -24,6 +24,7 @@ klibrary(
   name = "lemmas-0-files",
   srcs = ["lemmas-0.k"],
   deps = [
+      "//protocol-correctness/proof/lemmas/0/bool:trusted-lemma-bool-to-int-andbool-le-bool-to-int-files",
       "//protocol-correctness/proof/lemmas/0/bool:trusted-lemma-bool-to-int-ge-0-files",
       "//protocol-correctness/proof/lemmas/0/bool:trusted-lemma-bool-to-int-le-1-files",
       "//protocol-correctness/proof/lemmas/0/int:trusted-lemma-add-one-if-not-negative-files",

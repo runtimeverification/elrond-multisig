@@ -338,7 +338,7 @@ kprove_test(
   ],
   semantics = "//protocol-correctness/proof/malicious-user/can-be-deleted:can-be-deleted-execute",
   timeout = "long",
-  breadth = "3",
+  breadth = "5",
 )
 
 ktrusted(

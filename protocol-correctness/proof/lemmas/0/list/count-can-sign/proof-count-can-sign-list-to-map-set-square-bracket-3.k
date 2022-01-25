@@ -32,5 +32,9 @@ module PROOF-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3
       andBool notBool EDelete in_keys(M)
     ensures
       countCanSignFunction(L1, M) ==K countCanSignFunction(L2, M)
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
 
 endmodule

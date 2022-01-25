@@ -1,5 +1,5 @@
 // timeout = long
-// breadth = 2
+// breadth = 3
 //@ proof
 
 require "trusted-run-external-call-from-user.k"  //@ Bazel remove
@@ -104,6 +104,12 @@ module PROOF-RUN-EXTERNAL-CALLS-FROM-USER
                           ?NewActionSigners
                     ),
                     usesExpanded)
+
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
+                        ?NewActionSigners,
+                    DeleteActionId |-> RemoveUser(MaliciousAddress)
+                        ?NewActionData)
 
         andBool onlyThisSignerDiffs(
                     MaliciousId,

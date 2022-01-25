@@ -15,14 +15,14 @@ module PROOF-LIST-TO-MAP-SET-CONCRETIZE
   imports NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE-SYNTAX
   imports NO-MAP-KEY-IN-LIST-SYNTAX
 
-  claim lemmaListToMapSetConcretize(L:ExpressionList, E1:Expression, E2:Expression) => .K
+  claim lemmaListToMapSetConcretize(L:ExpressionCSV, E1:Expression, E2:Expression) => .K
     requires true
-        andBool listToMapSet(L)[E1 <- 0][E2 <- undef]
+        andBool listToMapSet([L])[E1 <- 0][E2 <- undef]
             ==K E1 |-> 0
-        andBool notBool #listContainsUnsafe(L, E1)
-        andBool listElementsAreDistinctUnsafe(L)
+        andBool notBool #listContainsUnsafe([L], E1)
+        andBool listElementsAreDistinctUnsafe([L])
         andBool notBool E1 ==K E2
-    ensures L ==K [.] orBool L ==K [E2, .]
+    ensures [E1, L] ==K [E1, .] orBool [E1, L] ==K [E1, E2, .]
     //@ proof
     //@ trusted
     // [trusted]

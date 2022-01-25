@@ -32,7 +32,7 @@ KOMPILE_TOOL_DIR=kompile-tool
 REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
 
 KORE_EXEC="$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-exec) --breadth $BREADTH"
-KORE_REPL="$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-repl) --repl-script $REPL_SCRIPT"
+KORE_REPL="rlwrap $(realpath $KOMPILE_TOOL_DIR/k/bin/kore-repl) --repl-script $REPL_SCRIPT"
 
 DEBUG_COMMAND="time"
 BACKEND_COMMAND=$KORE_EXEC

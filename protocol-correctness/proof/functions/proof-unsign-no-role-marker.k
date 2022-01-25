@@ -1,7 +1,7 @@
 // timeout = moderate
 //@ proof
 module PROOF-UNSIGN-NO-ROLE-MARKER
-    imports INSTRUMENTATION-PROOF
+  imports INSTRUMENTATION-PROOF
   imports INVARIANT
 //@ trusted
 // module TRUSTED-UNSIGN-NO-ROLE-MARKER

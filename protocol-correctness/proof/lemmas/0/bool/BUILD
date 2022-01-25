@@ -31,6 +31,31 @@ ktrusted(
 )
 
 kprove_test(
+  name = "lemma-bool-to-int-andbool-le-bool-to-int",
+  srcs = ["lemma-bool-to-int-andbool-le-bool-to-int.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-bool-to-int-andbool-le-bool-to-int",
+  srcs = ["lemma-bool-to-int-andbool-le-bool-to-int.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-bool-to-int-andbool-le-bool-to-int-files",
+  srcs = [":trusted-lemma-bool-to-int-andbool-le-bool-to-int"],
+  deps = [
+      "//protocol-correctness/lib/functions:bool-to-int-files",
+      ":trusted-lemma-bool-to-int-andbool-le-bool-to-int",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-bool-to-int-ge-0",
   srcs = ["lemma-bool-to-int-ge-0.k"],
   trusted = [

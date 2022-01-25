@@ -2208,6 +2208,194 @@ ktrusted(
 )
 
 kprove_test(
+  name = "proof-run-external-call-discard-action-caller-none",
+  srcs = ["proof-run-external-call-discard-action-caller-none.k"],
+  trusted = [
+      ":trusted-discard-action-no-role-marker",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-discard-action-caller-none",
+  srcs = ["proof-run-external-call-discard-action-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-perform-action-endpoint-caller-none",
+  srcs = ["proof-run-external-call-perform-action-endpoint-caller-none.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-None",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-perform-action-endpoint-caller-none",
+  srcs = ["proof-run-external-call-perform-action-endpoint-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-add-board-member-caller-none",
+  srcs = ["proof-run-external-call-propose-add-board-member-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-add-board-member-caller-none",
+  srcs = ["proof-run-external-call-propose-add-board-member-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-add-proposer-caller-none",
+  srcs = ["proof-run-external-call-propose-add-proposer-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-add-proposer-caller-none",
+  srcs = ["proof-run-external-call-propose-add-proposer-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-change-quorum-caller-none",
+  srcs = ["proof-run-external-call-propose-change-quorum-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-change-quorum-caller-none",
+  srcs = ["proof-run-external-call-propose-change-quorum-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-remove-user-caller-none",
+  srcs = ["proof-run-external-call-propose-remove-user-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-remove-user-caller-none",
+  srcs = ["proof-run-external-call-propose-remove-user-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-sc-call-caller-none",
+  srcs = ["proof-run-external-call-propose-sc-call-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-sc-call-caller-none",
+  srcs = ["proof-run-external-call-propose-sc-call-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-sc-deploy-caller-none",
+  srcs = ["proof-run-external-call-propose-sc-deploy-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "long",
+  breadth = "8",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-sc-deploy-caller-none",
+  srcs = ["proof-run-external-call-propose-sc-deploy-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-propose-send-egld-caller-none",
+  srcs = ["proof-run-external-call-propose-send-egld-caller-none.k"],
+  trusted = [
+      ":trusted-propose-action-error-no-role",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "1",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-propose-send-egld-caller-none",
+  srcs = ["proof-run-external-call-propose-send-egld-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-sign-caller-none",
+  srcs = ["proof-run-external-call-sign-caller-none.k"],
+  trusted = [
+      ":trusted-sign-caller-none",
+      ":trusted-sign-empty-action",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-sign-caller-none",
+  srcs = ["proof-run-external-call-sign-caller-none.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "proof-run-external-call-sign-existing-signers-not-in-list",
+  srcs = ["proof-run-external-call-sign-existing-signers-not-in-list.k"],
+  trusted = [
+      ":trusted-sign-existing-signers-not-in-list",
+      "//protocol-correctness/proof/instrumentation/pushlist:trusted-push-list-not-empty",
+  ],
+  semantics = "//protocol-correctness/proof:main-proof-execute",
+  timeout = "moderate",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-run-external-call-sign-existing-signers-not-in-list",
+  srcs = ["proof-run-external-call-sign-existing-signers-not-in-list.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-sign-caller-none",
   srcs = ["proof-sign-caller-none.k"],
   trusted = [

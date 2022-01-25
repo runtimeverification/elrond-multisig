@@ -1,13 +1,15 @@
-// breadth = 1
+// timeout = eternal
+// breadth = 16
 //@ proof
-// Not working most likely because of https://github.com/kframework/kore/issues/2829
 
 require "../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel remove
+require "../../functions/trusted-run-external-call-sign-existing-signers-not-in-list.k"  //@ Bazel remove
 require "../../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove
 require "../../lemmas/0/bool/trusted-bool-to-int-sum-and-not.k"  //@ Bazel remove
 require "../../lemmas/0/list/contains/trusted-list-contains-unsafe-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "../../lemmas/0/list/count-can-sign/trusted-count-can-sign-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../lemmas/0/signers/trusted-only-this-signer-diffs-transitive.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
 
 module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
@@ -16,6 +18,8 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
   imports TRUSTED-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET-3
   imports TRUSTED-MAKE-CONCRETE-VALUE-FRAGMENT
   imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
+  imports TRUSTED-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE
+  imports TRUSTED-RUN-EXTERNAL-CALL-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
   imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
   imports TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 
@@ -34,6 +38,7 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
                   DeleteActionId:Usize,
                   MaliciousId:Usize,
                   UnprocessedUserRoles:Map,
+                  InitialActionSigners:Map,
                   runExternalCallsFromUserData(
                       MaliciousAddress:Address,
                       DeleteActionId:Usize,
@@ -54,7 +59,9 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
               u(OldActionLastIndex:Int),
-              OldActionData:Map,
+              ( DeleteActionId |-> (RemoveUser(MaliciousAddress) #as DeleteAction:Action)
+                  _OldActionData:Map
+              ) #as OldActionData:Map,
               ( DeleteActionId |-> 
                     ( [DeleteFirstSignerId:Usize, _Signers:ExpressionCSV]
                       #as Signers:ExpressionList
@@ -75,7 +82,7 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
               UserIdToRole,
               u(Quorum),
               u(?NewActionLastIndex),
-              ?NewActionData,
+              DeleteActionId |-> DeleteAction ?NewActionData:Map,
               DeleteActionId |-> [DeleteFirstSignerId:Usize, ?NewSigners:ExpressionCSV]
                 ?NewActionSigners:Map,
               PerformedActions:List):StateCell
@@ -84,6 +91,7 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, OldActionSigners[DeleteActionId <- undef], UserIdToRole)
         andBool actionDataInvariant(OldActionData)
         andBool valueIsNotEmpty(MaliciousRole, rUserRole)
+        andBool actionSignersInvariant(InitialActionSigners[DeleteActionId <- undef])
         andBool actionSignersInvariant(OldActionSigners)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToAddressInvariant(UserIdToAddress)
@@ -98,6 +106,7 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
 
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
+        andBool allKeysBecomeKeys(OldActionSigners, OldActionData)
 
         andBool notBool u(0) in_keys(UserIdToRole)
         andBool Quorum >Int 1
@@ -117,24 +126,37 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
                         andBool MaliciousId in_keys(UnprocessedUserRoles)
                     )
                 ==Int mapCount(UserIdToRole, MEP.IsValue(BoardMember))
+        andBool onlyThisSignerDiffs(
+                    MaliciousId,
+                    InitialActionSigners[DeleteActionId <- undef],
+                    OldActionSigners[DeleteActionId <- undef],
+                    UserIdToRole)
 
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
-        andBool actionDataInvariant(?NewActionData)
+        andBool actionDataInvariant(DeleteActionId |-> DeleteAction ?NewActionData)
         andBool actionSignersInvariant(
                     DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners
                 )
 
-        andBool mapKeysAreBelowLimitSafe(?NewActionLastIndex +Int 1, keysMap(?NewActionData), usesExpanded)
+        andBool mapKeysAreBelowLimitSafe(
+                    ?NewActionLastIndex +Int 1,
+                    keysMap(DeleteActionId |-> DeleteAction ?NewActionData),
+                    usesExpanded)
         andBool mapKeysAreBelowLimitSafe(
                     ?NewActionLastIndex +Int 1,
                     keysMap(DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners),
                     usesExpanded)
 
+        andBool allKeysBecomeKeys(
+                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners]
+                        ?NewActionSigners,
+                    DeleteActionId |-> DeleteAction ?NewActionData)
+
         andBool onlyThisSignerDiffs(
                     MaliciousId,
-                    OldActionSigners,
-                    DeleteActionId |-> [DeleteFirstSignerId, ?NewSigners] ?NewActionSigners,
+                    InitialActionSigners[DeleteActionId <- undef],
+                    ?NewActionSigners,
                     UserIdToRole)
 
         andBool countCanSignFunction([DeleteFirstSignerId, ?NewSigners], UserIdToRole)

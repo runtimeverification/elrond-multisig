@@ -1,3 +1,4 @@
+require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-andbool-le-bool-to-int.k"
 require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-ge-0.k"
 require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-le-1.k"
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"
@@ -26,6 +27,7 @@ module LEMMAS-0
   imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-A
   imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports TRUSTED-LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
+  imports TRUSTED-BOOL-TO-INT-ANDBOOL-LE-BOOL-TO-INT
   imports TRUSTED-LEMMA-BOOL-TO-INT-GE-0
   imports TRUSTED-LEMMA-BOOL-TO-INT-LE-1
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-2-ELEMENTS-SWAP-REMOVE-FIND-UNSAFE-NOT-IN-KEYS

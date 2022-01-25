@@ -1,6 +1,6 @@
-// breadth = 4
+// timeout = moderate
+// breadth = 3
 //@ proof
-// Not working because of https://github.com/kframework/kore/issues/2828
 require "../../functions/trusted-propose-action-BoardMember.k"  //@ Bazel remove
 require "../../map/trusted-map-semantics.k"  //@ Bazel remove
 
@@ -49,28 +49,13 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
         </TT></T>
     requires true
         andBool notBool (UserIdToAddress[UserId] orDefault void ==K MaliciousAddress)
-        // andBool mapCount(UserIdToRole, MEP.IsValue(BoardMember)) >Int #if MaliciousRole ==K BoardMember #then 1 #else 0 #fi
-        // andBool notBool MaliciousRole ==K None
         andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
         andBool userIdToAddressInvariant(UserIdToAddress)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool mapValuesBecomeKeys(UserIdToAddress, AddressToUserId)
-        // andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
-
-        // andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        // andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
-        // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
-        // andBool mapValuesAreKResult(UserIdToRole)
     ensures true
-        //andBool ?UserIdToAddress1 ==K UserIdToAddress
         andBool UserIdToAddress ==K (MaliciousId |-> MaliciousAddress UserId |-> ?UserAddress:Address ?UserIdToAddress:Map)
         andBool AddressToUserId ==K (MaliciousAddress |-> MaliciousId ?UserAddress |-> ?SomeId ?AddressToUserId:Map)
-            // #if MaliciousAddress ==K ?UserAddress
-            // #then
-            //   (?UserAddress |-> MaliciousId ?AddressToUserId:Map)
-            // #else
-            //   (MaliciousAddress |-> MaliciousId ?UserAddress |-> UserId ?AddressToUserId:Map)
-            // #fi
     //@ proof
     //@ trusted
     // [trusted]
@@ -113,27 +98,12 @@ module PROOF-CONCRETIZE-BOARD-MEMBER
         </TT></T>
     requires true
         andBool (UserIdToAddress[UserId] orDefault void ==K MaliciousAddress)
-        // andBool mapCount(UserIdToRole, MEP.IsValue(BoardMember)) >Int #if MaliciousRole ==K BoardMember #then 1 #else 0 #fi
-        // andBool notBool MaliciousRole ==K None
         andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
         andBool userIdToAddressInvariant(UserIdToAddress)
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool mapValuesBecomeKeys(UserIdToAddress, AddressToUserId)
-        // andBool mapsAreReverseHalf(AddressToUserId, UserIdToAddress)
-
-        // andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionData), expand(expanded))
-        // andBool mapKeysAreBelowLimitSafe(ActionLastIndex +Int 1, keysMap(ActionSigners), expand(expanded))
-        // andBool mapValuesAreOfType(UserIdToRole, rUserRole)
-        // andBool mapValuesAreKResult(UserIdToRole)
     ensures true
-        //andBool ?UserIdToAddress1 ==K UserIdToAddress
         andBool UserIdToAddress ==K (MaliciousId |-> MaliciousAddress UserId |-> MaliciousAddress:Address ?UserIdToAddress:Map)
-            // #if MaliciousAddress ==K ?UserAddress
-            // #then
-            //   (?UserAddress |-> MaliciousId ?AddressToUserId:Map)
-            // #else
-            //   (MaliciousAddress |-> MaliciousId ?UserAddress |-> UserId ?AddressToUserId:Map)
-            // #fi
     //@ proof
     //@ trusted
     // [trusted]
