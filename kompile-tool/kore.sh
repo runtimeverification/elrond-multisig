@@ -45,8 +45,12 @@ else
       DEBUG_COMMAND="$KDEBUG"
     fi
   else
-    echo "Unknown argument: '$1'"
-    exit 1
+    if [ "$1" == "--" ]; then
+      shift
+    else
+      echo "Unknown argument: '$1'"
+      exit 1
+    fi
   fi
 fi
 
@@ -62,4 +66,5 @@ $DEBUG_COMMAND \
     --prove $SPEC \
     --module $MODULE_NAME \
     --spec-module $SPEC_MODULE_NAME \
-    --output $OUTPUT
+    --output $OUTPUT \
+    "$@"

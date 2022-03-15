@@ -153,5 +153,12 @@ If your hardware is different enough from the one where test timeouts were
 configured, or if you run one of the tests not optimized yet, you may
 get timeouts. If that happens, you can run proofs one by one like this:
 ```
-(Bazel run //protocol-correctness/proof/functions:proof-count-can-sign && echo "PASSED") || echo "FAILED"
+(bazel run //protocol-correctness/proof/functions:proof-count-can-sign && echo "PASSED") || echo "FAILED"
 ```
+
+If you want to pass specific flags to the Haskell Backend, you can do it like
+this:
+```
+(bazel run //protocol-correctness/proof/functions:proof-count-can-sign -- -- --my-flag --my-other-flag
+```
+Note the duplicated `-- --` separating the target name from the flags.

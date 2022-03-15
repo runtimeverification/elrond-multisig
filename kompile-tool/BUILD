@@ -52,7 +52,7 @@ sh_binary(
 
 sh_library(
   name = "k_release",
-  data = glob(["k/**"]),
+  data = glob(["k/bin/*", "k/include/**", "k/lib/kframework/**"]),
   visibility = ["//visibility:public"],
 )
 
