@@ -4,7 +4,6 @@ require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-le-1
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative-not-zero.k"
 require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-second-element.k"
-require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-eq.k"
 require "protocol-correctness/proof/lemmas/0/list/no-map-key-in-list/trusted-lemma-no-map-key-in-list-push-list-not-in-map.k"
 require "protocol-correctness/proof/lemmas/0/list/plistlen/trusted-lemma-plistlen.k"
 require "protocol-correctness/proof/lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-a.k"
@@ -35,7 +34,6 @@ module LEMMAS-0
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-PUSH-LIST
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-PUSH-LIST-2
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SECOND-ELEMENT
-  imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-EQ
   imports TRUSTED-LEMMA-NO-MAP-KEY-IN-LIST-PUSH-LIST-NOT-IN-MAP
   imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-SQUARE-BRACKET-ORDEFAULT-NOT-IN-KEYS

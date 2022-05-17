@@ -25,6 +25,7 @@ klibrary(
   srcs = ["lemmas-1.k"],
   deps = [
       "//protocol-correctness/proof/lemmas/1:lemmas-0-files",
+      "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-false-list-find-files",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-last-to-start-files",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-list-find-files",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-lemma-list-contains-pound-last-files",

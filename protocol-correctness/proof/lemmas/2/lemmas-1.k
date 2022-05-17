@@ -1,4 +1,5 @@
 require "protocol-correctness/proof/lemmas/1/lemmas-0.k"
+require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-false-list-find.k"
 require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"
 require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-list-find.k"
 require "protocol-correctness/proof/lemmas/1/list/contains/trusted-lemma-list-contains-pound-last.k"
@@ -29,6 +30,7 @@ module LEMMAS-1
   imports TRUSTED-LEMMA-LAST-USIZE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
+  imports TRUSTED-LEMMA-LIST-CONTAINS-FALSE-LIST-FIND
   imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
   imports TRUSTED-LEMMA-LIST-CONTAINS-LIST-FIND
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LAST

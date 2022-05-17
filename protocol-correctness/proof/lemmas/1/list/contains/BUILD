@@ -1,6 +1,32 @@
 load("//:proof.bzl", "klibrary", "kprove_test", "ktrusted")
 
 kprove_test(
+  name = "lemma-list-contains-false-list-find",
+  srcs = ["lemma-list-contains-false-list-find.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/1:lemmas-1-execute",
+  breadth = "3",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-false-list-find",
+  srcs = ["lemma-list-contains-false-list-find.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-false-list-find-files",
+  srcs = [":trusted-lemma-list-contains-false-list-find"],
+  deps = [
+      "//protocol-correctness/lib/functions:list-contains-files",
+      "//protocol-correctness/lib/functions:list-find-files",
+      ":trusted-lemma-list-contains-false-list-find",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "lemma-list-contains-last-to-start",
   srcs = ["lemma-list-contains-last-to-start.k"],
   trusted = [
