@@ -1,4 +1,4 @@
-// breadth = 1
+// breadth = 2
 //@ proof
 module PROOF-BOOL-TO-INT-SUM-AND-NOT
 //@ trusted
