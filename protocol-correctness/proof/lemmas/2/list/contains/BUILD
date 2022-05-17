@@ -137,3 +137,29 @@ klibrary(
   visibility = ["//visibility:public"],
 )
 
+kprove_test(
+  name = "lemma-list-contains-unsafe-element-last-to-start",
+  srcs = ["lemma-list-contains-unsafe-element-last-to-start.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/2:lemmas-2-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-unsafe-element-last-to-start",
+  srcs = ["lemma-list-contains-unsafe-element-last-to-start.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-unsafe-element-last-to-start-files",
+  srcs = [":trusted-lemma-list-contains-unsafe-element-last-to-start"],
+  deps = [
+      "//protocol-correctness/lib/functions:last-to-start-files",
+      "//protocol-correctness/lib/functions:list-contains-files",
+      ":trusted-lemma-list-contains-unsafe-element-last-to-start",
+  ],
+  visibility = ["//visibility:public"],
+)
+

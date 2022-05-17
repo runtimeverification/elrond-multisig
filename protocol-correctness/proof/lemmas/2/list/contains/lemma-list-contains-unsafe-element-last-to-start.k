@@ -1,4 +1,4 @@
-// breadth = 1
+// breadth = 2
 //@ proof
 module LEMMA-LIST-CONTAINS-UNSAFE-ELEMENT-LAST-TO-START
   imports INDUCTION-SYNTAX
@@ -15,8 +15,13 @@ module LEMMA-LIST-CONTAINS-UNSAFE-ELEMENT-LAST-TO-START
 
   lemma
       induction(
-        .Induction,
-        ("e", E:Expression) <> ("e1", E1:Expression) <> ("e2", E2:Expression) <> ("es", Es:ExpressionCSV)
+        case "e" == "e1" of
+          | False -> .Induction .
+          | True -> .Induction .
+        esac,
+        ("e", E:Expression)
+            <> ("e1", E1:Expression)
+            <> ("es", Es:ExpressionCSV)
       ) => .K
     proves
       #listContainsUnsafe
@@ -30,3 +35,15 @@ module LEMMA-LIST-CONTAINS-UNSAFE-ELEMENT-LAST-TO-START
     endlemma
 
 endmodule
+
+/*
+#listContainsUnsafe([E1, lastToStart(Es)], E)
+    ==K #listContainsUnsafe([E1, Es], E)
+case E1 ==K E
+  true:
+    true ==K true
+  false:
+    #listContainsUnsafe([lastToStart(Es)], E)
+        ==K #listContainsUnsafe([Es], E)
+    LEMMA-LIST-CONTAINS-LAST-TO-START
+*/
