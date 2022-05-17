@@ -26,7 +26,7 @@ module LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-EQ
     proves
       #listContainsUnsafe
         ( [ #listSwapRemove(Es:ExpressionCSV, #listFindUnsafe([Es], E)) ]
-        , E:Expression 
+        , E:Expression
         )
       => false
     requires

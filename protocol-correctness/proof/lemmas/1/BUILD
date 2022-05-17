@@ -29,7 +29,6 @@ klibrary(
       "//protocol-correctness/proof/lemmas/0/bool:trusted-lemma-bool-to-int-le-1-files",
       "//protocol-correctness/proof/lemmas/0/int:trusted-lemma-add-one-if-not-negative-files",
       "//protocol-correctness/proof/lemmas/0/int:trusted-lemma-add-one-if-not-negative-not-zero-files",
-      "//protocol-correctness/proof/lemmas/0/list/contains:trusted-lemma-list-contains-unsafe-2-element-swap-remove-find-unsafe-neq-files",
       "//protocol-correctness/proof/lemmas/0/list/contains:trusted-lemma-list-contains-unsafe-second-element-files",
       "//protocol-correctness/proof/lemmas/0/list/contains:trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-eq-files",
       "//protocol-correctness/proof/lemmas/0/list/no-map-key-in-list:trusted-lemma-no-map-key-in-list-push-list-not-in-map-files",

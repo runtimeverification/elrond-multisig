@@ -30,6 +30,7 @@ klibrary(
       "//protocol-correctness/proof/lemmas/2/list/contains:trusted-lemma-list-contains-pound-remove-last-pound-last-files",
       "//protocol-correctness/proof/lemmas/2/list/contains:trusted-lemma-list-contains-remove-last-files",
       "//protocol-correctness/proof/lemmas/2/list/contains:trusted-lemma-list-contains-unsafe-element-last-to-start-files",
+      "//protocol-correctness/proof/lemmas/2/list/contains:trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq-files",
       "//protocol-correctness/proof/lemmas/2/list/list-to-map-set:trusted-lemma-list-to-map-set-last-to-start-files",
       "//protocol-correctness/proof/lemmas/2/list/plistlen:trusted-lemma-plistlen-last-to-start-files",
       "//protocol-correctness/proof/lemmas/2:lemmas-1-files",

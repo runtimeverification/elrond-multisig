@@ -22,7 +22,9 @@ module REFLECTION-SYNTAX
                               | "False"
                               | "=" KItem
                               | "<" KItem
+                              | "<=" KItem
                               | ">" KItem
+                              | ">=" KItem
   syntax KItem ::= matchPatternOrElse(ReflectionPattern, KItem, matched:K, notMatched:K)
 
   syntax ReflectionDataItem ::= "(" ReflectionId "," KItem ")"

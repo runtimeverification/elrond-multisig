@@ -111,10 +111,24 @@ module REFLECTION-MATCH-INT
   rule matchPatternOrElse(< _:Int, _:Int, _Matched:K, NotMatched:K) => NotMatched
     [label(notLessPattern), priority(200)]
 
+  rule matchPatternOrElse(<= I1:Int, I2:Int, Matched:K, _NotMatched:K)
+      => .ReflectionData ~> Matched
+    requires I2 <=Int I1
+    [label(lessEqPattern)]
+  rule matchPatternOrElse(<= _:Int, _:Int, _Matched:K, NotMatched:K) => NotMatched
+    [label(notLessEqPattern), priority(200)]
+
   rule matchPatternOrElse(> I1:Int, I2:Int, Matched:K, _NotMatched:K)
       => .ReflectionData ~> Matched
     requires I2 >Int I1
     [label(greaterPattern)]
   rule matchPatternOrElse(> _:Int, _:Int, _Matched:K, NotMatched:K) => NotMatched
     [label(notGreaterPattern), priority(200)]
+
+  rule matchPatternOrElse(>= I1:Int, I2:Int, Matched:K, _NotMatched:K)
+      => .ReflectionData ~> Matched
+    requires I2 >=Int I1
+    [label(greaterEqPattern)]
+  rule matchPatternOrElse(>= _:Int, _:Int, _Matched:K, NotMatched:K) => NotMatched
+    [label(notGreaterEqPattern), priority(200)]
 endmodule

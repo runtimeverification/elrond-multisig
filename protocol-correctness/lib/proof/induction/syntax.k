@@ -35,6 +35,7 @@ module INDUCTION-SYNTAX
                                 | InductionExpression "==" InductionExpression
                                 | InductionExpression "key" InductionExpression
                                 | InductionExpression "-" InductionExpression
+                                | InductionExpression "<" InductionExpression
                                 | SymbolReflection "(" InductionExpressionList ")"
                                 | SymbolReflection "(" ")"
 

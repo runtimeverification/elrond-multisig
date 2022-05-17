@@ -163,3 +163,30 @@ klibrary(
   visibility = ["//visibility:public"],
 )
 
+kprove_test(
+  name = "lemma-list-contains-unsafe-swap-remove-find-unsafe-neq",
+  srcs = ["lemma-list-contains-unsafe-swap-remove-find-unsafe-neq.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/2:lemmas-2-execute",
+  breadth = "5",
+)
+
+ktrusted(
+  name = "trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq",
+  srcs = ["lemma-list-contains-unsafe-swap-remove-find-unsafe-neq.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq-files",
+  srcs = [":trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq"],
+  deps = [
+      "//protocol-correctness/lib/functions:list-contains-files",
+      "//protocol-correctness/lib/functions:list-find-files",
+      "//protocol-correctness/lib/functions:list-swap-remove-files",
+      ":trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq",
+  ],
+  visibility = ["//visibility:public"],
+)
+
