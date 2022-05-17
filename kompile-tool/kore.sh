@@ -40,9 +40,14 @@ if [ $# -eq 0 ]; then
   BACKEND_COMMAND=$KORE_EXEC
 else
   if [ "$1" == "--debug" ]; then
+    shift
     BACKEND_COMMAND=$KORE_REPL
     if [ -n "$KDEBUG" ]; then
       DEBUG_COMMAND="$KDEBUG"
+    fi
+    if [ $# -ne 0 ]; then
+      echo "Unknown argument: '$1'"
+      exit 1
     fi
   else
     if [ "$1" == "--" ]; then
@@ -53,6 +58,8 @@ else
     fi
   fi
 fi
+
+echo "$@"
 
 PATH=$(realpath $KOMPILE_TOOL_DIR/k/bin):$PATH
 
