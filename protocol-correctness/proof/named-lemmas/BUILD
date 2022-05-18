@@ -37,10 +37,29 @@ klibrary(
 )
 
 klibrary(
+  name = "in-keys-square-bracket-square-bracket-files",
+  srcs = ["in-keys-square-bracket-square-bracket.k"],
+  deps = [
+      "//protocol-correctness/lib/proof/induction:syntax-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "in-keys-substitution-files",
+  srcs = ["in-keys-substitution.k"],
+  deps = [
+      "//protocol-correctness/lib/language:reflection-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "list-contains-unsafe-list-to-map-set-square-bracket-files",
   srcs = ["list-contains-unsafe-list-to-map-set-square-bracket.k"],
   deps = [
       "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/proof/induction:syntax-files",
   ],
   visibility = ["//visibility:public"],
 )
@@ -66,6 +85,8 @@ klibrary(
       "//protocol-correctness/proof:instrumentation-proof-files",
       ":bool-to-int-sum-and-not-files",
       ":count-can-sign-list-to-map-set-square-bracket-3-files",
+      ":in-keys-square-bracket-square-bracket-files",
+      ":in-keys-substitution-files",
       ":list-contains-unsafe-list-to-map-set-square-bracket-files",
       ":list-to-map-set-concretize-files",
       ":only-this-signer-diffs-transitive-files",

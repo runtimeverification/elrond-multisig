@@ -1,17 +1,28 @@
 load("//:proof.bzl", "klibrary", "kprove_test", "ktrusted")
 
 kprove_test(
-  name = "proof-list-contains-unsafe-list-to-map-set-square-bracket-3",
-  srcs = ["proof-list-contains-unsafe-list-to-map-set-square-bracket-3.k"],
+  name = "lemma-list-contains-unsafe-list-to-map-set",
+  srcs = ["lemma-list-contains-unsafe-list-to-map-set.k"],
   trusted = [
   ],
   semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
-  breadth = "2",
+  breadth = "3",
 )
 
 ktrusted(
-  name = "trusted-list-contains-unsafe-list-to-map-set-square-bracket-3",
-  srcs = ["proof-list-contains-unsafe-list-to-map-set-square-bracket-3.k"],
+  name = "trusted-lemma-list-contains-unsafe-list-to-map-set",
+  srcs = ["lemma-list-contains-unsafe-list-to-map-set.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-list-contains-unsafe-list-to-map-set-files",
+  srcs = [":trusted-lemma-list-contains-unsafe-list-to-map-set"],
+  deps = [
+      "//protocol-correctness/lib/functions:list-contains-files",
+      "//protocol-correctness/lib/functions:list-to-map-set-files",
+      ":trusted-lemma-list-contains-unsafe-list-to-map-set",
+  ],
   visibility = ["//visibility:public"],
 )
 

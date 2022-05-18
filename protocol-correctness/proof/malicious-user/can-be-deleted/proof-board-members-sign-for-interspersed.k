@@ -6,10 +6,10 @@ require "../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel remo
 require "../../functions/trusted-run-external-call-sign-existing-signers-not-in-list.k"  //@ Bazel remove
 require "../../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove
 require "../../lemmas/0/bool/trusted-bool-to-int-sum-and-not.k"  //@ Bazel remove
-require "../../lemmas/0/list/contains/trusted-list-contains-unsafe-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "../../lemmas/0/list/count-can-sign/trusted-count-can-sign-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
 require "../../lemmas/0/signers/trusted-only-this-signer-diffs-transitive.k"  //@ Bazel remove
+require "../../lemmas/1/list/contains/trusted-list-contains-unsafe-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
 
 module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED

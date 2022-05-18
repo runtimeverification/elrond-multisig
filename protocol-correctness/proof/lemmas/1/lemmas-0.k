@@ -3,11 +3,13 @@ require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-ge-0
 require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-le-1.k"
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative-not-zero.k"
+require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-list-to-map-set.k"
 require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-second-element.k"
 require "protocol-correctness/proof/lemmas/0/list/no-map-key-in-list/trusted-lemma-no-map-key-in-list-push-list-not-in-map.k"
 require "protocol-correctness/proof/lemmas/0/list/plistlen/trusted-lemma-plistlen.k"
 require "protocol-correctness/proof/lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-a.k"
 require "protocol-correctness/proof/lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"
+require "protocol-correctness/proof/lemmas/0/map/square-bracket/trusted-lemma-in-keys-square-bracket-undef.k"
 require "protocol-correctness/proof/lemmas/0/map/square-bracket/trusted-lemma-square-bracket-ordefault-not-in-keys.k"
 require "protocol-correctness/proof/lemmas/0/map/square-bracket/trusted-lemma-square-bracket-square-bracket-undef.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-at-most-this-signer-0-count-can-sign-function.k"
@@ -33,6 +35,8 @@ module LEMMAS-0
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-SECOND-ELEMENT
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-PUSH-LIST
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-PUSH-LIST-2
+  imports TRUSTED-LEMMA-IN-KEYS-SQUARE-BRACKET-UNDEF
+  imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SECOND-ELEMENT
   imports TRUSTED-LEMMA-NO-MAP-KEY-IN-LIST-PUSH-LIST-NOT-IN-MAP
   imports TRUSTED-LEMMA-PLISTLEN

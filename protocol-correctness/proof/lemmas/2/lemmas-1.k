@@ -22,7 +22,6 @@ require "protocol-correctness/proof/lemmas/1/list/list-to-map-set/trusted-lemma-
 require "protocol-correctness/proof/lemmas/1/list/plistlen/trusted-lemma-plistlen-remove-last.k"
 require "protocol-correctness/proof/lemmas/1/map/square-bracket/trusted-lemma-square-bracket-sq-b-sq-b-undef.k"
 
-
 module LEMMAS-1
   imports LEMMAS-0
 

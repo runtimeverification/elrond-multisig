@@ -16,6 +16,21 @@ ktrusted(
 )
 
 kprove_test(
+  name = "proof-in-keys-square-bracket-square-bracket",
+  srcs = ["proof-in-keys-square-bracket-square-bracket.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-in-keys-square-bracket-square-bracket",
+  srcs = ["proof-in-keys-square-bracket-square-bracket.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-square-bracket-substitution",
   srcs = ["proof-square-bracket-substitution.k"],
   trusted = [
@@ -27,6 +42,30 @@ kprove_test(
 ktrusted(
   name = "trusted-square-bracket-substitution",
   srcs = ["proof-square-bracket-substitution.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
+  name = "lemma-in-keys-square-bracket-undef",
+  srcs = ["lemma-in-keys-square-bracket-undef.k"],
+  trusted = [
+  ],
+  semantics = "//protocol-correctness/proof/lemmas/0:lemmas-0-execute",
+  breadth = "2",
+)
+
+ktrusted(
+  name = "trusted-lemma-in-keys-square-bracket-undef",
+  srcs = ["lemma-in-keys-square-bracket-undef.k"],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "trusted-lemma-in-keys-square-bracket-undef-files",
+  srcs = [":trusted-lemma-in-keys-square-bracket-undef"],
+  deps = [
+      ":trusted-lemma-in-keys-square-bracket-undef",
+  ],
   visibility = ["//visibility:public"],
 )
 

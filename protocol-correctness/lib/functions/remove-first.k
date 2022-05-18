@@ -13,7 +13,7 @@ module REMOVE-FIRST
   imports REMOVE-FIRST-REFLECTION
 
   rule  removeFirstOrDefault([.], E:ExpressionList) => E
-  rule  removeFirstOrDefault([E:Expression, Es:ExpressionCSV], _:ExpressionList)
+  rule  removeFirstOrDefault([_:Expression, Es:ExpressionCSV], _:ExpressionList)
         => [Es]
 endmodule
 
