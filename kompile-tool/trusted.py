@@ -1,3 +1,8 @@
+"""
+Library for preprocessing claims to be used for proofs or as trusted or as simplification rules.
+
+See make-trusted.py for details.
+"""
 
 def intersperse(element, list):
   had_elements = False
