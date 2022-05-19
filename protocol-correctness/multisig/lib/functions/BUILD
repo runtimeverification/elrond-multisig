@@ -22,6 +22,7 @@ klibrary(
   name = "can-sign-function-files",
   srcs = ["can-sign-function.k"],
   deps = [
+      "//protocol-correctness/lib/language:reflection-files",
       "//protocol-correctness/multisig/lib/language:syntax-files",
   ],
   visibility = ["//visibility:public"],

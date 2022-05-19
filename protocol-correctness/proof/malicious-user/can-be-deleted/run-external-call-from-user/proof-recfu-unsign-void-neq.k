@@ -89,6 +89,8 @@ module PROOF-RECFU-UNSIGN-VOID-NEQ
 
         andBool allKeysBecomeKeys(OldActionSigners, ActionData)
 
+        andBool userIdToRoleInvariant(UserIdToRole)
+
     ensures true
         andBool noQuorumCanBeFilledBy(Quorum, MaliciousId, ?NewActionSigners, UserIdToRole)
         andBool actionSignersInvariant(

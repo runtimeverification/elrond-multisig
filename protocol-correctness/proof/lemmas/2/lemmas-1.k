@@ -21,10 +21,12 @@ require "protocol-correctness/proof/lemmas/1/list/last/trusted-lemma-remove-last
 require "protocol-correctness/proof/lemmas/1/list/list-to-map-set/trusted-lemma-list-to-map-set-pound-remove-last-pound-last.k"
 require "protocol-correctness/proof/lemmas/1/list/plistlen/trusted-lemma-plistlen-remove-last.k"
 require "protocol-correctness/proof/lemmas/1/map/square-bracket/trusted-lemma-square-bracket-sq-b-sq-b-undef.k"
+require "protocol-correctness/proof/lemmas/1/signers/trusted-lemma-at-most-this-signer-0-count-can-sign-function.k"
 
 module LEMMAS-1
   imports LEMMAS-0
 
+  imports TRUSTED-LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
   imports TRUSTED-LEMMA-LAST
   imports TRUSTED-LEMMA-LAST-USIZE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT

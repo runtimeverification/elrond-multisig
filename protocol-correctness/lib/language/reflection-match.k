@@ -39,6 +39,7 @@ endmodule
 
 module REFLECTION-MATCH-MAP
   imports BOOL
+  imports K-EQUAL-SYNTAX
   imports MAP
   imports MAP-UTILS-SYNTAX
   imports REFLECTION-SYNTAX
@@ -58,7 +59,7 @@ module REFLECTION-MATCH-MAP
           Matched:K,
           _NotMatched:K)
       =>  concretizeMapKey(K, M)
-          ~> (A, M) <> (B, K) <> (C, M[K])
+          ~> (A, M[K <- undef]) <> (B, K) <> (C, M[K])
           ~> Matched
       requires K in_keys(M)
     [label(keyInMapPattern)]
@@ -70,6 +71,34 @@ module REFLECTION-MATCH-MAP
       => NotMatched
       requires notBool K in_keys(M)
     [label(notKeyInMapPattern), priority(200)]
+
+
+  rule matchPatternOrElse(., .Map, Matched:K, _NotMatched:K)
+      => .ReflectionData ~> Matched
+    [label(emptyMapPattern)]
+  rule matchPatternOrElse(., M:Map, _Matched:K, NotMatched:K)
+      => NotMatched
+      requires M =/=K .Map
+    [label(notEmptyMapPattern), priority(200)]
+
+  rule matchPatternOrElse(
+          A:ReflectionId[B:ReflectionId <- C:ReflectionId],
+          K:KItem|-> V:KItem M:Map,
+          Matched:K,
+          _NotMatched:K)
+      =>  (A, M) <> (B, K) <> (C, V)
+          ~> Matched
+    [label(nonEmptyMapPattern)]
+  rule matchPatternOrElse(
+          _:ReflectionId[_:ReflectionId <- _:ReflectionId],
+          M:Map,
+          _Matched:K,
+          NotMatched:K)
+      => NotMatched
+      // TODO: Remove this when the Haskell backend will handle map case
+      // matching properly.
+      ensures M ==K .Map
+    [label(notNonEmptyMapPattern), priority(200)]
 endmodule
 
 module REFLECTION-MATCH-BOOL

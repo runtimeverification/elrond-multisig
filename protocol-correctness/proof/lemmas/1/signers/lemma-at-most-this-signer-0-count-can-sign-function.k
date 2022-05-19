@@ -35,7 +35,15 @@ module LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
             ~~> case "u" == "e1" of
               | True ->
                 case "m" key "e1" of
-                  | . -> reinduction("u", "es1", "m") .
+                  | . ->
+                    // TODO: This forces term re-evaluation. Should not be needed.
+                    // Haskell backend bug, most likely
+                    // https://github.com/kframework/kore/issues/2829
+                    case "es1" of
+                      | . -> .Induction .
+                      | "e2" <> "es2" -> .Induction .
+                    esac
+                    ~~> reinduction("u", "es1", "m") .
                   | "m1"["k1" <- "v1"] ->
                     call $castNoValue("v1", $rUserRole())
                     ~~> call $concretizeValue("v1")
@@ -45,7 +53,16 @@ module LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
                 .
               | False ->
                 case "m" key "e1" of
-                  | . -> reinduction("u", "es1", "m") .
+                  | . ->
+                    // TODO: This forces term re-evaluation. Should not be needed.
+                    // Haskell backend bug, most likely
+                    // https://github.com/kframework/kore/issues/2829
+                    case "es1" of
+                      | . -> .Induction .
+                      | "e2" <> "es2" -> .Induction .
+                    esac
+                    ~~> reinduction("u", "es1", "m")
+                    .
                   | "m1"["k1" <- "v1"] ->
                     call $castNoValue("v1", $rUserRole())
                     ~~> call $concretizeValue("v1")

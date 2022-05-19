@@ -29,6 +29,9 @@ module MALICIOUS-USER-DELETE-ACTIONS-SYNTAX
                       userRoles:Map,
                       initialActionSigners:Map,
                       InterspersedActionsData)
+  syntax KItem ::= boardMembersSignForInterspersedDummyEmpty(
+                      actionId:Usize,
+                      initialActionSigners:Map)
   syntax KItem ::= boardMembersSignForInterspersedFreezer(
                       actionId:Usize,
                       maliciousId:Usize,
@@ -122,10 +125,11 @@ module MALICIOUS-USER-DELETE-ACTIONS
   rule  <k>
           boardMembersSignForInterspersed
               ( ActionId:Usize, MaliciousId:Usize
-              , .Map, _InitialActionSigners:Map
+              , .Map, InitialActionSigners:Map
               , _:InterspersedActionsData
               )
-          => makeConcreteValue(MaliciousId, rUserRole, UserIdToRole)
+          => boardMembersSignForInterspersedDummyEmpty(ActionId, InitialActionSigners)
+              ~> makeConcreteValue(MaliciousId, rUserRole, UserIdToRole)
               ~> concretizeValue(#listContainsUnsafe(Signers, MaliciousId))        ...
         </k>
         <user-roles>
@@ -145,6 +149,8 @@ module MALICIOUS-USER-DELETE-ACTIONS
     requires true
         andBool notBool (UserIdToRole ==K .Map)
     [label(boardMembersSignIteration)]
+
+  rule boardMembersSignForInterspersedDummyEmpty(_, _) => .K
 
   rule
       <k>

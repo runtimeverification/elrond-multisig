@@ -12,9 +12,7 @@ require "../../lemmas/1/list/contains/trusted-list-contains-unsafe-list-to-map-s
 require "../../lemmas/2/signers/trusted-count-can-sign-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
 
-require "trusted-board-members-sign-for-interspersed-empty.k"  //@ Bazel remove
-
-module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
+module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED-EMPTY
   imports TRUSTED-BOOL-TO-INT-SUM-AND-NOT
   imports TRUSTED-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3
   imports TRUSTED-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET-3
@@ -25,10 +23,8 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
   imports TRUSTED-RUN-EXTERNAL-CALLS-FROM-USER
   imports TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 
-  imports TRUSTED-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED-EMPTY
-
 //@ trusted
-// module TRUSTED-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
+// module TRUSTED-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED-EMPTY
 //@ end
   imports CAN-BE-DELETED-EXECUTE-SYNTAX
   imports CAN-BE-DELETED-INTERSPERSED-ACTIONS-SYNTAX
@@ -38,18 +34,11 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
 
   claim
     <T><TT>
-          <k> boardMembersSignForInterspersed(
-                  DeleteActionId:Usize,
-                  MaliciousId:Usize,
-                  UnprocessedUserRoles:Map,
-                  InitialActionSigners:Map,
-                  runExternalCallsFromUserData(
-                      MaliciousAddress:Address,
-                      DeleteActionId:Usize,
-                      _Steps:Int,
-                      LemmasForCanBeDeletedProof)
-              )
+          <k>    boardMembersSignForInterspersedDummyEmpty(DeleteActionId, InitialActionSigners)
+              ~> makeConcreteValue(MaliciousId:Usize, rUserRole, UserIdToRole)
+              ~> concretizeValue(#listContainsUnsafe(Signers:ExpressionList, MaliciousId))
               ~> K:K
+              
           </k>
           invariantState(
               NumUsers:Usize,
@@ -100,13 +89,8 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
         andBool addressToUserIdInvariant(AddressToUserId)
         andBool userIdToAddressInvariant(UserIdToAddress)
         andBool userIdToRoleInvariant(UserIdToRole)
-        andBool userIdToRoleInvariant(UnprocessedUserRoles)
         andBool mapsAreReverse(UserIdToAddress, AddressToUserId)
         andBool allKeysBecomeKeys(UserIdToRole, UserIdToAddress)
-        andBool noMapKeyInList(UnprocessedUserRoles[MaliciousId <- undef], Signers)
-
-        andBool mapIncluded(UnprocessedUserRoles, UserIdToRole)
-        andBool notBool DeleteFirstSignerId in_keys(UnprocessedUserRoles)
 
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionData), expand(expanded))
         andBool mapKeysAreBelowLimitSafe(OldActionLastIndex +Int 1, keysMap(OldActionSigners), expand(expanded))
@@ -116,18 +100,10 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-INTERSPERSED
         andBool Quorum >Int 1
         andBool DeleteFirstSignerId =/=K MaliciousId
 
-        andBool UnprocessedUserRoles[MaliciousId] orDefault MaliciousRole ==K MaliciousRole
         andBool countCanSignFunction(Signers, UserIdToRole)
-                    +Int mapCount(UnprocessedUserRoles, MEP.IsValue(BoardMember))
                     +Int boolToInt(
                         MaliciousRole ==K BoardMember
                         andBool notBool #listContainsSafe(Signers, MaliciousId)
-                        andBool notBool MaliciousId in_keys(UnprocessedUserRoles)
-                    )
-                    -Int boolToInt(
-                        MaliciousRole ==K BoardMember
-                        andBool #listContainsSafe(Signers, MaliciousId)
-                        andBool MaliciousId in_keys(UnprocessedUserRoles)
                     )
                 ==Int mapCount(UserIdToRole, MEP.IsValue(BoardMember))
         andBool onlyThisSignerDiffs(

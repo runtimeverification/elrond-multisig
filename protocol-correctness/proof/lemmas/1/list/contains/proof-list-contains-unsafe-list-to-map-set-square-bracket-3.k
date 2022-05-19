@@ -1,4 +1,5 @@
 // breadth = 1
+// timeout = moderate
 //@ proof
 
 require "../../../0/map/square-bracket/trusted-in-keys-square-bracket-square-bracket.k"  //@ Bazel remove
@@ -11,11 +12,12 @@ module PROOF-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET-3
 //@ trusted
 // require "protocol-correctness/lib/functions/list-contains.k"
 // require "protocol-correctness/lib/functions/list-to-map-set.k"
+// require "protocol-correctness/lib/language/base-types.k"
 // require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-list-to-map-set-square-bracket.k"
 // module TRUSTED-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET-3
 //@ end
 
-  imports BOOL
+  imports BASE-TYPES-SYNTAX
   imports K-EQUAL-SYNTAX
   imports LIST-CONTAINS-ADDITIONAL-SYNTAX
   imports LIST-TO-MAP-SET-SYNTAX

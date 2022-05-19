@@ -50,6 +50,31 @@ ktrusted(
 )
 
 kprove_test(
+  name = "proof-board-members-sign-for-interspersed-empty",
+  srcs = ["proof-board-members-sign-for-interspersed-empty.k"],
+  trusted = [
+      "//protocol-correctness/proof/fragments:trusted-make-concrete-value-fragment",
+      "//protocol-correctness/proof/functions:trusted-run-external-call-sign-existing-signers-not-in-list",
+      "//protocol-correctness/proof/functions:trusted-sign-existing-signers-not-in-list",
+      "//protocol-correctness/proof/lemmas/0/bool:trusted-bool-to-int-sum-and-not",
+      "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-only-this-signer-diffs-transitive",
+      "//protocol-correctness/proof/lemmas/1/list/contains:trusted-list-contains-unsafe-list-to-map-set-square-bracket-3",
+      "//protocol-correctness/proof/lemmas/2/signers:trusted-count-can-sign-list-to-map-set-square-bracket-3",
+      ":trusted-run-external-calls-from-user",
+  ],
+  semantics = "can-be-deleted-execute",
+  timeout = "eternal",
+  breadth = "16",
+)
+
+ktrusted(
+  name = "trusted-board-members-sign-for-interspersed-empty",
+  srcs = ["proof-board-members-sign-for-interspersed-empty.k"],
+  visibility = ["//visibility:public"],
+)
+
+kprove_test(
   name = "proof-board-members-sign-for-interspersed",
   srcs = ["proof-board-members-sign-for-interspersed.k"],
   trusted = [
@@ -57,11 +82,12 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-run-external-call-sign-existing-signers-not-in-list",
       "//protocol-correctness/proof/functions:trusted-sign-existing-signers-not-in-list",
       "//protocol-correctness/proof/lemmas/0/bool:trusted-bool-to-int-sum-and-not",
-      "//protocol-correctness/proof/lemmas/0/list/count-can-sign:trusted-count-can-sign-list-to-map-set-square-bracket-3",
       "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
       "//protocol-correctness/proof/lemmas/0/signers:trusted-only-this-signer-diffs-transitive",
       "//protocol-correctness/proof/lemmas/1/list/contains:trusted-list-contains-unsafe-list-to-map-set-square-bracket-3",
+      "//protocol-correctness/proof/lemmas/2/signers:trusted-count-can-sign-list-to-map-set-square-bracket-3",
       ":trusted-run-external-calls-from-user",
+      ":trusted-board-members-sign-for-interspersed-empty",
   ],
   semantics = "can-be-deleted-execute",
   timeout = "eternal",
@@ -85,8 +111,8 @@ kprove_test(
       ":trusted-run-external-calls-from-user-None",
       "//protocol-correctness/proof/malicious-user/proofs:trusted-cannot-perform",
       "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
-      "//protocol-correctness/proof/lemmas/0/list/count-can-sign:trusted-count-can-sign-list-to-map-set-square-bracket-3",
       "//protocol-correctness/proof/lemmas/0/list/list-to-map-set:trusted-list-to-map-set-concretize",
+      "//protocol-correctness/proof/lemmas/2/signers:trusted-count-can-sign-list-to-map-set-square-bracket-3",
   ],
   semantics = "can-be-deleted-execute",
   timeout = "long",

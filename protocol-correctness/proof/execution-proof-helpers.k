@@ -242,12 +242,6 @@ module EXECUTION-PROOF-HELPERS
     requires notBool canSignFunction(Role)
     [simplification]
 
-  rule countCanSignFunction(Es, UserId |-> Role:UserRole M:Map)
-      =>  boolToInt(canSignFunction(Role) andBool #listContainsSafe(Es, UserId))
-          +Int countCanSignFunction(Es, M)
-    ensures notBool UserId in_keys(M)
-    [simplification]
-
   rule 0 <=Int countCanSignFunction(_, _) => true  [simplification, smt-lemma]
 
   rule isKResult(toExpressionListOrDefault(K:KItem, L:ExpressionList)) => true

@@ -5,9 +5,12 @@ require "protocol-correctness/proof/instrumentation-proof.k"
 
 require "protocol-correctness/proof/named-lemmas/bool-to-int-sum-and-not.k"
 require "protocol-correctness/proof/named-lemmas/count-can-sign-list-to-map-set-square-bracket-3.k"
+require "protocol-correctness/proof/named-lemmas/count-can-sign-map.k"
 require "protocol-correctness/proof/named-lemmas/in-keys-square-bracket-square-bracket.k"
 require "protocol-correctness/proof/named-lemmas/in-keys-substitution.k"
+require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-change-list-3.k"
 require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-list-to-map-set-square-bracket.k"
+require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-to-in-keys.k"
 require "protocol-correctness/proof/named-lemmas/list-to-map-set-concretize.k"
 require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
 
@@ -41,9 +44,12 @@ module NAMED-LEMMAS
 
   imports NAMED-LEMMA-BOOL-TO-INT-SUM-AND-NOT
   imports NAMED-LEMMA-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3
+  imports NAMED-LEMMA-COUNT-CAN-SIGN-MAP
   imports NAMED-LEMMA-IN-KEYS-SQUARE-BRACKET-SQUARE-BRACKET
   imports NAMED-LEMMA-IN-KEYS-SUBSTITUTION
+  imports NAMED-LEMMA-LIST-CONTAINS-UNSAFE-CHANGE-LIST-3
   imports NAMED-LEMMA-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET
+  imports NAMED-LEMMA-LIST-CONTAINS-UNSAFE-TO-IN-KEYS
   imports NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE
   imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE
 

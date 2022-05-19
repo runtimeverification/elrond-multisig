@@ -21,6 +21,10 @@ module COUNT-CAN-SIGN-FUNCTION
       => 1 +Int countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
     requires canSignFunction(Role)
     ensures notBool UserId in_keys(M)
+  rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], UserId |-> Role:UserRole M:Map)
+      => countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
+    requires notBool canSignFunction(Role)
+    ensures notBool UserId in_keys(M)
   rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], M:Map)
       => countCanSignFunction([Es], M)
     requires notBool UserId in_keys(M)

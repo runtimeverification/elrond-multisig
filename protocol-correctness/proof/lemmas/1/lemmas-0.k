@@ -3,6 +3,7 @@ require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-ge-0
 require "protocol-correctness/proof/lemmas/0/bool/trusted-lemma-bool-to-int-le-1.k"
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"
 require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-negative-not-zero.k"
+require "protocol-correctness/proof/lemmas/0/invariant/trusted-lemma-map-keys-are-kresult-user-id-to-role.k"
 require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-list-to-map-set.k"
 require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-second-element.k"
 require "protocol-correctness/proof/lemmas/0/list/no-map-key-in-list/trusted-lemma-no-map-key-in-list-push-list-not-in-map.k"
@@ -12,11 +13,12 @@ require "protocol-correctness/proof/lemmas/0/map/all-keys-become-keys/trusted-le
 require "protocol-correctness/proof/lemmas/0/map/square-bracket/trusted-lemma-in-keys-square-bracket-undef.k"
 require "protocol-correctness/proof/lemmas/0/map/square-bracket/trusted-lemma-square-bracket-ordefault-not-in-keys.k"
 require "protocol-correctness/proof/lemmas/0/map/square-bracket/trusted-lemma-square-bracket-square-bracket-undef.k"
-require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-at-most-this-signer-0-count-can-sign-function.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-function-element-last-to-start.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-function-last-remove-last.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-function-second-element.k"
+require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-map.k"
+require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-map-empty.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-push-list.k"
 require "protocol-correctness/proof/lemmas/0/signers/trusted-lemma-count-can-sign-push-list-2.k"
 
@@ -25,7 +27,6 @@ module LEMMAS-0
   imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE-NOT-ZERO
   imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-A
   imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
-  imports TRUSTED-LEMMA-AT-MOST-THIS-SIGNER-0-COUNT-CAN-SIGN-FUNCTION
   imports TRUSTED-BOOL-TO-INT-ANDBOOL-LE-BOOL-TO-INT
   imports TRUSTED-LEMMA-BOOL-TO-INT-GE-0
   imports TRUSTED-LEMMA-BOOL-TO-INT-LE-1
@@ -33,11 +34,14 @@ module LEMMAS-0
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-ELEMENT-LAST-TO-START
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-LAST-REMOVE-LAST
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-SECOND-ELEMENT
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP-EMPTY
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-PUSH-LIST
   imports TRUSTED-LEMMA-COUNT-CAN-SIGN-PUSH-LIST-2
   imports TRUSTED-LEMMA-IN-KEYS-SQUARE-BRACKET-UNDEF
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SECOND-ELEMENT
+  imports TRUSTED-LEMMA-MAP-KEYS-ARE-KRESULT-USER-ID-TO-ROLE
   imports TRUSTED-LEMMA-NO-MAP-KEY-IN-LIST-PUSH-LIST-NOT-IN-MAP
   imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-SQUARE-BRACKET-ORDEFAULT-NOT-IN-KEYS

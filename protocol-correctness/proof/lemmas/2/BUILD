@@ -47,6 +47,7 @@ klibrary(
       "//protocol-correctness/proof/lemmas/1/list/list-to-map-set:trusted-lemma-list-to-map-set-pound-remove-last-pound-last-files",
       "//protocol-correctness/proof/lemmas/1/list/plistlen:trusted-lemma-plistlen-remove-last-files",
       "//protocol-correctness/proof/lemmas/1/map/square-bracket:trusted-lemma-square-bracket-sq-b-sq-b-undef-files",
+      "//protocol-correctness/proof/lemmas/1/signers:trusted-lemma-at-most-this-signer-0-count-can-sign-function-files",
   ],
   visibility = ["//visibility:public"],
 )

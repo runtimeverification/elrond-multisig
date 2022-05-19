@@ -120,6 +120,25 @@ module INDUCTION-EXPRESSION
               _Data:InductionData
           )
 
+  // -
+  context evaluate(
+              {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression
+                  + _:InductionExpression,
+              Data:InductionData
+          )
+      [result(InductionEvaluatedExpression)]
+  context evaluate(
+              E:InductionExpression
+                  + {HOLE:InductionExpression => evaluate(HOLE, Data)}:>InductionExpression,
+              Data:InductionData
+          )
+      requires isInductionEvaluatedExpression(E)
+      [result(InductionEvaluatedExpression)]
+  rule evaluate(
+              (evaluated(E1:Int) + evaluated(E2:Int)) => evaluated(E1 +Int E2),
+              _Data:InductionData
+          )
+
   // application
   context evaluate(
               _SymbolId:SymbolReflection(
