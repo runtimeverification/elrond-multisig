@@ -13,7 +13,7 @@ module EXPRESSION
   imports RUNNING-SYNTAX
 
   rule add(u(A:Int), u(B:Int)) => u(A +Int B)
-  rule sub(u(A:Int), u(B:Int)) => u(A -Int B)
+  rule sub(u(A:Int), u(B:Int)) => u(A -Int B) requires A >=Int B
 
   context evaluate(! {HOLE:Expression => evaluate(HOLE)}:>Expression)
   rule evaluate((! false) => true)
