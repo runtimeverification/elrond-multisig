@@ -66,55 +66,6 @@ module MAP-UTILS-BASIC
     ensures M ==K (Key |-> Value Remainder)
     [simplification(50)]
 
-  /*
-  syntax Map ::= splitMap(key:KItem, Map, Map)  [function, functional]
-
-  rule  splitMap(K:KItem, (K |-> _:KItem _:Map) #as _:Map, M:Map)
-        => M
-    [simplification]
-  rule  splitMap(K:KItem, (K1 |-> _ M:Map) #as _:Map, N:Map)
-        => splitMap(K, M, N)
-    requires notBool (K ==K K1)
-    [simplification]
-  rule  splitMap(K:KItem, M:Map, N:Map)
-        =>
-            (
-              (#Ceil(M #And (K |-> ?_:KItem ?_:Map)))
-              #And
-              {true #Equals (K in_keys(M))}
-              #And N
-            )
-            #Or (N #And {true #Equals (notBool (K in_keys(M)))})
-
-  rule  splitMap(K:KItem, M:Map, N:Map)
-        =>(
-            (
-              (#Ceil(M #And (K |-> ?_:KItem ?_:Map)))
-              #And
-              {true #Equals (K in_keys(M))}
-            )
-            #Or
-            ({true #Equals (notBool (K in_keys(M)))})
-          )
-          #And N
-
-
-  rule  splitMap(K:KItem, M:Map, N:Map) => N
-        ensures
-          (
-            (
-              (#Ceil(M #And (K |-> ?_:KItem ?_:Map)))
-              #And
-              {true #Equals (K in_keys(M))}
-            )
-            #Or
-            ({true #Equals (notBool (K in_keys(M)))})
-          )
-
-
-
-  */
-
   // Do the map lookups in a way that makes the Haskell backend happy.
 
   rule mapLookup(K:KItem, M:Map)
