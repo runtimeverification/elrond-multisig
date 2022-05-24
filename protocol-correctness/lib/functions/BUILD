@@ -27,14 +27,6 @@ klibrary(
 )
 
 klibrary(
-  name = "all-keys-become-keys-files",
-  srcs = ["all-keys-become-keys.k"],
-  deps = [
-  ],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
   name = "bool-to-int-files",
   srcs = ["bool-to-int.k"],
   deps = [
@@ -89,7 +81,6 @@ klibrary(
   srcs = ["functions.k"],
   deps = [
       ":add-one-if-not-negative-files",
-      ":all-keys-become-keys-files",
       ":bool-to-int-files",
       ":can-add-list-elements-at-index-files",
       ":can-add-value-for-list-elements-at-index-files",
@@ -109,6 +100,7 @@ klibrary(
       ":list-to-map-set-files",
       ":map-included-files",
       ":map-keys-are-below-limit-files",
+      ":map-keys-are-included-files",
       ":map-keys-are-kresult-files",
       ":map-keys-are-of-type-files",
       ":map-representation-files",
@@ -269,6 +261,14 @@ klibrary(
       ":map-keys-are-of-type-files",
       "//protocol-correctness/lib/language:cast-files",
       "//protocol-correctness/lib/proof/unsorted:formula-expansion-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
+  name = "map-keys-are-included-files",
+  srcs = ["map-keys-are-included.k"],
+  deps = [
   ],
   visibility = ["//visibility:public"],
 )

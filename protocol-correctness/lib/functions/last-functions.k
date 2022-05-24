@@ -30,6 +30,9 @@ module LAST-FUNCTIONS
     requires pListLen([Es]) >Int 0
 
   rule #last0(E:Expression, Es:ExpressionCSV) => #last(E, Es)
+  // #last0 is total, but can't be fully evaluated.
+  // We could add something like 'rule #last0(.) => u(0)' in order to fix that,
+  // but that would make debugging harder.
 
   rule #Ceil(last(@Es:ExpressionCSV))
       =>  {pListLen([@Es]) >Int 0 #Equals true}
