@@ -65,26 +65,6 @@ klibrary(
 )
 
 klibrary(
-  name = "concretize-expression-list-files",
-  srcs = ["concretize-expression-list.k"],
-  deps = [
-      ":concretize-value-files",
-      "//protocol-correctness/lib/language:base-types-files",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
-  name = "concretize-value-files",
-  srcs = ["concretize-value.k"],
-  deps = [
-      "//protocol-correctness/lib/language:base-types-files",
-      "//protocol-correctness/lib/language:reflection-files",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
   name = "first-or-default-files",
   srcs = ["first-or-default.k"],
   deps = [
@@ -113,8 +93,6 @@ klibrary(
       ":bool-to-int-files",
       ":can-add-list-elements-at-index-files",
       ":can-add-value-for-list-elements-at-index-files",
-      ":concretize-value-files",
-      ":concretize-expression-list-files",
       ":first-or-default-files",
       ":forall-v-greater-or-equal-than-u-v-not-in-m-files",
       ":keys-map-files",

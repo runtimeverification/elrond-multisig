@@ -1,10 +1,7 @@
 require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
-require "protocol-correctness/lib/functions/all-keys-become-keys.k"
 require "protocol-correctness/lib/functions/bool-to-int.k"
 require "protocol-correctness/lib/functions/can-add-list-elements-at-index.k"
 require "protocol-correctness/lib/functions/can-add-value-for-list-elements-at-index.k"
-require "protocol-correctness/lib/functions/concretize-value.k"
-require "protocol-correctness/lib/functions/concretize-expression-list.k"
 require "protocol-correctness/lib/functions/first-or-default.k"
 require "protocol-correctness/lib/functions/forall-v-greater-or-equal-than-u-v-not-in-m.k"
 require "protocol-correctness/lib/functions/keys-map.k"
@@ -21,6 +18,7 @@ require "protocol-correctness/lib/functions/list-swap-remove.k"
 require "protocol-correctness/lib/functions/list-to-map-set.k"
 require "protocol-correctness/lib/functions/map-included.k"
 require "protocol-correctness/lib/functions/map-keys-are-below-limit.k"
+require "protocol-correctness/lib/functions/map-keys-are-included.k"
 require "protocol-correctness/lib/functions/map-keys-are-kresult.k"
 require "protocol-correctness/lib/functions/map-keys-are-of-type.k"
 require "protocol-correctness/lib/functions/map-representation.k"
@@ -49,12 +47,9 @@ endmodule
 
 module FUNCTIONS
   imports ADD-ONE-IF-NOT-NEGATIVE
-  imports ALL-KEYS-BECOME-KEYS
   imports BOOL-TO-INT
   imports CAN-ADD-LIST-ELEMENTS-AT-INDEX
   imports CAN-ADD-VALUE-FOR-LIST-ELEMENTS-AT-INDEX
-  imports CONCRETIZE-VALUE
-  imports CONCRETIZE-EXPRESSION-LIST
   imports FIRST-OR-DEFAULT
   imports FORALL-V-GREATER-OR-EQUAL-THAN-U-V-NOT-IN-M
   imports KEYS-MAP
@@ -71,6 +66,7 @@ module FUNCTIONS
   imports LIST-TO-MAP-SET
   imports MAP-INCLUDED
   imports MAP-KEYS-ARE-BELOW-LIMIT
+  imports MAP-KEYS-ARE-INCLUDED
   imports MAP-KEYS-ARE-KRESULT
   imports MAP-KEYS-ARE-OF-TYPE
   imports MAP-REPRESENTATION

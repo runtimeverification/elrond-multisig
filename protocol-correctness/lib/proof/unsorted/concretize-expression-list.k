@@ -1,4 +1,4 @@
-require "protocol-correctness/lib/functions/concretize-value.k"
+require "protocol-correctness/lib/proof/unsorted/concretize-value.k"
 require "protocol-correctness/lib/language/base-types.k"
 
 module CONCRETIZE-EXPRESSION-LIST-SYNTAX
