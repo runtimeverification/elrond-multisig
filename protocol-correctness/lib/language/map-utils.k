@@ -80,20 +80,14 @@ module MAP-UTILS-BASIC
   syntax KItem ::= #mapLookup(KItem, Map)
   rule #mapLookup(K:KItem, ((K |-> V:KItem) _:Map) #as M:Map) => just(V)
     ensures K in_keys(M)
-  rule #mapLookup(K:KItem, M:Map) => nothing
-    ensures notBool (K in_keys(M))
-    [owise]
 
-  rule mapDelete(K:KItem, M:Map) => #mapDelete(K, M)
+  rule mapDelete(K:KItem, M:Map) => concretizeMapKey(K, M) ~> #mapDelete(K, M)
     requires K in_keys(M)
   rule mapDelete(K:KItem, M:Map) => M
     requires notBool (K in_keys(M))
 
   syntax KItem ::= #mapDelete(key:KItem, Map)
   rule #mapDelete(K:KItem, (K |-> _:KItem) M:Map) => M
-  rule #mapDelete(_:KItem, M:Map) => M
-    ensures false
-    [owise]
 
   rule mapSet(K:KItem, V:KItem, M:Map) => #mapSet(K, V, M)
     requires K in_keys(M)
