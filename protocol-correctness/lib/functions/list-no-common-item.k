@@ -6,6 +6,10 @@ module LIST-NO-COMMON-ITEM-SYNTAX
   imports BOOL
   imports MAP
 
+  // Checks that no key in the ExpressionList is part of the map.
+  // This function is used in a loop invariant, so, in the recursive call,
+  // it tries to produce a map identical to the one produced by the loop.
+  // The Usize argument is the next value to use in the map.
   syntax Bool ::= listNoCommonItem(Usize, Map, ExpressionList)  [function, functional]
 endmodule
 
