@@ -5,6 +5,9 @@ module NO-MAP-KEY-IN-LIST-SYNTAX
   imports BOOL
   imports MAP
 
+  // TODO(review): Split this into a "safe" functions that everyone can call
+  // and which checks that the list os a KResult, and an internal version
+  // which does not check that.
   syntax Bool ::= noMapKeyInList(Map, ExpressionList)  [function, functional]
 endmodule
 
