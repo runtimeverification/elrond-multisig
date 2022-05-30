@@ -144,7 +144,6 @@ klibrary(
       ":function-call-files",
       ":language-list-files",
       ":map-utils-files",
-      ":mappers-files",
       ":maybe-files",
       ":memory-files",
       ":record-files",
@@ -161,18 +160,6 @@ klibrary(
   deps = [
       ":maybe-files",
       ":reflection-files",
-      ":type-reflection-files",
-  ],
-  visibility = ["//visibility:public"],
-)
-
-klibrary(
-  name = "mappers-files",
-  srcs = ["mappers.k"],
-  deps = [
-      ":base-types-files",
-      ":function-call-files",
-      ":running-syntax-files",
       ":type-reflection-files",
   ],
   visibility = ["//visibility:public"],

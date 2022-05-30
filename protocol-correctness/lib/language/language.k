@@ -7,7 +7,6 @@ require "protocol-correctness/lib/language/if.k"
 require "protocol-correctness/lib/language/function-call.k"
 require "protocol-correctness/lib/language/language-list.k"
 require "protocol-correctness/lib/language/map-utils.k"
-require "protocol-correctness/lib/language/mappers.k"
 require "protocol-correctness/lib/language/maybe.k"
 require "protocol-correctness/lib/language/memory.k"
 require "protocol-correctness/lib/language/record.k"
@@ -25,7 +24,6 @@ module LANGUAGE
   imports FUNCTION-CALL
   imports LANGUAGE-LIST
   imports MAP-UTILS
-  imports MAPPERS
   imports MAYBE
   imports MEMORY
   imports RECORD
