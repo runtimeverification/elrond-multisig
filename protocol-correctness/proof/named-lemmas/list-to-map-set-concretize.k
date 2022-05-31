@@ -18,21 +18,30 @@ module NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE
   rule lemmaListToMapSetConcretize(
             Es:ExpressionCSV, ToAdd:Expression, ToRemove:Expression)
       => induction(
-          case "es" of
-            | . -> .Induction .
-            | "e1" <> "es1" ->
-              case "toadd" == "e1" of
-                | True -> .Induction .
-                | False -> .Induction .
-              esac
-              ~~> case "es1" of
+          case $firstOrDefault("es", "toremove") == "toremove" of
+            | True ->
+              case "es" of
                 | . -> .Induction .
-                | "e2" <> "es2" ->
-                  case "e1" == "e2" of
-                    | True -> .Induction .
-                    | False -> .Induction .
+                | "e1" <> "es1" ->
+                  // call $lemmaMapTwoElementVsOneElement(
+                  //     "toadd",
+                  //     0,
+                  //     $firstOrDefault("es1", "e1"),
+                  //     0,
+                  //     $listToMapSet($removeFirstOrDefault("es1", "es1"))
+                  // )
+                  // ~~>
+                  case "es1" of
+                    | . -> .Induction .
+                    | "e2" <> "es2" -> .Induction .
                   esac
                   .
+              esac
+              .
+            | False ->
+              case "es" of
+                | . -> .Induction .
+                | "e1" <> "es1" -> .Induction .
               esac
               .
           esac,

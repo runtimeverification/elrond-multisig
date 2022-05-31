@@ -21,4 +21,6 @@ module FIRST-OR-DEFAULT-REFLECTION
 
   rule reflectionApply($firstOrDefault, (reflectionArgument(L:ExpressionList) , reflectionArgument(E:Expression)))
       => firstOrDefault(L, E)
+  rule reflectionApply($firstOrDefault, (reflectionArgument(L:ExpressionCSV) , reflectionArgument(E:Expression)))
+      => firstOrDefault([L], E)
 endmodule

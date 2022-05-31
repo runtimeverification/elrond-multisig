@@ -12,6 +12,7 @@ require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-change-lis
 require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-list-to-map-set-square-bracket.k"
 require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-to-in-keys.k"
 require "protocol-correctness/proof/named-lemmas/list-to-map-set-concretize.k"
+require "protocol-correctness/proof/named-lemmas/map-two-element-vs-one-element.k"
 require "protocol-correctness/proof/named-lemmas/only-this-signer-diffs-transitive.k"
 
 module NAMED-LEMMAS-SYNTAX
@@ -51,6 +52,7 @@ module NAMED-LEMMAS
   imports NAMED-LEMMA-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET-SQUARE-BRACKET
   imports NAMED-LEMMA-LIST-CONTAINS-UNSAFE-TO-IN-KEYS
   imports NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE
+  imports NAMED-LEMMA-MAP-TWO-ELEMENT-VS-ONE-ELEMENT
   imports NAMED-LEMMA-ONLY-THIS-SIGNER-DIFFS-TRANSITIVE
 
   rule lemmaCommuteMapSquareBracketAssignmentSameValue(M:Map, K1:KItem, K2:KItem, _V:KItem)

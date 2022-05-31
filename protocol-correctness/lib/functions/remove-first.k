@@ -21,6 +21,18 @@ module REMOVE-FIRST-REFLECTION
   imports REMOVE-FIRST-SYNTAX
   imports REFLECTION-SYNTAX
 
-  rule reflectionApply($removeFirstOrDefault, (reflectionArgument(L:ExpressionList) , reflectionArgument(L1:ExpressionList)))
+  rule reflectionApply
+            ( $removeFirstOrDefault
+            , ( reflectionArgument(L:ExpressionList) 
+              , reflectionArgument(L1:ExpressionList)
+              )
+            )
       => removeFirstOrDefault(L, L1)
+  rule reflectionApply
+            ( $removeFirstOrDefault
+            , ( reflectionArgument(L:ExpressionCSV)
+              , reflectionArgument(L1:ExpressionCSV)
+              )
+            )
+      => removeFirstOrDefault([L], [L1])
 endmodule

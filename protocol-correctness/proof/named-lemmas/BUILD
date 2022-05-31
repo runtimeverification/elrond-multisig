@@ -111,6 +111,16 @@ klibrary(
 )
 
 klibrary(
+  name = "map-two-element-vs-one-element-files",
+  srcs = ["map-two-element-vs-one-element.k"],
+  deps = [
+      "//protocol-correctness/lib/language:base-types-files",
+      "//protocol-correctness/lib/proof/induction:syntax-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "named-lemmas-files",
   srcs = ["named-lemmas.k"],
   deps = [
@@ -127,6 +137,7 @@ klibrary(
       ":list-contains-unsafe-list-to-map-set-square-bracket-files",
       ":list-contains-unsafe-to-in-keys-files",
       ":list-to-map-set-concretize-files",
+      ":map-two-element-vs-one-element-files",
       ":only-this-signer-diffs-transitive-files",
   ],
   visibility = ["//visibility:public"],

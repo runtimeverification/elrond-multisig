@@ -14,6 +14,5 @@ module LIST-ELEMENTS-ARE-OF-TYPE
   rule listElementsAreOfType([.], _:ReflectionType) => true
   rule listElementsAreOfType([E:Expression, Es:ExpressionCSV], T:ReflectionType)
       => valueOfType(E, T) andBool listElementsAreOfType([Es], T)
-    [simplification]
 endmodule
 

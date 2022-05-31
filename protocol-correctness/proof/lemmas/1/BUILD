@@ -32,6 +32,7 @@ klibrary(
       "//protocol-correctness/proof/lemmas/0/invariant:trusted-lemma-map-keys-are-kresult-user-id-to-role-files",
       "//protocol-correctness/proof/lemmas/0/list/contains:trusted-lemma-list-contains-unsafe-list-to-map-set-files",
       "//protocol-correctness/proof/lemmas/0/list/contains:trusted-lemma-list-contains-unsafe-second-element-files",
+      "//protocol-correctness/proof/lemmas/0/list/list-to-map-set:trusted-lemma-list-to-map-set-square-bracket-list-contains-unsafe-files",
       "//protocol-correctness/proof/lemmas/0/list/no-map-key-in-list:trusted-lemma-no-map-key-in-list-push-list-not-in-map-files",
       "//protocol-correctness/proof/lemmas/0/list/plistlen:trusted-lemma-plistlen-files",
       "//protocol-correctness/proof/lemmas/0/map/all-keys-become-keys:trusted-lemma-all-keys-become-keys-a-files",

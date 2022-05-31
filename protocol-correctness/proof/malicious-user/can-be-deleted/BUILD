@@ -111,7 +111,7 @@ kprove_test(
       ":trusted-run-external-calls-from-user-None",
       "//protocol-correctness/proof/malicious-user/proofs:trusted-cannot-perform",
       "//protocol-correctness/proof/lemmas/0/map/map-keys-are-below-limit:trusted-map-keys-are-below-limit-ignore-property-handling",
-      "//protocol-correctness/proof/lemmas/0/list/list-to-map-set:trusted-list-to-map-set-concretize",
+      "//protocol-correctness/proof/lemmas/1/list/list-to-map-set:trusted-list-to-map-set-concretize",
       "//protocol-correctness/proof/lemmas/2/signers:trusted-count-can-sign-list-to-map-set-square-bracket-3",
   ],
   semantics = "can-be-deleted-execute",

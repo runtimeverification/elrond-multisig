@@ -233,6 +233,9 @@ module EXECUTION-PROOF-HELPERS
           #And #Ceil(@V)
     [anywhere, simplification(20)]
 
+  rule { (_ |-> _) #Equals ((_ |-> _) (_ |-> _) _) } => #Bottom
+    [simplification, anywhere]
+
   rule countCanSignFunction([#pushList(Es:ExpressionCSV, UserId:Usize)], UserId |-> Role:UserRole M:Map)
       => 1 +Int countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
     requires canSignFunction(Role)

@@ -2,9 +2,6 @@
 //@ proof
 module PROOF-LIST-CONTAINS-UNSAFE-TO-IN-KEYS
 //@ trusted
-// require "protocol-correctness/lib/functions/list-contains.k"
-// require "protocol-correctness/lib/functions/list-to-map-set.k"
-// require "protocol-correctness/proof/named-lemmas/list-contains-unsafe-to-in-keys.k"
 // module TRUSTED-LIST-CONTAINS-UNSAFE-TO-IN-KEYS
 //@ end
 
