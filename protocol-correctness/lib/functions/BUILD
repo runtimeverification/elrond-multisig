@@ -266,6 +266,14 @@ klibrary(
 )
 
 klibrary(
+  name = "list-to-csv-files",
+  srcs = ["list-to-csv.k"],
+  deps = [
+  ],
+  visibility = ["//visibility:public"],
+)
+
+klibrary(
   name = "list-to-map-set-files",
   srcs = ["list-to-map-set.k"],
   deps = [

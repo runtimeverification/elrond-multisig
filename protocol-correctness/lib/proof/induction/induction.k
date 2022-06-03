@@ -49,6 +49,7 @@ module INDUCTION
   // when an error occurs.
   rule ((I:ReflectionId, K:KItem) <> Is:ReflectionData ~> mergeDataFreezer(D:InductionData))
       => addDataItem((I, K), D) ~> mergeDataFreezer2(Is)
+    [label(xyzzy)]
   rule (D:InductionData ~> mergeDataFreezer2(Is:ReflectionData))
       => Is ~> mergeDataFreezer(D)
 

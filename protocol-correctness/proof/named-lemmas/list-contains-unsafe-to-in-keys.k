@@ -32,4 +32,10 @@ module NAMED-LEMMA-LIST-CONTAINS-UNSAFE-TO-IN-KEYS
             )
         )
     => lemmaListContainsUnsafeToInKeys(E, Es)
+  rule  reflectionApply($lemmaListContainsUnsafeToInKeys,
+            ( reflectionArgument(E:KItem)
+            , reflectionArgument([Es:ExpressionCSV])
+            )
+        )
+    => lemmaListContainsUnsafeToInKeys(E, Es)
 endmodule

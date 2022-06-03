@@ -6,7 +6,6 @@ require "protocol-correctness/proof/lemmas/0/int/trusted-lemma-add-one-if-not-ne
 require "protocol-correctness/proof/lemmas/0/invariant/trusted-lemma-map-keys-are-kresult-user-id-to-role.k"
 require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-list-to-map-set.k"
 require "protocol-correctness/proof/lemmas/0/list/contains/trusted-lemma-list-contains-unsafe-second-element.k"
-require "protocol-correctness/proof/lemmas/0/list/list-to-map-set/trusted-lemma-list-to-map-set-square-bracket-list-contains-unsafe.k"
 require "protocol-correctness/proof/lemmas/0/list/no-map-key-in-list/trusted-lemma-no-map-key-in-list-push-list-not-in-map.k"
 require "protocol-correctness/proof/lemmas/0/list/plistlen/trusted-lemma-plistlen.k"
 require "protocol-correctness/proof/lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-a.k"
@@ -42,7 +41,6 @@ module LEMMAS-0
   imports TRUSTED-LEMMA-IN-KEYS-SQUARE-BRACKET-UNDEF
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-LIST-TO-MAP-SET
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SECOND-ELEMENT
-  imports TRUSTED-LEMMA-LIST-TO-MAP-SET-SQUARE-BRACKET-LIST-CONTAINS-UNSAFE
   imports TRUSTED-LEMMA-MAP-KEYS-ARE-KRESULT-USER-ID-TO-ROLE
   imports TRUSTED-LEMMA-NO-MAP-KEY-IN-LIST-PUSH-LIST-NOT-IN-MAP
   imports TRUSTED-LEMMA-PLISTLEN

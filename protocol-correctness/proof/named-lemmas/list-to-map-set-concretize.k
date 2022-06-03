@@ -23,15 +23,11 @@ module NAMED-LEMMA-LIST-TO-MAP-SET-CONCRETIZE
               case "es" of
                 | . -> .Induction .
                 | "e1" <> "es1" ->
-                  // call $lemmaMapTwoElementVsOneElement(
-                  //     "toadd",
-                  //     0,
-                  //     $firstOrDefault("es1", "e1"),
-                  //     0,
-                  //     $listToMapSet($removeFirstOrDefault("es1", "es1"))
-                  // )
-                  // ~~>
-                  case "es1" of
+                  call $lemmaListContainsUnsafeToInKeys
+                          ( $firstOrDefault("es1", "e1")
+                          , $removeFirstOrDefault("es1", "es1")
+                          )
+                  ~~> case "es1" of
                     | . -> .Induction .
                     | "e2" <> "es2" -> .Induction .
                   esac
