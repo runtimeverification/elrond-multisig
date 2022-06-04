@@ -6,7 +6,7 @@ module LEMMAS-EXECUTE-SYNTAX
 endmodule
 
 module LEMMAS-EXECUTE
-  imports LEMMAS-4
+  imports LEMMAS-3
   imports LEMMAS-5-EXECUTE
   imports LEMMAS-EXECUTE-SYNTAX
 endmodule

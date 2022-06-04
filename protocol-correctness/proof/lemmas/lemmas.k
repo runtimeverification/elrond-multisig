@@ -1,5 +1,5 @@
-require "protocol-correctness/proof/lemmas/5/lemmas-4.k"
+require "protocol-correctness/proof/lemmas/4/lemmas-3.k"
 
 module LEMMAS-FINAL
-  imports LEMMAS-4
+  imports LEMMAS-3
 endmodule

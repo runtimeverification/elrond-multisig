@@ -24,7 +24,7 @@ klibrary(
   name = "lemmas-files",
   srcs = ["lemmas.k"],
   deps = [
-      "//protocol-correctness/proof/lemmas/5:lemmas-4-files",
+      "//protocol-correctness/proof/lemmas/4:lemmas-3-files",
   ],
   visibility = ["//visibility:public"],
 )
