@@ -10,11 +10,17 @@ require "../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
 require "../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
 require "../functions/trusted-unsign-no-role-marker.k"  //@ Bazel remove
 require "../functions/trusted-unsign-no-user-marker.k"  //@ Bazel remove
+require "../lemmas/2/list/contains/trusted-lemma-list-contains-pound-list-swap-remove-2.k"  //@ Bazel remove
+require "../lemmas/2/list/contains/trusted-lemma-list-contains-pound-remove-last-pound-last.k"  //@ Bazel remove
+require "../lemmas/2/list/contains/trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq.k"  //@ Bazel remove
 
 module PROOF-UNSIGN
   imports INVARIANT-EXECUTE
   imports PSEUDOCODE
 
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
+  imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
+  imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-NEQ
   imports TRUSTED-UNSIGN-NO-ACTION
   imports TRUSTED-UNSIGN-ONLY-SIGNER
   imports TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
