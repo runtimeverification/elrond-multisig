@@ -7,12 +7,20 @@ require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
+require "../../../lemmas/1/list/last/trusted-lemma-last-to-start-kresult.k"  //@ Bazel remove
+require "../../../lemmas/1/list/last/trusted-lemma-last-to-start-usize.k"  //@ Bazel remove
+require "../../../lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"  //@ Bazel remove
+require "../../../lemmas/1/map/square-bracket/trusted-lemma-square-bracket-sq-b-sq-b-undef.k"  //@ Bazel remove
 require "../../../lemmas/2/list/contains/trusted-lemma-list-contains-pound-list-swap-remove-2.k"  //@ Bazel remove
 require "../../../lemmas/2/list/contains/trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq.k"  //@ Bazel remove
 require "../../../lemmas/2/list/list-to-map-set/trusted-lemma-list-to-map-set-last-to-start.k"  //@ Bazel remove
 require "../../../lemmas/4/list/list-to-map-set/trusted-lemma-list-to-map-set-list-swap-remove-list-find-sq-b-sq-b-sq-b-delete.k"  //@ Bazel remove
 
 module PROOF-RECFU-UNSIGN-VOID-EQ
+  imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
+  imports TRUSTED-LEMMA-LAST-TO-START-USIZE
+  imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
+  imports TRUSTED-LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-NEQ
   imports TRUSTED-LEMMA-LIST-TO-MAP-SET-LAST-TO-START

@@ -10,6 +10,13 @@ require "../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
 require "../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
 require "../functions/trusted-unsign-no-role-marker.k"  //@ Bazel remove
 require "../functions/trusted-unsign-no-user-marker.k"  //@ Bazel remove
+require "../lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"  //@ Bazel remove
+require "../lemmas/1/list/last/trusted-lemma-last-to-start-kresult.k"  //@ Bazel remove
+require "../lemmas/1/list/last/trusted-lemma-last-to-start-usize.k"  //@ Bazel remove
+require "../lemmas/1/list/last/trusted-lemma-pound-last.k"  //@ Bazel remove
+require "../lemmas/1/list/last/trusted-lemma-pound-last-usize-kitem.k"  //@ Bazel remove
+require "../lemmas/1/list/last/trusted-lemma-pound-remove-last-kresult-expression.k"  //@ Bazel remove
+require "../lemmas/1/list/last/trusted-lemma-pound-remove-last-usize.k"  //@ Bazel remove
 require "../lemmas/2/list/contains/trusted-lemma-list-contains-pound-list-swap-remove-2.k"  //@ Bazel remove
 require "../lemmas/2/list/contains/trusted-lemma-list-contains-pound-remove-last-pound-last.k"  //@ Bazel remove
 require "../lemmas/2/list/contains/trusted-lemma-list-contains-unsafe-swap-remove-find-unsafe-neq.k"  //@ Bazel remove
@@ -18,9 +25,16 @@ module PROOF-UNSIGN
   imports INVARIANT-EXECUTE
   imports PSEUDOCODE
 
+  imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
+  imports TRUSTED-LEMMA-LAST-TO-START-USIZE
+  imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-NEQ
+  imports TRUSTED-LEMMA-POUND-LAST
+  imports TRUSTED-LEMMA-POUND-LAST-USIZE-KITEM
+  imports TRUSTED-LEMMA-POUND-REMOVE-LAST-KRESULT-EXPRESSION
+  imports TRUSTED-LEMMA-POUND-REMOVE-LAST-USIZE
   imports TRUSTED-UNSIGN-NO-ACTION
   imports TRUSTED-UNSIGN-ONLY-SIGNER
   imports TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST

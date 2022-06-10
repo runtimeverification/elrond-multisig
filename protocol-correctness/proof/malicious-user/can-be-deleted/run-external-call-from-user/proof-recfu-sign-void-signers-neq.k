@@ -4,8 +4,10 @@
 
 require "../../../functions/trusted-sign-existing-signers-in-list.k"  //@ Bazel remove
 require "../../../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove
+require "../../../lemmas/1/map/square-bracket/trusted-lemma-square-bracket-sq-b-sq-b-undef.k"  //@ Bazel remove
 
 module PROOF-RECFU-SIGN-VOID-SIGNERS-NEQ
+  imports TRUSTED-LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
   imports TRUSTED-SIGN-EXISTING-SIGNERS-IN-LIST
   imports TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ trusted

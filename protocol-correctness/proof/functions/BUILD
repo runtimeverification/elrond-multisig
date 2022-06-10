@@ -2644,6 +2644,8 @@ kprove_test(
   name = "proof-unsign-other-signers-first",
   srcs = ["proof-unsign-other-signers-first.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-pound-last",
+      "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-pound-remove-last-kresult-expression",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "long",
