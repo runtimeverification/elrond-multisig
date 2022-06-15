@@ -1,11 +1,13 @@
 // timeout = long
 //@ proof
 
+require "../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
 require "../lemmas/1/list/last/trusted-lemma-pound-last.k"  //@ Bazel remove
 require "../lemmas/1/list/last/trusted-lemma-pound-remove-last-kresult-expression.k"  //@ Bazel remove
 
 module PROOF-UNSIGN-OTHER-SIGNERS-FIRST
     imports INVARIANT
+    imports TRUSTED-LEMMA-PLISTLEN
     imports TRUSTED-LEMMA-POUND-LAST
     imports TRUSTED-LEMMA-POUND-REMOVE-LAST-KRESULT-EXPRESSION
 //@ trusted

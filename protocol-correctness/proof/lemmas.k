@@ -3,5 +3,5 @@ require "protocol-correctness/proof/lemmas/lemmas.k"
 
 module LEMMAS
 
-  imports LEMMAS-FINAL
+  // imports LEMMAS-FINAL
 endmodule

@@ -8,5 +8,5 @@ endmodule
 module MAIN-PROOF-EXECUTE
   imports MAIN-PROOF-EXECUTE-NO-LEMMAS
 
-  imports LEMMAS
+  // imports LEMMAS
 endmodule

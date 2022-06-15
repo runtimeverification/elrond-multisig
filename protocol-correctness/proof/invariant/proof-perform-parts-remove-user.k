@@ -5,10 +5,12 @@ require "trusted-perform-parts-remove-user-eq.k"  //@ Bazel remove
 require "trusted-perform-parts-remove-user-neq.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-remove-user-New-marker.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-remove-user-None-marker.k"  //@ Bazel remove
+require "../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
 
 module PROOF-PERFORM-PARTS-REMOVE-USER
   imports INVARIANT-EXECUTE
 
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports TRUSTED-PERFORM-PARTS-REMOVE-USER-EQ
   imports TRUSTED-PERFORM-PARTS-REMOVE-USER-NEQ
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-REMOVE-USER-NEW-MARKER

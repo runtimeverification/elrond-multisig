@@ -68,6 +68,7 @@ kprove_test(
   name = "proof-count-can-sign",
   srcs = ["proof-count-can-sign.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-lemma-count-can-sign-map",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "moderate",
@@ -1029,6 +1030,7 @@ kprove_test(
   srcs = ["proof-perform-action-endpoint-fragment-no-quorum.k"],
   trusted = [
       ":trusted-count-can-sign",
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-lemma-count-can-sign-map",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "eternal",
@@ -2477,6 +2479,7 @@ kprove_test(
   name = "proof-sign-existing-signers-not-in-list",
   srcs = ["proof-sign-existing-signers-not-in-list.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas/0/list/plistlen:trusted-lemma-plistlen",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "long",
@@ -2644,6 +2647,7 @@ kprove_test(
   name = "proof-unsign-other-signers-first",
   srcs = ["proof-unsign-other-signers-first.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas/0/list/plistlen:trusted-lemma-plistlen",
       "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-pound-last",
       "//protocol-correctness/proof/lemmas/1/list/last:trusted-lemma-pound-remove-last-kresult-expression",
   ],
@@ -2661,6 +2665,8 @@ kprove_test(
   name = "proof-unsign-other-signers-not-first",
   srcs = ["proof-unsign-other-signers-not-first.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas/0/int:trusted-lemma-add-one-if-not-negative-not-zero",
+      "//protocol-correctness/proof/lemmas/0/list/plistlen:trusted-lemma-plistlen",
   ],
   semantics = "//protocol-correctness/proof:main-proof-execute",
   timeout = "long",

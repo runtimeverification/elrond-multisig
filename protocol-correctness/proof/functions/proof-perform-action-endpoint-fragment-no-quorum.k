@@ -2,9 +2,12 @@
 // breadth = 6
 //@ proof
 require "trusted-count-can-sign.k"  //@ Bazel remove
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM
   imports TRUSTED-COUNT-CAN-SIGN
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
+
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM
 //@ end

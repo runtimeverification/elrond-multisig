@@ -1,7 +1,12 @@
 // timeout = long
 //@ proof
+require "../lemmas/0/int/trusted-lemma-add-one-if-not-negative-not-zero.k"  //@ Bazel remove
+require "../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
+
 module PROOF-UNSIGN-OTHER-SIGNERS-NOT-FIRST
     imports INVARIANT
+    imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE-NOT-ZERO
+    imports TRUSTED-LEMMA-PLISTLEN
 //@ trusted
 // module TRUSTED-UNSIGN-OTHER-SIGNERS-NOT-FIRST
   // imports MAIN-PROOF-EXECUTE

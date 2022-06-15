@@ -1,7 +1,10 @@
 // timeout = long
 // breadth = 2
 //@ proof
+require "../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
+
 module PROOF-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
+  imports TRUSTED-LEMMA-PLISTLEN
 //@ trusted
 // module TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 //@ end

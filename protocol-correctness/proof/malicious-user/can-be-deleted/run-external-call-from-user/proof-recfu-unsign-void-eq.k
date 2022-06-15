@@ -7,6 +7,8 @@ require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
+require "../../../lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"  //@ Bazel remove
+require "../../../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
 require "../../../lemmas/1/list/last/trusted-lemma-last-to-start-kresult.k"  //@ Bazel remove
 require "../../../lemmas/1/list/last/trusted-lemma-last-to-start-usize.k"  //@ Bazel remove
 require "../../../lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"  //@ Bazel remove
@@ -17,13 +19,15 @@ require "../../../lemmas/2/list/list-to-map-set/trusted-lemma-list-to-map-set-la
 require "../../../lemmas/4/list/list-to-map-set/trusted-lemma-list-to-map-set-list-swap-remove-list-find-sq-b-sq-b-sq-b-delete.k"  //@ Bazel remove
 
 module PROOF-RECFU-UNSIGN-VOID-EQ
+  imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
   imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
-  imports TRUSTED-LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-NEQ
   imports TRUSTED-LEMMA-LIST-TO-MAP-SET-LAST-TO-START
+  imports TRUSTED-LEMMA-PLISTLEN
+  imports TRUSTED-LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
   imports TRUSTED-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-SQ-B-SQ-B-SQ-B-DELETE
   imports TRUSTED-UNSIGN-NO-SIGNERS
   imports TRUSTED-UNSIGN-NOT-SIGNED

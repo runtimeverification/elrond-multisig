@@ -6,9 +6,14 @@ require "trusted-recfu-discard-action-error-eq.k"  //@ Bazel remove
 require "trusted-recfu-discard-action-error-ne.k"  //@ Bazel remove
 require "trusted-recfu-discard-action-void-ne.k"  //@ Bazel remove
 
+require "../../../lemmas/0/bool/trusted-lemma-bool-to-int-ge-0.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 require "../../../fragments/trusted-make-concrete-value-fragment.k"  //@ Bazel remove
 
 module PROOF-RECFU-FRAGMENT-DISCARD-ACTION
+  imports TRUSTED-LEMMA-BOOL-TO-INT-GE-0
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
+
   imports TRUSTED-RECFU-DISCARD-ACTION-ERROR-EQ
   imports TRUSTED-RECFU-DISCARD-ACTION-ERROR-NE
   imports TRUSTED-RECFU-DISCARD-ACTION-VOID-NE

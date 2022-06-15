@@ -1,11 +1,12 @@
 // timeout = eternal
 // breadth = 5
-// 2021-06-11: Failing because of https://github.com/kframework/kore/issues/2564
 //@ proof
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-change-quorum-with-quorum-marker.k"  //@ Bazel remove
 require "../map/trusted-map-semantics.k"  //@ Bazel remove
 
 module PROOF-PICK-AND-CALL-2
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
   imports TRUSTED-MAP-SEMANTICS
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-CHANGE-QUORUM-WITH-QUORUM-MARKER
 

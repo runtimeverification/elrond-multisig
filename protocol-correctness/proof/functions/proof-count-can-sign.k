@@ -1,8 +1,13 @@
 // timeout = moderate
 // breadth = 6
 //@ proof
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
+
 module PROOF-COUNT-CAN-SIGN
   imports INVARIANT
+
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
+
 //@ trusted
 // module TRUSTED-COUNT-CAN-SIGN
   // imports MAIN-PROOF-EXECUTE

@@ -5,10 +5,12 @@ require "trusted-perform-parts-add-proposer-no-signers-eq.k"  //@ Bazel remove
 require "trusted-perform-parts-add-proposer-no-signers-neq.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-add-proposer-New.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-add-proposer-None.k"  //@ Bazel remove
+require "../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
 
 module PROOF-PERFORM-PARTS-ADD-PROPOSER-NO-SIGNERS
   imports INVARIANT-EXECUTE
 
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-NO-SIGNERS-EQ
   imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-NO-SIGNERS-NEQ
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-NEW

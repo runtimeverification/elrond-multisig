@@ -4,8 +4,10 @@
 
 require "../../../functions/trusted-propose-action-BoardMember.k"  //@ Bazel remove
 require "../../../functions/trusted-propose-action-Proposer.k"  //@ Bazel remove
+require "../../../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
 
 module PROOF-RECFU-PROPOSE-SEND-EGLD
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
   imports TRUSTED-PROPOSE-ACTION-PROPOSER
 //@ trusted

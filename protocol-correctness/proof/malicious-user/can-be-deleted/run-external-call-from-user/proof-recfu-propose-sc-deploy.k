@@ -4,8 +4,10 @@
 
 require "../../../functions/trusted-propose-sc-deploy-BoardMember.k"  //@ Bazel remove
 require "../../../functions/trusted-propose-sc-deploy-Proposer.k"  //@ Bazel remove
+require "../../../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
 
 module PROOF-RECFU-PROPOSE-SC-DEPLOY
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports TRUSTED-PROPOSE-SC-DEPLOY-BOARDMEMBER
   imports TRUSTED-PROPOSE-SC-DEPLOY-PROPOSER
 //@ trusted

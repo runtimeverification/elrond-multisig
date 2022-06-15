@@ -4,11 +4,15 @@
 require "../functions/trusted-discard-action-has-signers.k"  //@ Bazel remove
 require "../functions/trusted-discard-action-no-valid-signers.k"  //@ Bazel remove
 require "../functions/trusted-discard-action-no-valid-signers-no-action.k"  //@ Bazel remove
+require "../lemmas/0/bool/trusted-lemma-bool-to-int-ge-0.k"  //@ Bazel remove
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 
 module PROOF-DISCARD-ACTION-1
   imports INVARIANT-EXECUTE
   imports PSEUDOCODE
 
+  imports TRUSTED-LEMMA-BOOL-TO-INT-GE-0
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
   imports TRUSTED-DISCARD-ACTION-HAS-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION

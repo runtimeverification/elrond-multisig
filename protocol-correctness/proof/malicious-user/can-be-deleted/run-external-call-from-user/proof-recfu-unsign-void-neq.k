@@ -7,6 +7,14 @@ require "../../../functions/trusted-unsign-not-signed.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-only-signer.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-first.k"  //@ Bazel remove
 require "../../../functions/trusted-unsign-other-signers-not-first.k"  //@ Bazel remove
+require "../../../lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"  //@ Bazel remove
+require "../../../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
+require "../../../lemmas/0/map/square-bracket/trusted-lemma-square-bracket-square-bracket-undef.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-2-elements-swap-remove-find-unsafe-not-in-keys.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-function-element-last-to-start.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-function-last-remove-last.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-function-second-element.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 require "../../../lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"  //@ Bazel remove
 require "../../../lemmas/1/list/contains/trusted-lemma-list-contains-list-find.k"  //@ Bazel remove
 require "../../../lemmas/1/list/last/trusted-lemma-last-to-start-kresult.k"  //@ Bazel remove
@@ -26,6 +34,12 @@ require "../../../lemmas/4/list/contains/trusted-lemma-list-contains-unsafe-2-el
 require "../../../lemmas/4/list/list-to-map-set/trusted-lemma-list-to-map-set-list-swap-remove-list-find-sq-b-sq-b-sq-b-delete.k"  //@ Bazel remove
 
 module PROOF-RECFU-UNSIGN-VOID-NEQ
+  imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-2-ELEMENTS-SWAP-REMOVE-FIND-UNSAFE-NOT-IN-KEYS
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-ELEMENT-LAST-TO-START
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-LAST-REMOVE-LAST
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-FUNCTION-SECOND-ELEMENT
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
   imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
@@ -37,11 +51,13 @@ module PROOF-RECFU-UNSIGN-VOID-NEQ
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-NEQ
   imports TRUSTED-LEMMA-LIST-TO-MAP-SET-LAST-TO-START
   imports TRUSTED-LEMMA-LIST-TO-MAP-SET-POUND-REMOVE-LAST-POUND-LAST
+  imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-POUND-LAST
   imports TRUSTED-LEMMA-POUND-LAST-USIZE-KITEM
   imports TRUSTED-LEMMA-POUND-REMOVE-LAST-KRESULT-EXPRESSION
   imports TRUSTED-LEMMA-POUND-REMOVE-LAST-USIZE
   imports TRUSTED-LEMMA-SQUARE-BRACKET-SQ-B-SQ-B-UNDEF
+  imports TRUSTED-LEMMA-SQUARE-BRACKET-SQUARE-BRACKET-UNDEF
   imports TRUSTED-LIST-TO-MAP-SET-LIST-SWAP-REMOVE-LIST-FIND-SQ-B-SQ-B-SQ-B-DELETE
   imports TRUSTED-UNSIGN-NO-SIGNERS
   imports TRUSTED-UNSIGN-NOT-SIGNED

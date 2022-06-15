@@ -7,10 +7,12 @@ require "../functions/trusted-perform-action-endpoint-New-marker.k"  //@ Bazel r
 require "../functions/trusted-perform-action-endpoint-no-quorum-marker.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-None-marker.k"  //@ Bazel remove
 require "../functions/trusted-perform-action-endpoint-nothing-marker.k"  //@ Bazel remove
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ENDPOINT
   imports INVARIANT-EXECUTE
 
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
   imports TRUSTED-PERFORM-PARTS-1
   imports TRUSTED-PERFORM-PARTS-2
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-NEW-MARKER

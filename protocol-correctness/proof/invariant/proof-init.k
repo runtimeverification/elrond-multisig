@@ -5,8 +5,10 @@
 require "trusted-init-loop-error.k"  //@ Bazel remove
 require "trusted-init-loop-no-error.k"  //@ Bazel remove
 require "../functions/trusted-listlen.k"  //@ Bazel remove
+require "../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
 
 module PROOF-INIT
+  imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-INIT-LOOP-ERROR
   imports TRUSTED-INIT-LOOP-NO-ERROR
   imports TRUSTED-LISTLEN

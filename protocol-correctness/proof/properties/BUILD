@@ -77,6 +77,7 @@ kprove_test(
       "//protocol-correctness/proof/functions:trusted-sign-no-signers",
       "//protocol-correctness/proof/functions:trusted-sign-existing-signers-in-list",
       "//protocol-correctness/proof/functions:trusted-sign-existing-signers-not-in-list",
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-lemma-count-can-sign-map",
   ],
   semantics = "properties-execute",
   timeout = "eternal",
@@ -138,6 +139,7 @@ kprove_test(
   name = "proof-pick-and-call-2",
   srcs = ["proof-pick-and-call-2.k"],
   trusted = [
+      "//protocol-correctness/proof/lemmas/0/signers:trusted-lemma-count-can-sign-map",
       "//protocol-correctness/proof/functions:trusted-perform-action-endpoint-change-quorum-with-quorum-marker",
       "//protocol-correctness/proof/map:trusted-map-semantics",
   ],

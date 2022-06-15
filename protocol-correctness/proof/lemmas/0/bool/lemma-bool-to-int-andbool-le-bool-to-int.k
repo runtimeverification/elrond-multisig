@@ -5,7 +5,7 @@ module LEMMA-BOOL-TO-INT-ANDBOOL-LE-BOOL-TO-INT
   imports K-EQUAL-SYNTAX
 //@ trusted
 // require "protocol-correctness/lib/functions/bool-to-int.k"
-// module TRUSTED-BOOL-TO-INT-ANDBOOL-LE-BOOL-TO-INT
+// module TRUSTED-LEMMA-BOOL-TO-INT-ANDBOOL-LE-BOOL-TO-INT
 //@ end
 
   imports BOOL-TO-INT-SYNTAX

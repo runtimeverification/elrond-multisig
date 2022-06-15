@@ -7,7 +7,11 @@ require "trusted-propose-delete-malicious.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user.k"  //@ Bazel remove
 require "trusted-run-external-calls-from-user-None.k"  //@ Bazel remove
 require "../proofs/trusted-cannot-perform.k"  //@ Bazel remove
+require "../../lemmas/0/bool/trusted-lemma-bool-to-int-andbool-le-bool-to-int.k"  //@ Bazel remove
+require "../../lemmas/0/invariant/trusted-lemma-map-keys-are-kresult-user-id-to-role.k"  //@ Bazel remove
 require "../../lemmas/0/map/map-keys-are-below-limit/trusted-map-keys-are-below-limit-ignore-property-handling.k"  //@ Bazel remove
+require "../../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
+require "../../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 require "../../lemmas/1/list/list-to-map-set/trusted-list-to-map-set-concretize.k"  //@ Bazel remove
 require "../../lemmas/2/signers/trusted-count-can-sign-list-to-map-set-square-bracket-3.k"  //@ Bazel remove
 
@@ -16,6 +20,10 @@ module PROOF-CAN-BE-DELETED
   imports TRUSTED-CANNOT-PERFORM
   imports TRUSTED-COUNT-CAN-SIGN-LIST-TO-MAP-SET-SQUARE-BRACKET-3
   imports TRUSTED-EXECUTE-DELETE-MALICIOUS
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
+  imports TRUSTED-LEMMA-BOOL-TO-INT-ANDBOOL-LE-BOOL-TO-INT
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
+  imports TRUSTED-LEMMA-MAP-KEYS-ARE-KRESULT-USER-ID-TO-ROLE
   imports TRUSTED-LIST-TO-MAP-SET-CONCRETIZE
   imports TRUSTED-MAP-KEYS-ARE-BELOW-LIMIT-IGNORE-PROPERTY-HANDLING
   imports TRUSTED-PROPOSE-DELETE-MALICIOUS

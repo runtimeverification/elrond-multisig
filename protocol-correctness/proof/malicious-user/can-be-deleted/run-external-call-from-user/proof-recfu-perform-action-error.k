@@ -3,8 +3,10 @@
 //@ proof
 
 require "../../../functions/trusted-perform-action-endpoint-no-quorum.k"  //@ Bazel remove
+require "../../../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 
 module PROOF-RECFU-PERFORM-ACTION-ERROR
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
   imports TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM
 //@ trusted
 // module TRUSTED-RECFU-PERFORM-ACTION-ERROR

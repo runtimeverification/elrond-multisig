@@ -10,6 +10,8 @@ require "../functions/trusted-unsign-no-signers.k"  //@ Bazel remove
 require "../functions/trusted-unsign-Proposer.k"  //@ Bazel remove
 require "../functions/trusted-unsign-no-role-marker.k"  //@ Bazel remove
 require "../functions/trusted-unsign-no-user-marker.k"  //@ Bazel remove
+require "../lemmas/0/int/trusted-lemma-add-one-if-not-negative.k"  //@ Bazel remove
+require "../lemmas/0/list/plistlen/trusted-lemma-plistlen.k"  //@ Bazel remove
 require "../lemmas/1/list/contains/trusted-lemma-list-contains-last-to-start.k"  //@ Bazel remove
 require "../lemmas/1/list/last/trusted-lemma-last-to-start-kresult.k"  //@ Bazel remove
 require "../lemmas/1/list/last/trusted-lemma-last-to-start-usize.k"  //@ Bazel remove
@@ -25,12 +27,14 @@ module PROOF-UNSIGN
   imports INVARIANT-EXECUTE
   imports PSEUDOCODE
 
+  imports TRUSTED-LEMMA-ADD-ONE-IF-NOT-NEGATIVE
   imports TRUSTED-LEMMA-LAST-TO-START-KRESULT
   imports TRUSTED-LEMMA-LAST-TO-START-USIZE
   imports TRUSTED-LEMMA-LIST-CONTAINS-LAST-TO-START
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-LIST-SWAP-REMOVE-2
   imports TRUSTED-LEMMA-LIST-CONTAINS-POUND-REMOVE-LAST-POUND-LAST
   imports TRUSTED-LEMMA-LIST-CONTAINS-UNSAFE-SWAP-REMOVE-FIND-UNSAFE-NEQ
+  imports TRUSTED-LEMMA-PLISTLEN
   imports TRUSTED-LEMMA-POUND-LAST
   imports TRUSTED-LEMMA-POUND-LAST-USIZE-KITEM
   imports TRUSTED-LEMMA-POUND-REMOVE-LAST-KRESULT-EXPRESSION

@@ -1,7 +1,11 @@
 // timeout = long
 // breadth = 2
 //@ proof
+
+require "../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
+
 module PROOF-INIT-LOOP-ERROR
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
 //@ trusted
 // module TRUSTED-INIT-LOOP-ERROR
 //@ end

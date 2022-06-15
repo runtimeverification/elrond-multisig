@@ -4,6 +4,7 @@
 require "../functions/trusted-discard-action-has-signers.k"  //@ Bazel remove
 require "../functions/trusted-discard-action-no-valid-signers.k"  //@ Bazel remove
 require "../functions/trusted-discard-action-no-valid-signers-no-action.k"  //@ Bazel remove
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 
 module PROOF-DISCARD-ACTION-2
   imports INVARIANT-EXECUTE
@@ -12,6 +13,7 @@ module PROOF-DISCARD-ACTION-2
   imports TRUSTED-DISCARD-ACTION-HAS-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
 //@ trusted
 // module TRUSTED-DISCARD-ACTION-2
 //   imports INVARIANT-FUNCTIONS

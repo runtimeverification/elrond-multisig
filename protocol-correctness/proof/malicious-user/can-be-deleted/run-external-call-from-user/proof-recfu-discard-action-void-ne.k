@@ -6,9 +6,11 @@ require "../../../functions/trusted-discard-action-no-signers.k"  //@ Bazel remo
 require "../../../functions/trusted-discard-action-no-signers-no-action.k"  //@ Bazel remove
 require "../../../functions/trusted-discard-action-no-valid-signers.k"  //@ Bazel remove
 require "../../../functions/trusted-discard-action-no-valid-signers-no-action.k"  //@ Bazel remove
+require "../../../lemmas/0/map/all-keys-become-keys/trusted-lemma-all-keys-become-keys-b.k"  //@ Bazel remove
 require "../../../lemmas/1/signers/trusted-lemma-at-most-this-signer-0-count-can-sign-function.k"  //@ Bazel remove
 
 module PROOF-RECFU-DISCARD-ACTION-VOID-NE
+  imports TRUSTED-LEMMA-ALL-KEYS-BECOME-KEYS-B
   imports TRUSTED-DISCARD-ACTION-NO-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-SIGNERS-NO-ACTION
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS

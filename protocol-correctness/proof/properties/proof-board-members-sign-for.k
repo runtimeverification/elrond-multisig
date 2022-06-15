@@ -11,14 +11,15 @@ require "../functions/trusted-sign-caller-proposer.k"  //@ Bazel remove
 require "../functions/trusted-sign-no-signers.k"  //@ Bazel remove
 require "../functions/trusted-sign-existing-signers-in-list.k"  //@ Bazel remove
 require "../functions/trusted-sign-existing-signers-not-in-list.k"  //@ Bazel remove
+require "../lemmas/0/signers/trusted-lemma-count-can-sign-map.k"  //@ Bazel remove
 
 module PROOF-BOARD-MEMBERS-SIGN-FOR
   // imports MAP-EXECUTE
   imports PROPERTIES-EXECUTE
   imports PSEUDOCODE
 
+  imports TRUSTED-LEMMA-COUNT-CAN-SIGN-MAP
   imports TRUSTED-MAP-SEMANTICS
-
   imports TRUSTED-PUSH-LIST-NOT-EMPTY
   imports TRUSTED-SIGN-EMPTY-ACTION
   imports TRUSTED-SIGN-CALLER-NOT-USER
