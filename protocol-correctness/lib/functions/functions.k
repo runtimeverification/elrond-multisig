@@ -1,0 +1,94 @@
+require "protocol-correctness/lib/functions/add-one-if-not-negative.k"
+require "protocol-correctness/lib/functions/all-keys-become-keys.k"
+require "protocol-correctness/lib/functions/bool-to-int.k"
+require "protocol-correctness/lib/functions/can-add-list-elements-at-index.k"
+require "protocol-correctness/lib/functions/can-add-value-for-list-elements-at-index.k"
+require "protocol-correctness/lib/functions/concretize-value.k"
+require "protocol-correctness/lib/functions/concretize-expression-list.k"
+require "protocol-correctness/lib/functions/first-or-default.k"
+require "protocol-correctness/lib/functions/forall-v-greater-or-equal-than-u-v-not-in-m.k"
+require "protocol-correctness/lib/functions/keys-map.k"
+require "protocol-correctness/lib/functions/last-functions.k"
+require "protocol-correctness/lib/functions/last-to-start.k"
+require "protocol-correctness/lib/functions/list-contains.k"
+require "protocol-correctness/lib/functions/list-elements-are-distinct.k"
+require "protocol-correctness/lib/functions/list-elements-are-of-type.k"
+require "protocol-correctness/lib/functions/list-elements-are-usize.k"
+require "protocol-correctness/lib/functions/list-find.k"
+require "protocol-correctness/lib/functions/list-first-with-default.k"
+require "protocol-correctness/lib/functions/list-no-common-item.k"
+require "protocol-correctness/lib/functions/list-swap-remove.k"
+require "protocol-correctness/lib/functions/list-to-map-set.k"
+require "protocol-correctness/lib/functions/map-included.k"
+require "protocol-correctness/lib/functions/map-keys-are-below-limit.k"
+require "protocol-correctness/lib/functions/map-keys-are-kresult.k"
+require "protocol-correctness/lib/functions/map-keys-are-of-type.k"
+require "protocol-correctness/lib/functions/map-representation.k"
+require "protocol-correctness/lib/functions/map-unification.k"
+require "protocol-correctness/lib/functions/map-values-are-distinct.k"
+require "protocol-correctness/lib/functions/map-values-are-expression-list-of-usize.k"
+require "protocol-correctness/lib/functions/map-values-are-kresult.k"
+require "protocol-correctness/lib/functions/map-values-are-not-empty.k"
+require "protocol-correctness/lib/functions/map-values-are-of-type.k"
+require "protocol-correctness/lib/functions/map-values-become-keys.k"
+require "protocol-correctness/lib/functions/maps-are-reverse.k"
+require "protocol-correctness/lib/functions/no-map-key-in-list.k"
+require "protocol-correctness/lib/functions/map-values-are-below-limit.k"
+require "protocol-correctness/lib/functions/plistlen-functions.k"
+require "protocol-correctness/lib/functions/prepend.k"
+require "protocol-correctness/lib/functions/push-list.k"
+require "protocol-correctness/lib/functions/remove-first.k"
+require "protocol-correctness/lib/functions/remove-last.k"
+require "protocol-correctness/lib/functions/reverse-expression-csv.k"
+require "protocol-correctness/lib/functions/value-is-not-empty.k"
+require "protocol-correctness/lib/functions/value-not-in-map-values.k"
+
+module FUNCTIONS-SYNTAX
+endmodule
+
+module FUNCTIONS
+  imports ADD-ONE-IF-NOT-NEGATIVE
+  imports ALL-KEYS-BECOME-KEYS
+  imports BOOL-TO-INT
+  imports CAN-ADD-LIST-ELEMENTS-AT-INDEX
+  imports CAN-ADD-VALUE-FOR-LIST-ELEMENTS-AT-INDEX
+  imports CONCRETIZE-VALUE
+  imports CONCRETIZE-EXPRESSION-LIST
+  imports FIRST-OR-DEFAULT
+  imports FORALL-V-GREATER-OR-EQUAL-THAN-U-V-NOT-IN-M
+  imports KEYS-MAP
+  imports LAST-FUNCTIONS
+  imports LAST-TO-START
+  imports LIST-CONTAINS
+  imports LIST-ELEMENTS-ARE-DISTINCT
+  imports LIST-ELEMENTS-ARE-OF-TYPE
+  imports LIST-ELEMENTS-ARE-USIZE
+  imports LIST-FIND
+  imports LIST-FIRST-WITH-DEFAULT
+  imports LIST-NO-COMMON-ITEM
+  imports LIST-SWAP-REMOVE
+  imports LIST-TO-MAP-SET
+  imports MAP-INCLUDED
+  imports MAP-KEYS-ARE-BELOW-LIMIT
+  imports MAP-KEYS-ARE-KRESULT
+  imports MAP-KEYS-ARE-OF-TYPE
+  imports MAP-REPRESENTATION
+  imports MAP-UNIFICATION
+  imports MAP-VALUES-ARE-DISTINCT
+  imports MAP-VALUES-ARE-EXPRESSION-LIST-OF-USIZE
+  imports MAP-VALUES-ARE-KRESULT
+  imports MAP-VALUES-ARE-NOT-EMPTY
+  imports MAP-VALUES-ARE-OF-TYPE
+  imports MAP-VALUES-BECOME-KEYS
+  imports MAPS-ARE-REVERSE
+  imports NO-MAP-KEY-IN-LIST
+  imports MAP-VALUES-ARE-BELOW-LIMIT
+  imports PLISTLEN-FUNCTIONS
+  imports PREPEND
+  imports PUSH-LIST
+  imports REMOVE-FIRST
+  imports REMOVE-LAST
+  imports REVERSE-EXPRESSION-CSV
+  imports VALUE-IS-NOT-EMPTY
+  imports VALUE-NOT-IN-MAP-VALUES
+endmodule
